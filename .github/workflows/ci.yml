@@ -7,8 +7,10 @@ on:
     paths:
       - 'requirements.txt'
       - 'Dockerfile'
+      - '.dockerignore'
       - '**.py'
       - 'ui/src/**'
+      - 'ui/public/**'
       - 'ui/package*.json'
       - '.env.example'
 
