@@ -1,0 +1,30 @@
+# Environment
+.env
+*.env.*
+!.env.example
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+
+# Scripts (internal only)
+scripts/
+
+# DB files
+*.db
+*.sqlite
+
+# UI
+ui/node_modules/
+ui/dist/
+
+# IDE / OS
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db

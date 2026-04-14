@@ -1,0 +1,3356 @@
+id,code,prefix,name,parent_id,division_type,region
+1,133,tỉnh,"An Giang",NULL,PROVINCE,NULL
+2,35639,xã,"Xã Hòa Thuận",1,WARD,4
+3,35640,xã,"Xã Hòa Điền",1,WARD,3
+4,35641,xã,"Xã Tân Hiệp",1,WARD,4
+5,35642,xã,"Xã Sơn Hải",1,WARD,3
+6,35643,xã,"Xã Vĩnh Điều",1,WARD,4
+7,35644,xã,"Xã Thạnh Đông",1,WARD,4
+8,35645,"đặc khu","Đặc khu Phú Quốc",1,WARD,2
+9,35646,xã,"Xã Kiên Lương",1,WARD,3
+10,35647,xã,"Xã Đông Thái",1,WARD,4
+11,35648,xã,"Xã Đông Hòa",1,WARD,4
+12,35649,phường,"Phường Rạch Giá",1,WARD,2
+13,35655,xã,"Xã Bình An",1,WARD,3
+14,35656,xã,"Xã Tây Yên",1,WARD,4
+15,35657,xã,"Xã An Biên",1,WARD,4
+16,35658,"đặc khu","Đặc khu Kiên Hải",1,WARD,3
+17,35659,phường,"Phường Hà Tiên",1,WARD,2
+18,35660,xã,"Xã Bình Giang",1,WARD,4
+19,35661,xã,"Xã Vân Khánh",1,WARD,4
+20,35662,xã,"Xã Vĩnh Hòa Hưng",1,WARD,4
+21,35663,xã,"Xã Vĩnh Phong",1,WARD,4
+22,35664,xã,"Xã Gò Quao",1,WARD,4
+23,35665,xã,"Xã Vĩnh Thuận",1,WARD,4
+24,35666,xã,"Xã Hòn Đất",1,WARD,4
+25,35667,xã,"Xã Thạnh Lộc",1,WARD,3
+26,35668,xã,"Xã Vĩnh Bình",1,WARD,4
+27,35669,xã,"Xã Thạnh Hưng",1,WARD,4
+28,35670,xã,"Xã U Minh Thượng",1,WARD,4
+29,35671,xã,"Xã Định Hòa",1,WARD,4
+30,35672,xã,"Xã Tân Thạnh",1,WARD,4
+31,35673,"đặc khu","Đặc khu Thổ Châu",1,WARD,2
+32,35674,xã,"Xã Vĩnh Tuy",1,WARD,4
+33,35675,xã,"Xã Bình Sơn",1,WARD,4
+34,35676,xã,"Xã Tân Hội",1,WARD,4
+35,35677,xã,"Xã Ngọc Chúc",1,WARD,4
+36,35678,xã,"Xã Giang Thành",1,WARD,4
+37,35679,xã,"Xã An Minh",1,WARD,4
+38,35680,xã,"Xã Sơn Kiên",1,WARD,4
+39,35681,xã,"Xã Mỹ Thuận",1,WARD,4
+40,35682,xã,"Xã Đông Hưng",1,WARD,4
+41,35683,xã,"Xã Giồng Riềng",1,WARD,4
+42,35684,phường,"Phường Tô Châu",1,WARD,2
+43,35685,xã,"Xã Tiên Hải",1,WARD,2
+44,35686,xã,"Xã Long Thạnh",1,WARD,4
+45,35687,xã,"Xã Châu Thành",1,WARD,3
+46,35688,phường,"Phường Vĩnh Thông",1,WARD,2
+47,36173,xã,"Xã Núi Cấm",1,WARD,4
+48,35689,xã,"Xã Hòn Nghệ",1,WARD,3
+49,35690,xã,"Xã Hòa Hưng",1,WARD,4
+50,35881,xã,"Xã Cô Tô",1,WARD,4
+51,35882,xã,"Xã Thạnh Mỹ Tây",1,WARD,3
+52,35883,xã,"Xã Cù Lao Giêng",1,WARD,4
+53,35884,xã,"Xã Ô Lâm",1,WARD,4
+54,35885,phường,"Phường Tân Châu",1,WARD,3
+55,35886,xã,"Xã Long Kiến",1,WARD,4
+56,35887,xã,"Xã Óc Eo",1,WARD,3
+57,35888,phường,"Phường Bình Đức",1,WARD,2
+58,35889,xã,"Xã Mỹ Đức",1,WARD,3
+59,35890,xã,"Xã Vĩnh Xương",1,WARD,3
+60,35891,xã,"Xã Phú Lâm",1,WARD,4
+61,35892,xã,"Xã Vĩnh Trạch",1,WARD,3
+62,35893,xã,"Xã Bình Thạnh Đông",1,WARD,4
+63,35894,phường,"Phường Châu Đốc",1,WARD,2
+64,35895,phường,"Phường Mỹ Thới",1,WARD,2
+65,35896,xã,"Xã Thoại Sơn",1,WARD,3
+66,35897,xã,"Xã Vĩnh Hậu",1,WARD,4
+67,35898,xã,"Xã Châu Phú",1,WARD,3
+68,35899,xã,"Xã Tri Tôn",1,WARD,4
+69,35900,xã,"Xã Khánh Bình",1,WARD,4
+70,35901,phường,"Phường Thới Sơn",1,WARD,4
+71,35902,xã,"Xã Tây Phú",1,WARD,3
+72,35903,xã,"Xã An Cư",1,WARD,4
+73,35904,xã,"Xã Vĩnh An",1,WARD,3
+74,35905,xã,"Xã Nhơn Mỹ",1,WARD,4
+75,35906,xã,"Xã Chợ Mới",1,WARD,4
+76,35907,xã,"Xã Chợ Vàm",1,WARD,4
+77,35908,phường,"Phường Long Phú",1,WARD,3
+78,35909,xã,"Xã Cần Đăng",1,WARD,3
+79,35910,xã,"Xã Phú An",1,WARD,4
+80,35911,xã,"Xã Phú Tân",1,WARD,4
+81,35912,phường,"Phường Chi Lăng",1,WARD,4
+82,35913,xã,"Xã Châu Phong",1,WARD,3
+83,35914,xã,"Xã Vĩnh Thạnh Trung",1,WARD,3
+84,35915,xã,"Xã Vĩnh Gia",1,WARD,4
+85,35916,xã,"Xã An Phú",1,WARD,4
+86,35917,xã,"Xã Nhơn Hội",1,WARD,4
+87,35918,xã,"Xã Mỹ Hòa Hưng",1,WARD,2
+88,35919,xã,"Xã Phú Hòa",1,WARD,3
+89,35920,xã,"Xã Hội An",1,WARD,4
+90,35921,phường,"Phường Long Xuyên",1,WARD,2
+91,35922,xã,"Xã Vĩnh Hanh",1,WARD,3
+92,35923,xã,"Xã An Châu",1,WARD,3
+93,35924,xã,"Xã Phú Hữu",1,WARD,4
+94,35925,xã,"Xã Long Điền",1,WARD,4
+95,35926,xã,"Xã Bình Mỹ",1,WARD,3
+96,35927,xã,"Xã Ba Chúc",1,WARD,4
+97,35928,xã,"Xã Định Mỹ",1,WARD,3
+98,35929,xã,"Xã Tân An",1,WARD,3
+99,35930,xã,"Xã Bình Hòa",1,WARD,3
+100,35931,xã,"Xã Hòa Lạc",1,WARD,4
+101,35932,phường,"Phường Vĩnh Tế",1,WARD,2
+102,35933,phường,"Phường Tịnh Biên",1,WARD,4
+103,38127,xã,"Xã Vĩnh Hòa",1,WARD,4
+104,100,tỉnh,"Bắc Ninh",NULL,PROVINCE,NULL
+105,35000,phường,"Phường Kinh Bắc",104,WARD,2
+106,35001,xã,"Xã Đông Cứu",104,WARD,2
+107,35002,xã,"Xã Đại Lai",104,WARD,2
+108,35003,xã,"Xã Yên Phong",104,WARD,2
+109,35004,phường,"Phường Tam Sơn",104,WARD,2
+110,35005,phường,"Phường Trí Quả",104,WARD,2
+111,35006,xã,"Xã Liên Bão",104,WARD,2
+112,35007,phường,"Phường Phương Liễu",104,WARD,2
+113,35008,xã,"Xã Tam Đa",104,WARD,2
+114,35009,xã,"Xã Cao Đức",104,WARD,2
+115,35010,xã,"Xã Trung Kênh",104,WARD,2
+116,35011,xã,"Xã Tiên Du",104,WARD,2
+117,35222,phường,"Phường Nhân Hòa",104,WARD,2
+118,35012,xã,"Xã Tam Giang",104,WARD,2
+119,35013,phường,"Phường Ninh Xá",104,WARD,2
+120,35014,xã,"Xã Phật Tích",104,WARD,2
+121,35015,phường,"Phường Phù Khê",104,WARD,2
+122,35016,xã,"Xã Đại Đồng",104,WARD,2
+123,35017,phường,"Phường Đào Viên",104,WARD,2
+124,35018,xã,"Xã Tân Chi",104,WARD,2
+125,35019,xã,"Xã Chi Lăng",104,WARD,2
+126,35020,phường,"Phường Đồng Nguyên",104,WARD,2
+127,35021,phường,"Phường Mão Điền",104,WARD,2
+128,35022,xã,"Xã Yên Trung",104,WARD,2
+129,35023,phường,"Phường Thuận Thành",104,WARD,2
+130,35024,phường,"Phường Song Liễu",104,WARD,2
+131,35025,phường,"Phường Trạm Lộ",104,WARD,2
+132,35026,xã,"Xã Lâm Thao",104,WARD,2
+133,35027,phường,"Phường Từ Sơn",104,WARD,2
+134,35028,xã,"Xã Trung Chính",104,WARD,2
+135,35029,xã,"Xã Nhân Thắng",104,WARD,2
+136,35030,xã,"Xã Lương Tài",104,WARD,2
+137,35031,phường,"Phường Võ Cường",104,WARD,2
+138,35032,phường,"Phường Nam Sơn",104,WARD,2
+139,35033,xã,"Xã Phù Lãng",104,WARD,2
+140,35034,xã,"Xã Gia Bình",104,WARD,2
+141,35035,phường,"Phường Bồng Lai",104,WARD,2
+142,35036,phường,"Phường Quế Võ",104,WARD,2
+143,35037,xã,"Xã Văn Môn",104,WARD,2
+144,35038,phường,"Phường Hạp Lĩnh",104,WARD,2
+145,35039,phường,"Phường Vũ Ninh",104,WARD,2
+146,36025,phường,"Phường Tiền Phong",104,WARD,2
+147,36026,xã,"Xã Lục Nam",104,WARD,4
+148,35969,xã,"Xã Trường Sơn",104,WARD,4
+149,35970,xã,"Xã Tân Sơn",104,WARD,4
+150,35971,phường,"Phường Việt Yên",104,WARD,2
+151,35972,xã,"Xã Cẩm Lý",104,WARD,4
+152,35973,xã,"Xã Tân Yên",104,WARD,3
+153,35974,phường,"Phường Yên Dũng",104,WARD,2
+154,35975,xã,"Xã Yên Thế",104,WARD,4
+155,35976,xã,"Xã Sơn Hải",104,WARD,4
+156,35977,xã,"Xã An Lạc",104,WARD,4
+157,35978,xã,"Xã Tuấn Đạo",104,WARD,4
+158,35979,xã,"Xã Đông Phú",104,WARD,4
+159,35980,phường,"Phường Vân Hà",104,WARD,2
+160,35981,phường,"Phường Đa Mai",104,WARD,2
+161,35982,xã,"Xã Nghĩa Phương",104,WARD,4
+162,35983,xã,"Xã Đồng Việt",104,WARD,2
+163,35984,xã,"Xã Tiên Lục",104,WARD,3
+164,35985,xã,"Xã Sơn Động",104,WARD,4
+165,35986,xã,"Xã Kép",104,WARD,3
+166,35987,xã,"Xã Bảo Đài",104,WARD,4
+167,35988,xã,"Xã Vân Sơn",104,WARD,4
+168,35989,xã,"Xã Hoàng Vân",104,WARD,3
+169,35990,xã,"Xã Xuân Lương",104,WARD,4
+170,35991,xã,"Xã Đèo Gia",104,WARD,4
+171,35992,xã,"Xã Sa Lý",104,WARD,4
+172,35993,xã,"Xã Bắc Lũng",104,WARD,4
+173,35994,phường,"Phường Phượng Sơn",104,WARD,4
+174,35995,phường,"Phường Tân Tiến",104,WARD,2
+175,35996,xã,"Xã Nam Dương",104,WARD,4
+176,35997,xã,"Xã Lục Sơn",104,WARD,4
+177,35998,phường,"Phường Chũ",104,WARD,4
+178,35999,xã,"Xã Quang Trung",104,WARD,3
+179,36000,xã,"Xã Nhã Nam",104,WARD,3
+180,36001,xã,"Xã Đồng Kỳ",104,WARD,4
+181,36002,xã,"Xã Hiệp Hòa",104,WARD,3
+182,36003,xã,"Xã Hợp Thịnh",104,WARD,3
+183,36004,phường,"Phường Cảnh Thụy",104,WARD,2
+184,36005,xã,"Xã Kiên Lao",104,WARD,4
+185,36006,xã,"Xã Lạng Giang",104,WARD,3
+186,36007,xã,"Xã Dương Hưu",104,WARD,4
+187,36008,xã,"Xã Biên Sơn",104,WARD,4
+188,36009,xã,"Xã Lục Ngạn",104,WARD,4
+189,36010,phường,"Phường Nếnh",104,WARD,2
+190,36011,xã,"Xã Tân Dĩnh",104,WARD,3
+191,36012,phường,"Phường Bắc Giang",104,WARD,2
+192,36013,phường,"Phường Tân An",104,WARD,2
+193,36014,xã,"Xã Yên Định",104,WARD,4
+194,36015,phường,"Phường Tự Lạn",104,WARD,2
+195,36016,xã,"Xã Bố Hạ",104,WARD,4
+196,36017,xã,"Xã Tây Yên Tử",104,WARD,4
+197,36018,xã,"Xã Xuân Cẩm",104,WARD,3
+198,36019,xã,"Xã Tam Tiến",104,WARD,4
+199,36020,xã,"Xã Biển Động",104,WARD,4
+200,36021,xã,"Xã Đại Sơn",104,WARD,4
+201,36022,xã,"Xã Ngọc Thiện",104,WARD,3
+202,36023,xã,"Xã Mỹ Thái",104,WARD,3
+203,36024,xã,"Xã Phúc Hòa",104,WARD,3
+204,143,tỉnh,"Cà Mau",NULL,PROVINCE,NULL
+205,36239,xã,"Xã An Trạch",204,WARD,4
+206,36240,xã,"Xã Hòa Bình",204,WARD,3
+207,36241,phường,"Phường Láng Tròn",204,WARD,3
+208,36242,xã,"Xã Vĩnh Hậu",204,WARD,3
+209,36243,xã,"Xã Vĩnh Lộc",204,WARD,4
+210,36244,xã,"Xã Ninh Quới",204,WARD,4
+211,36245,phường,"Phường Hiệp Thành",204,WARD,2
+212,36246,xã,"Xã Hồng Dân",204,WARD,4
+213,36247,xã,"Xã Vĩnh Mỹ",204,WARD,3
+214,36248,phường,"Phường Giá Rai",204,WARD,3
+215,36249,xã,"Xã Ninh Thạnh Lợi",204,WARD,4
+216,36250,xã,"Xã Phước Long",204,WARD,4
+217,36251,xã,"Xã Phong Hiệp",204,WARD,4
+218,36252,phường,"Phường Vĩnh Trạch",204,WARD,2
+219,36253,xã,"Xã Vĩnh Phước",204,WARD,4
+220,36254,phường,"Phường Bạc Liêu",204,WARD,2
+221,36255,xã,"Xã Châu Thới",204,WARD,4
+222,36256,xã,"Xã Vĩnh Lợi",204,WARD,4
+223,36257,xã,"Xã Long Điền",204,WARD,4
+224,36258,xã,"Xã Phong Thạnh",204,WARD,3
+225,36259,xã,"Xã Hưng Hội",204,WARD,4
+226,36260,xã,"Xã Định Thành",204,WARD,4
+227,36261,xã,"Xã Đông Hải",204,WARD,4
+228,37220,xã,"Xã Phú Mỹ",204,WARD,3
+229,37221,phường,"Phường Hòa Thành",204,WARD,2
+230,37222,xã,"Xã Đất Mới",204,WARD,3
+231,37223,xã,"Xã Tạ An Khương",204,WARD,4
+232,37224,phường,"Phường Tân Thành",204,WARD,2
+233,37225,xã,"Xã Khánh Lâm",204,WARD,3
+234,37226,xã,"Xã Đầm Dơi",204,WARD,4
+235,37227,xã,"Xã Sông Đốc",204,WARD,3
+236,37228,xã,"Xã Hồ Thị Kỷ",204,WARD,4
+237,37229,xã,"Xã Tam Giang",204,WARD,3
+238,37230,xã,"Xã Đất Mũi",204,WARD,4
+239,37231,xã,"Xã Khánh Bình",204,WARD,3
+240,37232,xã,"Xã Cái Nước",204,WARD,3
+241,37233,xã,"Xã Hưng Mỹ",204,WARD,3
+242,37234,xã,"Xã Phú Tân",204,WARD,4
+243,37235,xã,"Xã Phan Ngọc Hiển",204,WARD,4
+244,37236,xã,"Xã Biển Bạch",204,WARD,4
+245,37237,xã,"Xã Nguyễn Phích",204,WARD,3
+246,37238,xã,"Xã Tân Ân",204,WARD,4
+247,37239,xã,"Xã Tân Tiến",204,WARD,4
+248,37240,xã,"Xã Thới Bình",204,WARD,4
+249,37241,xã,"Xã Cái Đôi Vàm",204,WARD,4
+250,37242,xã,"Xã U Minh",204,WARD,3
+251,37243,xã,"Xã Quách Phẩm",204,WARD,4
+252,37244,xã,"Xã Nguyễn Việt Khái",204,WARD,4
+253,37245,xã,"Xã Lương Thế Trân",204,WARD,3
+254,37246,xã,"Xã Trần Văn Thời",204,WARD,3
+255,37247,xã,"Xã Tân Thuận",204,WARD,4
+256,37248,xã,"Xã Tân Lộc",204,WARD,4
+257,37249,phường,"Phường Lý Văn Lâm",204,WARD,2
+258,37250,xã,"Xã Khánh An",204,WARD,3
+259,37251,xã,"Xã Tân Hưng",204,WARD,3
+260,37252,xã,"Xã Trí Phải",204,WARD,4
+261,37253,xã,"Xã Năm Căn",204,WARD,3
+262,37254,xã,"Xã Đá Bạc",204,WARD,3
+263,37255,xã,"Xã Thanh Tùng",204,WARD,4
+264,37256,xã,"Xã Khánh Hưng",204,WARD,3
+265,37257,xã,"Xã Trần Phán",204,WARD,4
+266,37259,phường,"Phường An Xuyên",204,WARD,2
+267,37887,xã,"Xã Vĩnh Thanh",204,WARD,4
+268,37766,xã,"Xã Gành Hào",204,WARD,4
+269,138,"thành phố","Cần Thơ",NULL,PROVINCE,NULL
+270,37317,xã,"Xã Hồ Đắc Kiện",269,WARD,4
+271,37318,xã,"Xã Long Phú",269,WARD,4
+272,37319,phường,"Phường Ngã Năm",269,WARD,3
+273,37320,xã,"Xã Tài Văn",269,WARD,4
+274,37321,xã,"Xã Thuận Hòa",269,WARD,4
+275,37322,xã,"Xã Mỹ Phước",269,WARD,4
+276,37323,phường,"Phường Vĩnh Châu",269,WARD,3
+277,37324,xã,"Xã Thạnh Thới An",269,WARD,4
+278,37325,xã,"Xã Hòa Tú",269,WARD,4
+279,37326,xã,"Xã Nhơn Mỹ",269,WARD,4
+280,37327,phường,"Phường Phú Lợi",269,WARD,2
+281,37328,xã,"Xã Lâm Tân",269,WARD,4
+282,37329,xã,"Xã Lai Hòa",269,WARD,3
+283,37330,xã,"Xã Kế Sách",269,WARD,4
+284,37331,xã,"Xã An Lạc Thôn",269,WARD,4
+285,37332,phường,"Phường Sóc Trăng",269,WARD,2
+286,37333,xã,"Xã Vĩnh Hải",269,WARD,3
+287,37334,xã,"Xã An Thạnh",269,WARD,4
+288,37335,xã,"Xã Đại Ngãi",269,WARD,4
+289,37336,xã,"Xã Long Hưng",269,WARD,4
+290,37337,xã,"Xã Lịch Hội Thượng",269,WARD,4
+291,37338,xã,"Xã Liêu Tú",269,WARD,4
+292,37339,xã,"Xã Mỹ Hương",269,WARD,4
+293,37340,xã,"Xã Mỹ Tú",269,WARD,4
+294,37341,xã,"Xã Thới An Hội",269,WARD,4
+295,37342,xã,"Xã Gia Hòa",269,WARD,4
+296,37343,phường,"Phường Mỹ Quới",269,WARD,3
+297,37344,phường,"Phường Khánh Hòa",269,WARD,3
+298,37345,xã,"Xã Phong Nẫm",269,WARD,4
+299,37346,xã,"Xã Đại Hải",269,WARD,4
+300,37347,xã,"Xã Phú Lộc",269,WARD,4
+301,37348,xã,"Xã Tân Thạnh",269,WARD,4
+302,37349,phường,"Phường Vĩnh Phước",269,WARD,3
+303,37350,xã,"Xã Trường Khánh",269,WARD,4
+304,37351,xã,"Xã Nhu Gia",269,WARD,4
+305,37352,xã,"Xã Cù Lao Dung",269,WARD,4
+306,37353,xã,"Xã Vĩnh Lợi",269,WARD,4
+307,37354,phường,"Phường Mỹ Xuyên",269,WARD,2
+308,37544,phường,"Phường Thuận Hưng",269,WARD,2
+309,37545,phường,"Phường Ô Môn",269,WARD,2
+310,37546,xã,"Xã Trường Xuân",269,WARD,3
+311,37547,phường,"Phường Hưng Phú",269,WARD,2
+312,37548,phường,"Phường Thới An Đông",269,WARD,2
+313,37549,phường,"Phường Thốt Nốt",269,WARD,2
+314,37550,xã,"Xã Thạnh Quới",269,WARD,3
+315,37551,phường,"Phường An Bình",269,WARD,2
+316,37552,xã,"Xã Trường Thành",269,WARD,3
+317,37553,phường,"Phường Bình Thủy",269,WARD,2
+318,37554,phường,"Phường Cái Răng",269,WARD,2
+319,37555,xã,"Xã Trung Hưng",269,WARD,3
+320,37556,xã,"Xã Trường Long",269,WARD,3
+321,37557,phường,"Phường Phước Thới",269,WARD,2
+322,37558,xã,"Xã Đông Thuận",269,WARD,3
+323,37559,xã,"Xã Nhơn Ái",269,WARD,3
+324,37560,xã,"Xã Thạnh An",269,WARD,3
+325,37561,phường,"Phường Tân Lộc",269,WARD,2
+326,37562,xã,"Xã Thạnh Phú",269,WARD,3
+327,37563,xã,"Xã Phong Điền",269,WARD,3
+328,37564,phường,"Phường Ninh Kiều",269,WARD,2
+329,37565,xã,"Xã Đông Hiệp",269,WARD,3
+330,37566,xã,"Xã Cờ Đỏ",269,WARD,3
+331,37567,phường,"Phường Tân An",269,WARD,2
+332,37568,xã,"Xã Vĩnh Thạnh",269,WARD,3
+333,37569,phường,"Phường Long Tuyền",269,WARD,2
+334,37570,xã,"Xã Thới Lai",269,WARD,3
+335,37571,phường,"Phường Thới Long",269,WARD,2
+336,37572,phường,"Phường Cái Khế",269,WARD,2
+337,37573,phường,"Phường Trung Nhứt",269,WARD,2
+338,37574,xã,"Xã Thới Hưng",269,WARD,3
+339,37575,xã,"Xã Vĩnh Trinh",269,WARD,3
+340,37312,xã,"Xã Tân Long",269,WARD,3
+341,37313,xã,"Xã An Ninh",269,WARD,4
+342,37314,xã,"Xã Ngọc Tố",269,WARD,4
+343,37315,xã,"Xã Trần Đề",269,WARD,4
+344,37316,xã,"Xã Phú Tâm",269,WARD,4
+345,37664,phường,"Phường Vị Tân",269,WARD,3
+346,37665,xã,"Xã Lương Tâm",269,WARD,4
+347,37666,xã,"Xã Xà Phiên",269,WARD,4
+348,37667,xã,"Xã Vĩnh Tường",269,WARD,4
+349,37668,xã,"Xã Phú Hữu",269,WARD,3
+350,37669,phường,"Phường Ngã Bảy",269,WARD,3
+351,37670,xã,"Xã Phụng Hiệp",269,WARD,4
+352,37671,phường,"Phường Long Bình",269,WARD,4
+353,37672,phường,"Phường Long Mỹ",269,WARD,4
+354,37673,xã,"Xã Hỏa Lựu",269,WARD,3
+355,37674,xã,"Xã Vị Thủy",269,WARD,4
+356,37675,xã,"Xã Tân Bình",269,WARD,4
+357,37676,xã,"Xã Châu Thành",269,WARD,3
+358,37677,xã,"Xã Phương Bình",269,WARD,4
+359,37678,xã,"Xã Tân Hòa",269,WARD,3
+360,37679,xã,"Xã Thạnh Hoà",269,WARD,4
+361,37680,xã,"Xã Trường Long Tây",269,WARD,3
+362,37681,phường,"Phường Vị Thanh",269,WARD,3
+363,37682,xã,"Xã Tân Phước Hưng",269,WARD,4
+364,37683,xã,"Xã Vĩnh Thuận Đông",269,WARD,4
+365,37684,xã,"Xã Vĩnh Viễn",269,WARD,4
+366,37685,phường,"Phường Long Phú 1",269,WARD,4
+367,37686,xã,"Xã Vị Thanh 1",269,WARD,4
+368,37687,xã,"Xã Thạnh Xuân",269,WARD,3
+369,37688,phường,"Phường Đại Thành",269,WARD,3
+370,37689,xã,"Xã Hòa An",269,WARD,4
+371,37690,xã,"Xã Hiệp Hưng",269,WARD,4
+372,37691,xã,"Xã Đông Phước",269,WARD,3
+373,90,tỉnh,"Cao Bằng",NULL,PROVINCE,NULL
+374,36347,xã,"Xã Sơn Lộ",373,WARD,4
+375,36348,xã,"Xã Tổng Cọt",373,WARD,4
+376,36349,xã,"Xã Bế Văn Đàn",373,WARD,4
+377,36350,xã,"Xã Bảo Lâm",373,WARD,4
+378,36351,xã,"Xã Quang Long",373,WARD,4
+379,36352,xã,"Xã Hưng Đạo",373,WARD,4
+380,36353,xã,"Xã Ca Thành",373,WARD,4
+381,36354,xã,"Xã Đoài Dương",373,WARD,4
+382,36355,xã,"Xã Quảng Lâm",373,WARD,4
+383,36356,xã,"Xã Hà Quảng",373,WARD,4
+384,36357,xã,"Xã Minh Tâm",373,WARD,4
+385,36358,xã,"Xã Nam Quang",373,WARD,4
+386,36359,xã,"Xã Lý Bôn",373,WARD,4
+387,36360,phường,"Phường Nùng Trí Cao",373,WARD,3
+388,36361,xã,"Xã Hạ Lang",373,WARD,4
+389,36362,xã,"Xã Canh Tân",373,WARD,4
+390,36363,xã,"Xã Lũng Nặm",373,WARD,4
+391,36364,xã,"Xã Nguyên Bình",373,WARD,4
+392,36365,xã,"Xã Đình Phong",373,WARD,4
+393,36366,xã,"Xã Nguyễn Huệ",373,WARD,4
+394,36367,xã,"Xã Cần Yên",373,WARD,4
+395,36368,xã,"Xã Lý Quốc",373,WARD,4
+396,36369,xã,"Xã Cốc Pàng",373,WARD,4
+397,36370,xã,"Xã Bạch Đằng",373,WARD,4
+398,36371,xã,"Xã Quang Trung",373,WARD,4
+399,36372,xã,"Xã Phục Hòa",373,WARD,4
+400,36373,xã,"Xã Bảo Lạc",373,WARD,4
+401,36374,xã,"Xã Đông Khê",373,WARD,4
+402,36375,xã,"Xã Độc Lập",373,WARD,4
+403,36376,xã,"Xã Thông Nông",373,WARD,4
+404,36377,xã,"Xã Phan Thanh",373,WARD,4
+405,36378,xã,"Xã Huy Giáp",373,WARD,4
+406,36379,xã,"Xã Kim Đồng",373,WARD,4
+407,36380,xã,"Xã Minh Khai",373,WARD,4
+408,36381,xã,"Xã Thạch An",373,WARD,4
+409,36382,xã,"Xã Thanh Long",373,WARD,4
+410,36383,xã,"Xã Xuân Trường",373,WARD,4
+411,36384,xã,"Xã Hạnh Phúc",373,WARD,4
+412,36385,xã,"Xã Yên Thổ",373,WARD,4
+413,36386,xã,"Xã Trùng Khánh",373,WARD,4
+414,36387,xã,"Xã Khánh Xuân",373,WARD,4
+415,36388,xã,"Xã Thành Công",373,WARD,4
+416,36389,xã,"Xã Quang Hán",373,WARD,4
+417,36390,xã,"Xã Nam Tuấn",373,WARD,4
+418,36391,xã,"Xã Trường Hà",373,WARD,4
+419,36392,phường,"Phường Thục Phán",373,WARD,3
+420,36393,xã,"Xã Tĩnh Túc",373,WARD,4
+421,36394,phường,"Phường Tân Giang",373,WARD,3
+422,36395,xã,"Xã Đức Long",373,WARD,4
+423,36396,xã,"Xã Quảng Uyên",373,WARD,4
+424,36397,xã,"Xã Đàm Thuỷ",373,WARD,4
+425,36398,xã,"Xã Vinh Quý",373,WARD,4
+426,36399,xã,"Xã Cô Ba",373,WARD,4
+427,36400,xã,"Xã Hòa An",373,WARD,4
+428,36401,xã,"Xã Tam Kim",373,WARD,4
+429,36402,xã,"Xã Trà Lĩnh",373,WARD,4
+430,112,"thành phố","Đà Nẵng",NULL,PROVINCE,NULL
+431,36789,xã,"Xã Đắc Pring",430,WARD,4
+432,36790,xã,"Xã Tam Xuân",430,WARD,3
+433,36791,xã,"Xã Quế Phước",430,WARD,3
+434,36488,xã,"Xã Đông Giang",430,WARD,4
+435,36489,xã,"Xã Trà Tập",430,WARD,4
+436,36490,xã,"Xã Phước Hiệp",430,WARD,4
+437,36491,xã,"Xã Khâm Đức",430,WARD,4
+438,36492,xã,"Xã Bến Giằng",430,WARD,4
+439,36493,xã,"Xã Xuân Phú",430,WARD,3
+440,36494,xã,"Xã La Dêê",430,WARD,4
+441,36495,phường,"Phường Hội An",430,WARD,2
+442,36496,xã,"Xã Hiệp Đức",430,WARD,4
+443,36497,xã,"Xã Nam Trà My",430,WARD,4
+444,36498,xã,"Xã Trà Leng",430,WARD,4
+445,36499,xã,"Xã Phước Trà",430,WARD,4
+446,36500,xã,"Xã Thăng Điền",430,WARD,3
+447,36501,xã,"Xã Trà Vân",430,WARD,4
+448,36502,xã,"Xã Thu Bồn",430,WARD,3
+449,36503,xã,"Xã Sông Vàng",430,WARD,4
+450,36504,xã,"Xã Phước Thành",430,WARD,4
+451,36505,xã,"Xã Thăng An",430,WARD,3
+452,36506,phường,"Phường Tam Kỳ",430,WARD,2
+453,36507,xã,"Xã Phú Thuận",430,WARD,3
+454,36508,xã,"Xã Tam Anh",430,WARD,3
+455,36509,xã,"Xã Điện Bàn Tây",430,WARD,3
+456,36510,xã,"Xã Trà Giáp",430,WARD,4
+457,36511,xã,"Xã Quế Sơn",430,WARD,3
+458,36512,xã,"Xã Thăng Bình",430,WARD,3
+459,36513,xã,"Xã Quế Sơn Trung",430,WARD,3
+460,36514,xã,"Xã Duy Xuyên",430,WARD,3
+461,36515,xã,"Xã Núi Thành",430,WARD,3
+462,36516,phường,"Phường Điện Bàn Đông",430,WARD,3
+463,36566,xã,"Xã Tam Mỹ",430,WARD,3
+464,36567,phường,"Phường Hội An Tây",430,WARD,2
+465,36568,xã,"Xã Việt An",430,WARD,4
+466,36569,xã,"Xã Sơn Cẩm Hà",430,WARD,4
+467,36570,xã,"Xã Thượng Đức",430,WARD,3
+468,36571,xã,"Xã Vu Gia",430,WARD,3
+469,36572,xã,"Xã Tây Hồ",430,WARD,3
+470,36573,xã,"Xã Trà Linh",430,WARD,4
+471,36574,xã,"Xã Tiên Phước",430,WARD,4
+472,36575,xã,"Xã La Êê",430,WARD,4
+473,36576,phường,"Phường Điện Bàn",430,WARD,3
+474,36577,xã,"Xã Phú Ninh",430,WARD,3
+475,36578,xã,"Xã Đức Phú",430,WARD,3
+476,36579,xã,"Xã Trà Tân",430,WARD,4
+477,36580,xã,"Xã Thạnh Bình",430,WARD,4
+478,36581,phường,"Phường Bàn Thạch",430,WARD,2
+479,36582,xã,"Xã Trà Đốc",430,WARD,4
+480,36583,xã,"Xã Nam Phước",430,WARD,3
+481,36584,xã,"Xã Nông Sơn",430,WARD,3
+482,36585,xã,"Xã Nam Giang",430,WARD,4
+483,36586,phường,"Phường Hội An Đông",430,WARD,2
+484,36587,xã,"Xã Sông Kôn",430,WARD,4
+485,36588,xã,"Xã Đồng Dương",430,WARD,3
+486,36589,xã,"Xã Chiên Đàn",430,WARD,3
+487,36590,phường,"Phường An Thắng",430,WARD,3
+488,36591,xã,"Xã Hà Nha",430,WARD,3
+489,36592,xã,"Xã Tân Hiệp",430,WARD,2
+490,36593,xã,"Xã Thạnh Mỹ",430,WARD,4
+491,36594,xã,"Xã Hùng Sơn",430,WARD,4
+492,36595,xã,"Xã Thăng Trường",430,WARD,3
+493,36596,xã,"Xã Trà Liên",430,WARD,4
+494,36597,phường,"Phường Quảng Phú",430,WARD,2
+495,36598,xã,"Xã Tây Giang",430,WARD,4
+496,36599,xã,"Xã Trà My",430,WARD,4
+497,36600,xã,"Xã Phước Năng",430,WARD,4
+498,36601,xã,"Xã Tam Hải",430,WARD,3
+499,36602,xã,"Xã Duy Nghĩa",430,WARD,3
+500,36603,phường,"Phường Điện Bàn Bắc",430,WARD,3
+501,36604,phường,"Phường Hương Trà",430,WARD,2
+502,36605,xã,"Xã Thăng Phú",430,WARD,3
+503,36606,xã,"Xã Gò Nổi",430,WARD,3
+504,36607,xã,"Xã Lãnh Ngọc",430,WARD,4
+505,36608,xã,"Xã Phước Chánh",430,WARD,4
+506,36609,xã,"Xã Đại Lộc",430,WARD,3
+507,36610,xã,"Xã Avương",430,WARD,4
+508,36611,xã,"Xã Bến Hiên",430,WARD,4
+509,38134,phường,"Phường Thanh Khê",430,WARD,2
+510,38135,xã,"Xã Hòa Vang",430,WARD,2
+511,38136,phường,"Phường Hải Châu",430,WARD,2
+512,38137,phường,"Phường Sơn Trà",430,WARD,2
+513,38138,phường,"Phường An Khê",430,WARD,2
+514,38139,"đặc khu","Đặc khu Hoàng Sa",430,WARD,2
+515,38140,phường,"Phường Hòa Xuân",430,WARD,2
+516,38141,phường,"Phường Liên Chiểu",430,WARD,2
+517,38142,phường,"Phường Ngũ Hành Sơn",430,WARD,2
+518,38143,phường,"Phường Hòa Khánh",430,WARD,2
+519,38144,xã,"Xã Bà Nà",430,WARD,2
+520,38145,phường,"Phường Hòa Cường",430,WARD,2
+521,38146,xã,"Xã Hoà Tiến",430,WARD,2
+522,38147,phường,"Phường Cẩm Lệ",430,WARD,2
+523,38148,phường,"Phường An Hải",430,WARD,2
+524,38149,phường,"Phường Hải Vân",430,WARD,2
+525,120,tỉnh,"Đắk Lắk",NULL,PROVINCE,NULL
+526,36105,xã,"Xã Xuân Phước",525,WARD,4
+527,36106,phường,"Phường Tuy Hòa",525,WARD,3
+528,36107,xã,"Xã Tây Hòa",525,WARD,4
+529,36108,xã,"Xã Hòa Mỹ",525,WARD,4
+530,36109,xã,"Xã Tuy An Nam",525,WARD,4
+531,36110,xã,"Xã Ealy",525,WARD,NULL
+532,36111,phường,"Phường Sông Cầu",525,WARD,3
+533,36112,xã,"Xã Đồng Xuân",525,WARD,4
+534,36113,xã,"Xã Tây Sơn",525,WARD,4
+535,36114,xã,"Xã Xuân Cảnh",525,WARD,3
+536,36115,xã,"Xã Hòa Xuân",525,WARD,3
+537,36116,xã,"Xã Phú Hòa 2",525,WARD,4
+538,36117,phường,"Phường Bình Kiến",525,WARD,3
+539,36118,xã,"Xã Xuân Lộc",525,WARD,3
+540,36119,phường,"Phường Xuân Đài",525,WARD,3
+541,36120,phường,"Phường Hòa Hiệp",525,WARD,3
+542,36121,xã,"Xã Tuy An Tây",525,WARD,4
+543,36122,phường,"Phường Đông Hòa",525,WARD,3
+544,36123,xã,"Xã Sông Hinh",525,WARD,4
+545,36124,xã,"Xã Sơn Hòa",525,WARD,4
+546,36125,xã,"Xã Đức Bình",525,WARD,4
+547,36126,xã,"Xã Tuy An Đông",525,WARD,4
+548,36127,xã,"Xã Hòa Thịnh",525,WARD,4
+549,36128,xã,"Xã Ea Bá",525,WARD,4
+550,36129,xã,"Xã Xuân Thọ",525,WARD,3
+551,36130,phường,"Phường Phú Yên",525,WARD,3
+552,36131,xã,"Xã Sơn Thành",525,WARD,4
+553,36132,xã,"Xã Phú Hòa 1",525,WARD,4
+554,36133,xã,"Xã Tuy An Bắc",525,WARD,4
+555,36134,xã,"Xã Vân Hòa",525,WARD,4
+556,36135,xã,"Xã Suối Trai",525,WARD,4
+557,36136,xã,"Xã Ô Loan",525,WARD,4
+558,36137,xã,"Xã Phú Mỡ",525,WARD,4
+559,36138,xã,"Xã Xuân Lãnh",525,WARD,4
+560,35757,xã,"Xã Ea H’Ieo",525,WARD,NULL
+561,36612,xã,"Xã Ea Trang",525,WARD,4
+562,36613,xã,"Xã Krông Nô",525,WARD,4
+563,36614,phường,"Phường Buôn Ma Thuột",525,WARD,3
+564,36615,xã,"Xã Ea Păl",525,WARD,4
+565,36616,xã,"Xã Nam Ka",525,WARD,4
+566,36617,xã,"Xã Cư Pơng",525,WARD,4
+567,36618,xã,"Xã Quảng Phú",525,WARD,4
+568,36619,xã,"Xã Cư M’ta",525,WARD,4
+569,36620,xã,"Xã Cư Yang",525,WARD,4
+570,36621,phường,"Phường Tân An",525,WARD,3
+571,36622,xã,"Xã Krông Pắc",525,WARD,4
+572,36623,xã,"Xã Ea Rốk",525,WARD,4
+573,36624,xã,"Xã Ea Phê",525,WARD,4
+574,36625,xã,"Xã Ea Kar",525,WARD,4
+575,36626,xã,"Xã Pơng Drang",525,WARD,4
+576,36627,xã,"Xã Ea Ô",525,WARD,4
+577,36628,xã,"Xã Phú Xuân",525,WARD,4
+578,36629,xã,"Xã Cư Pui",525,WARD,4
+579,36630,xã,"Xã Tân Tiến",525,WARD,4
+580,36631,xã,"Xã Dray Bhăng",525,WARD,4
+581,36632,xã,"Xã Liên Sơn Lắk",525,WARD,4
+582,36633,xã,"Xã Krông Á",525,WARD,4
+583,36634,xã,"Xã Cuôr Đăng",525,WARD,4
+584,36635,xã,"Xã Ea Na",525,WARD,4
+585,36636,phường,"Phường Thành Nhất",525,WARD,3
+586,36637,xã,"Xã Buôn Đôn",525,WARD,4
+587,36638,xã,"Xã Ea Wer",525,WARD,4
+588,36639,phường,"Phường Buôn Hồ",525,WARD,4
+589,36640,phường,"Phường Cư Bao",525,WARD,4
+590,36641,xã,"Xã Ea Tul",525,WARD,4
+591,36642,xã,"Xã Krông Bông",525,WARD,4
+592,36643,xã,"Xã Ea M’Droh",525,WARD,4
+593,36644,xã,"Xã Yang Mao",525,WARD,4
+594,36645,xã,"Xã Dliê Ya",525,WARD,4
+595,36646,xã,"Xã Ea Bung",525,WARD,4
+596,36647,xã,"Xã Ea Knuếc",525,WARD,4
+597,36648,xã,"Xã Cư M’gar",525,WARD,4
+598,36649,xã,"Xã Ea Hiao",525,WARD,4
+599,36650,xã,"Xã Ea Khăl",525,WARD,4
+600,36651,xã,"Xã Dang Kang",525,WARD,4
+601,36652,xã,"Xã Krông Ana",525,WARD,4
+602,36653,xã,"Xã Ea Wy",525,WARD,4
+603,36654,xã,"Xã Ea Ktur",525,WARD,4
+604,36655,xã,"Xã Hòa Sơn",525,WARD,4
+605,36656,phường,"Phường Ea Kao",525,WARD,3
+606,36657,xã,"Xã Krông Búk",525,WARD,4
+607,36658,xã,"Xã Ea Ning",525,WARD,4
+608,36659,xã,"Xã Krông Năng",525,WARD,4
+609,36660,xã,"Xã Dur Kmăl",525,WARD,4
+610,36661,xã,"Xã Ia Rvê",525,WARD,4
+611,36662,xã,"Xã Ea Knốp",525,WARD,4
+612,36663,phường,"Phường Tân Lập",525,WARD,3
+613,36664,xã,"Xã M’Drắk",525,WARD,4
+614,36665,xã,"Xã Ea Riêng",525,WARD,4
+615,36666,xã,"Xã Tam Giang",525,WARD,4
+616,36667,xã,"Xã Hòa Phú",525,WARD,3
+617,36668,xã,"Xã Ia Lốp",525,WARD,4
+618,36669,xã,"Xã Ea Nuôl",525,WARD,4
+619,36670,xã,"Xã Ea Kly",525,WARD,4
+620,36671,xã,"Xã Ea Súp",525,WARD,4
+621,36672,xã,"Xã Đắk Liêng",525,WARD,4
+622,38115,xã,"Xã Ea Drông",525,WARD,4
+623,38116,xã,"Xã Ea Kiết",525,WARD,4
+624,38117,xã,"Xã Ea Drăng",525,WARD,4
+625,38118,xã,"Xã Vụ Bổn",525,WARD,4
+626,38119,xã,"Xã Cư Prao",525,WARD,4
+627,38120,xã,"Xã Đắk Phơi",525,WARD,4
+628,102,tỉnh,"Điện Biên",NULL,PROVINCE,NULL
+629,36027,xã,"Xã Quài Tở",628,WARD,4
+630,36028,phường,"Phường Mường Thanh",628,WARD,3
+631,36029,xã,"Xã Nà Bủng",628,WARD,4
+632,36030,xã,"Xã Na Son",628,WARD,4
+633,36031,phường,"Phường Điện Biên Phủ",628,WARD,3
+634,36032,xã,"Xã Mường Mùn",628,WARD,4
+635,36033,xã,"Xã Chiềng Sinh",628,WARD,4
+636,36034,xã,"Xã Pú Nhung",628,WARD,4
+637,36035,xã,"Xã Mường Tùng",628,WARD,4
+638,36036,xã,"Xã Xa Dung",628,WARD,4
+639,36037,xã,"Xã Tuần Giáo",628,WARD,4
+640,36038,xã,"Xã Mường Chà",628,WARD,4
+641,36039,xã,"Xã Mường Toong",628,WARD,4
+642,36040,xã,"Xã Mường Ảng",628,WARD,4
+643,36041,xã,"Xã Sín Thầu",628,WARD,4
+644,36042,xã,"Xã Quảng Lâm",628,WARD,4
+645,36043,xã,"Xã Sáng Nhè",628,WARD,4
+646,36044,xã,"Xã Mường Luân",628,WARD,4
+647,36045,xã,"Xã Thanh Nưa",628,WARD,4
+648,36046,xã,"Xã Thanh Yên",628,WARD,4
+649,36047,xã,"Xã Nà Tấu",628,WARD,3
+650,36048,xã,"Xã Mường Nhà",628,WARD,4
+651,36049,xã,"Xã Pa Ham",628,WARD,4
+652,36050,xã,"Xã Si Pa Phìn",628,WARD,4
+653,36051,xã,"Xã Sam Mứn",628,WARD,4
+654,36052,xã,"Xã Tủa Thàng",628,WARD,4
+655,36053,xã,"Xã Phình Giàng",628,WARD,4
+656,36054,xã,"Xã Mường Lạn",628,WARD,4
+657,36055,xã,"Xã Mường Pồn",628,WARD,4
+658,36056,xã,"Xã Nậm Nèn",628,WARD,4
+659,36057,phường,"Phường Mường Lay",628,WARD,4
+660,36058,xã,"Xã Búng Lao",628,WARD,4
+661,36059,xã,"Xã Na Sang",628,WARD,4
+662,36060,xã,"Xã Nậm Kè",628,WARD,4
+663,36061,xã,"Xã Thanh An",628,WARD,4
+664,36062,xã,"Xã Nà Hỳ",628,WARD,4
+665,36063,xã,"Xã Mường Nhé",628,WARD,4
+666,36064,xã,"Xã Mường Phăng",628,WARD,3
+667,36065,xã,"Xã Chà Tở",628,WARD,4
+668,36066,xã,"Xã Sín Chải",628,WARD,4
+669,36067,xã,"Xã Tủa Chùa",628,WARD,4
+670,36068,xã,"Xã Pú Nhi",628,WARD,4
+671,36069,xã,"Xã Sính Phình",628,WARD,4
+672,36070,xã,"Xã Tìa Dình",628,WARD,4
+673,36071,xã,"Xã Núa Ngam",628,WARD,4
+674,128,tỉnh,"Đồng Nai",NULL,PROVINCE,NULL
+675,35076,xã,"Xã Đồng Phú",674,WARD,2
+676,35077,xã,"Xã Tân Lợi",674,WARD,2
+677,35078,phường,"Phường Phước Bình",674,WARD,3
+678,35079,xã,"Xã Đăk Ơ",674,WARD,4
+679,35080,xã,"Xã Bù Gia Mập",674,WARD,4
+680,35081,xã,"Xã Thiện Hưng",674,WARD,4
+681,35082,phường,"Phường Đồng Xoài",674,WARD,2
+682,35083,xã,"Xã Phước Sơn",674,WARD,4
+683,35084,xã,"Xã Hưng Phước",674,WARD,4
+684,35085,xã,"Xã Thuận Lợi",674,WARD,2
+685,35086,xã,"Xã Phú Nghĩa",674,WARD,4
+686,35087,xã,"Xã Thọ Sơn",674,WARD,4
+687,35088,phường,"Phường Phước Long",674,WARD,3
+688,35089,xã,"Xã Đak Nhau",674,WARD,4
+689,35589,phường,"Phường Bình Long",674,WARD,3
+690,35590,xã,"Xã Nha Bích",674,WARD,2
+691,35591,xã,"Xã Nghĩa Trung",674,WARD,4
+692,35592,xã,"Xã Lộc Thạnh",674,WARD,3
+693,35593,xã,"Xã Phú Riềng",674,WARD,3
+694,35594,xã,"Xã Phú Trung",674,WARD,3
+695,35595,xã,"Xã Bom Bo",674,WARD,4
+696,35596,xã,"Xã Lộc Ninh",674,WARD,3
+697,35597,xã,"Xã Bù Đăng",674,WARD,4
+698,35598,xã,"Xã Bình Tân",674,WARD,3
+699,35599,xã,"Xã Tân Tiến",674,WARD,3
+700,35600,xã,"Xã Lộc Hưng",674,WARD,3
+701,35601,phường,"Phường Minh Hưng",674,WARD,2
+702,35602,xã,"Xã Long Hà",674,WARD,3
+703,35603,xã,"Xã Tân Khai",674,WARD,3
+704,35604,xã,"Xã Minh Đức",674,WARD,3
+705,35605,xã,"Xã Đa Kia",674,WARD,4
+706,35606,xã,"Xã Lộc Thành",674,WARD,NULL
+707,35607,xã,"Xã Lộc Quang",674,WARD,3
+708,35608,xã,"Xã Tân Hưng",674,WARD,3
+709,35609,xã,"Xã Tân Quan",674,WARD,2
+710,35610,phường,"Phường Chơn Thành",674,WARD,2
+711,35611,xã,"Xã Đồng Tâm",674,WARD,2
+712,35612,phường,"Phường An Lộc",674,WARD,3
+713,35271,xã,"Xã Lộc Tấn",674,WARD,3
+714,38057,xã,"Xã La Ngà",674,WARD,2
+715,38058,xã,"Xã Bàu Hàm",674,WARD,1
+716,38059,phường,"Phường Bình Lộc",674,WARD,1
+717,38060,xã,"Xã Bình Minh",674,WARD,1
+718,38061,xã,"Xã Nam Cát Tiên",674,WARD,2
+719,38062,xã,"Xã Hưng Thịnh",674,WARD,1
+720,38063,xã,"Xã Cẩm Mỹ",674,WARD,2
+721,38064,phường,"Phường Bảo Vinh",674,WARD,1
+722,38065,xã,"Xã Định Quán",674,WARD,2
+723,38066,phường,"Phường Xuân Lập",674,WARD,1
+724,38067,xã,"Xã Phú Lâm",674,WARD,2
+725,38068,phường,"Phường Hố Nai",674,WARD,1
+726,38069,xã,"Xã Thống Nhất",674,WARD,1
+727,38070,xã,"Xã Xuân Phú",674,WARD,1
+728,38071,xã,"Xã Xuân Đường",674,WARD,1
+729,38072,phường,"Phường Long Bình",674,WARD,1
+730,38073,xã,"Xã Phú Hòa",674,WARD,2
+731,38074,xã,"Xã Xuân Định",674,WARD,1
+732,38075,xã,"Xã Gia Kiệm",674,WARD,1
+733,38076,xã,"Xã Xuân Lộc",674,WARD,1
+734,38077,xã,"Xã Phước Thái",674,WARD,1
+735,38078,xã,"Xã Trị An",674,WARD,1
+736,38079,xã,"Xã Xuân Quế",674,WARD,2
+737,38080,phường,"Phường Long Khánh",674,WARD,1
+738,38081,phường,"Phường Tam Phước",674,WARD,1
+739,38082,xã,"Xã Tân An",674,WARD,1
+740,38083,xã,"Xã Đại Phước",674,WARD,1
+741,38084,xã,"Xã Xuân Hòa",674,WARD,1
+742,38085,xã,"Xã Bình An",674,WARD,1
+743,38086,xã,"Xã Nhơn Trạch",674,WARD,1
+744,38087,xã,"Xã Tà Lài",674,WARD,2
+745,38088,xã,"Xã Đak Lua",674,WARD,2
+746,38089,xã,"Xã An Phước",674,WARD,1
+747,38090,xã,"Xã Dầu Giây",674,WARD,1
+748,38091,xã,"Xã Phú Vinh",674,WARD,2
+749,38092,phường,"Phường Phước Tân",674,WARD,1
+750,38093,xã,"Xã Xuân Đông",674,WARD,1
+751,38094,phường,"Phường Trấn Biên",674,WARD,1
+752,38095,phường,"Phường Hàng Gòn",674,WARD,1
+753,38096,xã,"Xã An Viễn",674,WARD,1
+754,38097,phường,"Phường Trảng Dài",674,WARD,1
+755,38098,phường,"Phường Tam Hiệp",674,WARD,1
+756,38099,xã,"Xã Phú Lý",674,WARD,1
+757,38100,xã,"Xã Thanh Sơn",674,WARD,2
+758,38101,xã,"Xã Long Thành",674,WARD,1
+759,38102,xã,"Xã Phước An",674,WARD,1
+760,38103,xã,"Xã Long Phước",674,WARD,1
+761,38104,phường,"Phường Biên Hòa",674,WARD,1
+762,38105,xã,"Xã Trảng Bom",674,WARD,1
+763,38106,xã,"Xã Xuân Bắc",674,WARD,1
+764,38107,phường,"Phường Tân Triều",674,WARD,1
+765,38108,xã,"Xã Sông Ray",674,WARD,2
+766,38109,xã,"Xã Tân Phú",674,WARD,2
+767,38110,xã,"Xã Xuân Thành",674,WARD,1
+768,38111,phường,"Phường Long Hưng",674,WARD,1
+769,38121,phường,"Phường Bình Phước",674,WARD,2
+770,132,tỉnh,"Đồng Tháp",NULL,PROVINCE,NULL
+771,35445,xã,"Xã Long Hưng",770,WARD,2
+772,35446,xã,"Xã Mỹ Thành",770,WARD,4
+773,35447,phường,"Phường Đạo Thạnh",770,WARD,2
+774,35448,xã,"Xã Long Định",770,WARD,2
+775,35449,xã,"Xã Chợ Gạo",770,WARD,3
+776,35450,xã,"Xã Lương Hòa Lạc",770,WARD,3
+777,35451,xã,"Xã Gò Công Đông",770,WARD,4
+778,35452,phường,"Phường Bình Xuân",770,WARD,3
+779,35453,xã,"Xã Tân Đông",770,WARD,4
+780,35454,xã,"Xã Mỹ Thiện",770,WARD,4
+781,35455,xã,"Xã Thanh Hưng",770,WARD,4
+782,35456,phường,"Phường Cai Lậy",770,WARD,3
+783,35457,xã,"Xã Kim Sơn",770,WARD,2
+784,35458,xã,"Xã Mỹ Đức Tây",770,WARD,4
+785,35459,xã,"Xã Bình Phú",770,WARD,4
+786,35460,xã,"Xã Châu Thành",770,WARD,2
+787,35461,phường,"Phường Mỹ Phong",770,WARD,2
+788,35462,xã,"Xã Tân Phú",770,WARD,3
+789,35463,xã,"Xã Hội Cư",770,WARD,4
+790,35464,xã,"Xã Hưng Thạnh",770,WARD,3
+791,35465,xã,"Xã Tân Thới",770,WARD,4
+792,35652,phường,"Phường Thanh Hòa",770,WARD,3
+793,36431,xã,"Xã Long Khánh",770,WARD,4
+794,36432,xã,"Xã Phương Thịnh",770,WARD,4
+795,36433,xã,"Xã Tân Nhuận Đông",770,WARD,4
+796,36434,xã,"Xã Lấp Vò",770,WARD,4
+797,36435,xã,"Xã Tràm Chim",770,WARD,4
+798,36436,xã,"Xã Tân Long",770,WARD,4
+799,36437,xã,"Xã Mỹ An Hưng",770,WARD,4
+800,36438,xã,"Xã Hòa Long",770,WARD,4
+801,36439,xã,"Xã Mỹ Hiệp",770,WARD,4
+802,36440,xã,"Xã Trường Xuân",770,WARD,4
+803,36441,xã,"Xã Phú Thọ",770,WARD,4
+804,36442,xã,"Xã Tháp Mười",770,WARD,4
+805,36443,xã,"Xã An Long",770,WARD,4
+806,36444,xã,"Xã Tân Thành",770,WARD,4
+807,36445,phường,"Phường An Bình",770,WARD,3
+808,36446,phường,"Phường Thường Lạc",770,WARD,3
+809,36447,xã,"Xã Thanh Mỹ",770,WARD,4
+810,36448,xã,"Xã Long Phú Thuận",770,WARD,4
+811,36449,xã,"Xã Bình Thành",770,WARD,4
+812,36450,xã,"Xã Mỹ Thọ",770,WARD,4
+813,36451,phường,"Phường Mỹ Ngãi",770,WARD,3
+814,36452,xã,"Xã Đốc Binh Kiều",770,WARD,4
+815,36453,xã,"Xã Thanh Bình",770,WARD,4
+816,36454,xã,"Xã Phong Hòa",770,WARD,4
+817,36455,xã,"Xã Tân Hộ Cơ",770,WARD,4
+818,36456,xã,"Xã Thường Phước",770,WARD,4
+819,36457,xã,"Xã Lai Vung",770,WARD,4
+820,36458,xã,"Xã An Phước",770,WARD,4
+821,36459,xã,"Xã Tân Thạnh",770,WARD,NULL
+822,36460,phường,"Phường Mỹ Trà",770,WARD,3
+823,36461,xã,"Xã Phú Hựu",770,WARD,4
+824,36462,xã,"Xã Tân Khánh Trung",770,WARD,4
+825,36463,phường,"Phường Hồng Ngự",770,WARD,3
+826,36464,phường,"Phường Cao Lãnh",770,WARD,3
+827,36465,xã,"Xã Tân Hồng",770,WARD,4
+828,36466,xã,"Xã Tân Phú Trung",770,WARD,4
+829,36467,xã,"Xã Ba Sao",770,WARD,4
+830,36468,xã,"Xã Bình Hàng Trung",770,WARD,4
+831,36469,xã,"Xã Phú Cường",770,WARD,4
+832,36470,xã,"Xã Phong Mỹ",770,WARD,4
+833,36471,xã,"Xã Tam Nông",770,WARD,4
+834,36472,xã,"Xã An Hòa",770,WARD,4
+835,36473,phường,"Phường Sa Đéc",770,WARD,3
+836,36474,xã,"Xã Mỹ Quí",770,WARD,4
+837,35270,xã,"Xã Tân Phước 2",770,WARD,3
+838,35415,xã,"Xã Mỹ Lợi",770,WARD,4
+839,35416,xã,"Xã Tân Phú Đông",770,WARD,4
+840,35417,xã,"Xã Bình Ninh",770,WARD,3
+841,35418,xã,"Xã An Hữu",770,WARD,4
+842,35419,phường,"Phường Long Thuận",770,WARD,3
+843,35420,xã,"Xã Vĩnh Bình",770,WARD,4
+844,35421,xã,"Xã Tân Hương",770,WARD,2
+845,35422,phường,"Phường Thới Sơn",770,WARD,2
+846,35423,xã,"Xã Phú Thành",770,WARD,4
+847,35424,xã,"Xã Long Bình",770,WARD,4
+848,35425,xã,"Xã Tân Điền",770,WARD,4
+849,35426,xã,"Xã Vĩnh Kim",770,WARD,2
+850,35427,xã,"Xã Tân Phước 3",770,WARD,3
+851,35428,xã,"Xã Hiệp Đức",770,WARD,4
+852,35429,xã,"Xã Tân Thuận Bình",770,WARD,3
+853,35430,xã,"Xã Cái Bè",770,WARD,4
+854,35431,xã,"Xã Mỹ Tịnh An",770,WARD,3
+855,35432,phường,"Phường Gò Công",770,WARD,3
+856,35433,phường,"Phường Mỹ Tho",770,WARD,NULL
+857,35434,phường,"Phường Sơn Qui",770,WARD,3
+858,35435,phường,"Phường Trung An",770,WARD,2
+859,35436,phường,"Phường Mỹ Phước Tây",770,WARD,3
+860,35437,xã,"Xã Tân Hòa",770,WARD,4
+861,35438,xã,"Xã Hậu Mỹ",770,WARD,4
+862,35439,xã,"Xã Ngũ Hiệp",770,WARD,4
+863,35440,xã,"Xã Gia Thuận",770,WARD,4
+864,35441,xã,"Xã Đồng Sơn",770,WARD,4
+865,35442,xã,"Xã An Thạnh Thủy",770,WARD,3
+866,35443,xã,"Xã Thạnh Phú",770,WARD,4
+867,35444,xã,"Xã Tân Phước 1",770,WARD,3
+868,38122,phường,"Phường Nhị Quý",770,WARD,3
+869,38123,xã,"Xã Long Tiên",770,WARD,4
+870,38124,xã,"Xã Bình Trưng",770,WARD,2
+871,38125,xã,"Xã Vĩnh Hựu",770,WARD,4
+872,38126,xã,"Xã Tân Dương",770,WARD,3
+873,119,tỉnh,"Gia Lai",NULL,PROVINCE,NULL
+874,35468,xã,"Xã Chơ Long",873,WARD,4
+875,35469,xã,"Xã Chư Prông",873,WARD,4
+876,35470,xã,"Xã Ia Băng",873,WARD,4
+877,35471,xã,"Xã Ia Rsai",873,WARD,4
+878,35472,phường,"Phường An Bình",873,WARD,4
+879,35473,xã,"Xã Ia Grai",873,WARD,4
+880,35474,xã,"Xã SRó",873,WARD,4
+881,35475,xã,"Xã Ia Khươl",873,WARD,4
+882,35476,xã,"Xã Ia Ko",873,WARD,4
+883,35477,xã,"Xã Chư Sê",873,WARD,4
+884,35478,phường,"Phường Thống Nhất",873,WARD,3
+885,35479,xã,"Xã Albá",873,WARD,4
+886,35480,xã,"Xã Ia Sao",873,WARD,4
+887,35481,xã,"Xã Kông Chro",873,WARD,4
+888,35482,xã,"Xã Ia Pia",873,WARD,4
+889,35483,xã,"Xã Ia Krái",873,WARD,4
+890,35484,xã,"Xã Ia Pnôn",873,WARD,4
+891,35485,xã,"Xã Krong",873,WARD,4
+892,35486,phường,"Phường Ayun Pa",873,WARD,4
+893,35487,xã,"Xã Ia Hrung",873,WARD,4
+894,35488,xã,"Xã Biển Hồ",873,WARD,3
+895,35489,phường,"Phường An Khê",873,WARD,4
+896,35490,phường,"Phường Hội Phú",873,WARD,3
+897,35491,xã,"Xã Ia Chia",873,WARD,4
+898,35492,xã,"Xã Bờ Ngoong",873,WARD,4
+899,35493,xã,"Xã Gào",873,WARD,3
+900,35494,xã,"Xã Ia Nan",873,WARD,4
+901,35495,xã,"Xã Ia Púch",873,WARD,4
+902,35496,xã,"Xã Ia Dơk",873,WARD,4
+903,35497,xã,"Xã Kbang",873,WARD,4
+904,35498,xã,"Xã Kon Gang",873,WARD,4
+905,35499,xã,"Xã Ia Pa",873,WARD,4
+906,35500,xã,"Xã Ia Lâu",873,WARD,4
+907,35501,xã,"Xã Ya Ma",873,WARD,4
+908,35502,xã,"Xã Ia Mơ",873,WARD,4
+909,35503,xã,"Xã Ia Krêl",873,WARD,4
+910,35504,xã,"Xã Kông Bơ La",873,WARD,4
+911,35505,phường,"Phường Pleiku",873,WARD,3
+912,35506,xã,"Xã Chư A Thai",873,WARD,4
+913,35507,xã,"Xã Phú Túc",873,WARD,4
+914,35508,xã,"Xã Ia Ly",873,WARD,4
+915,35509,xã,"Xã Ia Hrú",873,WARD,4
+916,35510,xã,"Xã Cửu An",873,WARD,4
+917,35511,xã,"Xã KDang",873,WARD,4
+918,35512,xã,"Xã Ia Tul",873,WARD,4
+919,35513,xã,"Xã Sơn Lang",873,WARD,4
+920,35514,xã,"Xã Bàu Cạn",873,WARD,4
+921,35515,xã,"Xã Ia Tôr",873,WARD,4
+922,35516,xã,"Xã Ia Dom",873,WARD,4
+923,35517,xã,"Xã Đức Cơ",873,WARD,4
+924,35518,xã,"Xã Đăk Song",873,WARD,4
+925,35613,xã,"Xã Ia Dreh",873,WARD,4
+926,35614,xã,"Xã Hra",873,WARD,4
+927,35615,xã,"Xã Chư Păh",873,WARD,4
+928,35616,xã,"Xã Ia Hiao",873,WARD,4
+929,35617,xã,"Xã Ayun",873,WARD,4
+930,35618,xã,"Xã Ia Phí",873,WARD,4
+931,35619,xã,"Xã Lơ Pang",873,WARD,4
+932,35620,xã,"Xã Ia O",873,WARD,4
+933,35621,xã,"Xã Tơ Tung",873,WARD,4
+934,35622,xã,"Xã Chư Pưh",873,WARD,4
+935,35623,xã,"Xã Mang Yang",873,WARD,4
+936,35624,xã,"Xã Chư Krey",873,WARD,4
+937,35625,xã,"Xã Đak Rong",873,WARD,4
+938,35626,xã,"Xã Ia Le",873,WARD,4
+939,35627,xã,"Xã Kon Chiêng",873,WARD,4
+940,35628,xã,"Xã Pờ Tó",873,WARD,4
+941,35629,phường,"Phường Diên Hồng",873,WARD,3
+942,35630,phường,"Phường An Phú",873,WARD,3
+943,35631,xã,"Xã Đak Đoa",873,WARD,4
+944,35632,xã,"Xã Ia Boòng",873,WARD,4
+945,35633,xã,"Xã Đak Pơ",873,WARD,4
+946,35634,xã,"Xã Ia Rbol",873,WARD,4
+947,35635,xã,"Xã Ya Hội",873,WARD,4
+948,35636,xã,"Xã Đak Sơmei",873,WARD,4
+949,35637,xã,"Xã Uar",873,WARD,4
+950,35638,xã,"Xã Phú Thiện",873,WARD,4
+951,36181,xã,"Xã Tuy Phước Đông",873,WARD,4
+952,36182,xã,"Xã Bình Dương",873,WARD,4
+953,36183,phường,"Phường Quy Nhơn Nam",873,WARD,3
+954,36184,xã,"Xã Đề Gi",873,WARD,4
+955,36185,phường,"Phường Tam Quan",873,WARD,4
+956,36186,xã,"Xã Phù Mỹ Bắc",873,WARD,4
+957,36187,xã,"Xã Ân Tường",873,WARD,4
+958,36188,xã,"Xã Vĩnh Thạnh",873,WARD,4
+959,36189,phường,"Phường Quy Nhơn Bắc",873,WARD,3
+960,36190,phường,"Phường An Nhơn Đông",873,WARD,4
+961,36191,xã,"Xã Vạn Đức",873,WARD,4
+962,36192,xã,"Xã Bình Phú",873,WARD,4
+963,36193,phường,"Phường An Nhơn",873,WARD,4
+964,36194,xã,"Xã Phù Mỹ Nam",873,WARD,4
+965,36195,xã,"Xã Tuy Phước Bắc",873,WARD,4
+966,36196,xã,"Xã Bình An",873,WARD,4
+967,36197,phường,"Phường Bình Định",873,WARD,4
+968,36198,xã,"Xã Phù Mỹ",873,WARD,4
+969,36199,phường,"Phường Hoài Nhơn Nam",873,WARD,4
+970,36200,xã,"Xã Vân Canh",873,WARD,4
+971,36201,xã,"Xã Ân Hảo",873,WARD,4
+972,36202,xã,"Xã Tuy Phước Tây",873,WARD,4
+973,36203,xã,"Xã Hòa Hội",873,WARD,4
+974,36204,phường,"Phường Bồng Sơn",873,WARD,4
+975,36205,xã,"Xã Phù Mỹ Đông",873,WARD,4
+976,36206,xã,"Xã Vĩnh Sơn",873,WARD,4
+977,36207,xã,"Xã Ngô Mây",873,WARD,4
+978,36208,phường,"Phường Hoài Nhơn",873,WARD,4
+979,36209,xã,"Xã An Nhơn Tây",873,WARD,4
+980,36210,phường,"Phường Quy Nhơn Tây",873,WARD,3
+981,36211,xã,"Xã Tuy Phước",873,WARD,4
+982,36212,xã,"Xã Nhơn Châu",873,WARD,4
+983,36213,xã,"Xã An Toàn",873,WARD,4
+984,36214,phường,"Phường Hoài Nhơn Đông",873,WARD,4
+985,36215,xã,"Xã An Vinh",873,WARD,4
+986,36216,xã,"Xã An Lão",873,WARD,4
+987,36217,xã,"Xã Phù Mỹ Tây",873,WARD,4
+988,36218,phường,"Phường Hoài Nhơn Tây",873,WARD,4
+989,36219,phường,"Phường Hoài Nhơn Bắc",873,WARD,4
+990,36220,phường,"Phường Quy Nhơn",873,WARD,3
+991,36221,phường,"Phường An Nhơn Bắc",873,WARD,4
+992,36222,xã,"Xã Phù Cát",873,WARD,4
+993,36223,xã,"Xã Vĩnh Thịnh",873,WARD,4
+994,36224,xã,"Xã Canh Vinh",873,WARD,4
+995,36225,xã,"Xã Vĩnh Quang",873,WARD,4
+996,36226,xã,"Xã Xuân An",873,WARD,4
+997,36227,xã,"Xã Hoài Ân",873,WARD,4
+998,36228,xã,"Xã Bình Khê",873,WARD,4
+999,36229,xã,"Xã Kim Sơn",873,WARD,4
+1000,36230,phường,"Phường An Nhơn Nam",873,WARD,4
+1001,36231,xã,"Xã Cát Tiến",873,WARD,4
+1002,36232,xã,"Xã Hội Sơn",873,WARD,4
+1003,36233,xã,"Xã Tây Sơn",873,WARD,4
+1004,36234,xã,"Xã Canh Liên",873,WARD,4
+1005,36235,xã,"Xã An Hòa",873,WARD,4
+1006,36236,phường,"Phường Quy Nhơn Đông",873,WARD,3
+1007,36237,xã,"Xã Bình Hiệp",873,WARD,4
+1008,36238,xã,"Xã An Lương",873,WARD,4
+1009,81,"thành phố","Hà Nội",NULL,PROVINCE,NULL
+1010,38150,xã,"Xã Bát Tràng",1009,WARD,1
+1011,38151,phường,"Phường Hoàng Mai",1009,WARD,1
+1012,38152,phường,"Phường Hoàng Liệt",1009,WARD,1
+1013,38153,phường,"Phường Định Công",1009,WARD,1
+1014,38154,phường,"Phường Hồng Hà",1009,WARD,1
+1015,38155,phường,"Phường Tây Hồ",1009,WARD,1
+1016,38156,phường,"Phường Tương Mai",1009,WARD,1
+1017,38157,phường,"Phường Cửa Nam",1009,WARD,1
+1018,38158,phường,"Phường Nghĩa Đô",1009,WARD,1
+1019,38159,xã,"Xã Phúc Thọ",1009,WARD,2
+1020,38160,xã,"Xã Phượng Dực",1009,WARD,2
+1021,38161,phường,"Phường Bạch Mai",1009,WARD,1
+1022,38162,xã,"Xã Thuận An",1009,WARD,1
+1023,38163,xã,"Xã Cổ Đô",1009,WARD,2
+1024,38164,xã,"Xã Trần Phú",1009,WARD,1
+1025,38165,phường,"Phường Giảng Võ",1009,WARD,1
+1026,38166,phường,"Phường Hai Bà Trưng",1009,WARD,1
+1027,38167,xã,"Xã Minh Châu",1009,WARD,2
+1028,38168,xã,"Xã Vật Lại",1009,WARD,2
+1029,38169,xã,"Xã Vân Đình",1009,WARD,2
+1030,38170,xã,"Xã Chương Dương",1009,WARD,1
+1031,38171,phường,"Phường Từ Liêm",1009,WARD,1
+1032,38172,phường,"Phường Phú Lương",1009,WARD,1
+1033,38173,phường,"Phường Long Biên",1009,WARD,1
+1034,38174,xã,"Xã Phúc Thịnh",1009,WARD,1
+1035,38175,phường,"Phường Cầu Giấy",1009,WARD,1
+1036,38176,xã,"Xã Dương Hòa",1009,WARD,1
+1037,38177,xã,"Xã Hát Môn",1009,WARD,2
+1038,38178,xã,"Xã Ứng Hòa",1009,WARD,2
+1039,38179,phường,"Phường Phú Diễn",1009,WARD,1
+1040,38180,xã,"Xã Hòa Lạc",1009,WARD,1
+1041,38181,xã,"Xã Nội Bài",1009,WARD,1
+1042,38182,xã,"Xã Mỹ Đức",1009,WARD,2
+1043,38183,phường,"Phường Thanh Liệt",1009,WARD,1
+1044,38184,xã,"Xã Vĩnh Thanh",1009,WARD,1
+1045,38185,xã,"Xã Xuân Mai",1009,WARD,1
+1046,38186,xã,"Xã Ba Vì",1009,WARD,2
+1047,38187,phường,"Phường Thanh Xuân",1009,WARD,1
+1048,38188,xã,"Xã Hoài Đức",1009,WARD,1
+1049,38189,phường,"Phường Sơn Tây",1009,WARD,1
+1050,38190,phường,"Phường Chương Mỹ",1009,WARD,1
+1051,38191,xã,"Xã Quốc Oai",1009,WARD,1
+1052,38192,xã,"Xã Thượng Phúc",1009,WARD,1
+1053,38193,phường,"Phường Kim Liên",1009,WARD,1
+1054,38194,phường,"Phường Ba Đình",1009,WARD,1
+1055,38195,xã,"Xã Quảng Bị",1009,WARD,1
+1056,38196,phường,"Phường Yên Nghĩa",1009,WARD,1
+1057,38197,phường,"Phường Tây Mỗ",1009,WARD,1
+1058,38198,xã,"Xã Thạch Thất",1009,WARD,1
+1059,38199,phường,"Phường Lĩnh Nam",1009,WARD,1
+1060,38200,xã,"Xã Thường Tín",1009,WARD,1
+1061,38201,xã,"Xã Liên Minh",1009,WARD,1
+1062,38202,xã,"Xã Phúc Lộc",1009,WARD,2
+1063,38203,xã,"Xã Kiều Phú",1009,WARD,1
+1064,38204,xã,"Xã Hạ Bằng",1009,WARD,1
+1065,38205,xã,"Xã Quang Minh",1009,WARD,1
+1066,38206,phường,"Phường Bồ Đề",1009,WARD,1
+1067,38207,xã,"Xã Hòa Xá",1009,WARD,2
+1068,38208,xã,"Xã Sơn Đồng",1009,WARD,1
+1069,38209,phường,"Phường Thượng Cát",1009,WARD,1
+1070,38210,phường,"Phường Xuân Đỉnh",1009,WARD,1
+1071,38211,xã,"Xã Tây Phương",1009,WARD,1
+1072,38212,phường,"Phường Hoàn Kiếm",1009,WARD,1
+1073,38213,phường,"Phường Việt Hưng",1009,WARD,1
+1074,38214,xã,"Xã Yên Lãng",1009,WARD,1
+1075,38215,xã,"Xã Trung Giã",1009,WARD,1
+1076,38216,xã,"Xã Dân Hòa",1009,WARD,1
+1077,38217,xã,"Xã Sóc Sơn",1009,WARD,1
+1078,38218,xã,"Xã Kim Anh",1009,WARD,1
+1079,38219,xã,"Xã Thư Lâm",1009,WARD,1
+1080,38220,xã,"Xã Thiên Lộc",1009,WARD,1
+1081,38221,xã,"Xã Đoài Phương",1009,WARD,1
+1082,38222,phường,"Phường Kiến Hưng",1009,WARD,1
+1083,38223,xã,"Xã Gia Lâm",1009,WARD,1
+1084,38224,phường,"Phường Phú Thượng",1009,WARD,1
+1085,38225,xã,"Xã Chuyên Mỹ",1009,WARD,2
+1086,38226,xã,"Xã Ứng Thiên",1009,WARD,2
+1087,38227,phường,"Phường Vĩnh Tuy",1009,WARD,1
+1088,38228,xã,"Xã Yên Xuân",1009,WARD,1
+1089,38229,xã,"Xã Suối Hai",1009,WARD,2
+1090,38230,xã,"Xã Ô Diên",1009,WARD,1
+1091,38231,phường,"Phường Khương Đình",1009,WARD,1
+1092,38232,xã,"Xã Quảng Oai",1009,WARD,2
+1093,38233,xã,"Xã An Khánh",1009,WARD,1
+1094,38234,xã,"Xã Hưng Đạo",1009,WARD,1
+1095,38235,xã,"Xã Hương Sơn",1009,WARD,2
+1096,38236,phường,"Phường Láng",1009,WARD,1
+1097,38237,phường,"Phường Dương Nội",1009,WARD,1
+1098,38238,xã,"Xã Hồng Vân",1009,WARD,1
+1099,38239,phường,"Phường Vĩnh Hưng",1009,WARD,1
+1100,38240,xã,"Xã Phú Cát",1009,WARD,1
+1101,38241,xã,"Xã Mê Linh",1009,WARD,1
+1102,38242,xã,"Xã Yên Bài",1009,WARD,1
+1103,38243,xã,"Xã Phú Xuyên",1009,WARD,1
+1104,38244,phường,"Phường Ngọc Hà",1009,WARD,1
+1105,38245,phường,"Phường Xuân Phương",1009,WARD,1
+1106,38246,xã,"Xã Đông Anh",1009,WARD,1
+1107,38247,phường,"Phường Yên Sở",1009,WARD,1
+1108,38248,xã,"Xã Phúc Sơn",1009,WARD,2
+1109,38249,xã,"Xã Đan Phượng",1009,WARD,2
+1110,38250,xã,"Xã Bình Minh",1009,WARD,1
+1111,38251,xã,"Xã Bất Bạt",1009,WARD,2
+1112,38252,xã,"Xã Tam Hưng",1009,WARD,1
+1113,38253,phường,"Phường Đại Mỗ",1009,WARD,1
+1114,38254,phường,"Phường Đông Ngạc",1009,WARD,1
+1115,38255,xã,"Xã Phù Đổng",1009,WARD,1
+1116,38256,phường,"Phường Phương Liệt",1009,WARD,1
+1117,38257,xã,"Xã Tiến Thắng",1009,WARD,1
+1118,38258,xã,"Xã Phú Nghĩa",1009,WARD,1
+1119,38259,xã,"Xã Thanh Trì",1009,WARD,1
+1120,38260,phường,"Phường Phúc Lợi",1009,WARD,1
+1121,38261,xã,"Xã Đại Xuyên",1009,WARD,2
+1122,38262,xã,"Xã Thanh Oai",1009,WARD,1
+1123,38263,xã,"Xã Nam Phù",1009,WARD,1
+1124,38264,xã,"Xã Ngọc Hồi",1009,WARD,1
+1125,38265,xã,"Xã Hòa Phú",1009,WARD,1
+1126,38266,xã,"Xã Hồng Sơn",1009,WARD,2
+1127,38267,xã,"Xã Đa Phúc",1009,WARD,1
+1128,38268,xã,"Xã Đại Thanh",1009,WARD,1
+1129,38269,phường,"Phường Yên Hòa",1009,WARD,1
+1130,38270,phường,"Phường Tùng Thiện",1009,WARD,1
+1131,38271,phường,"Phường Văn Miếu - Quốc Tử Giám",1009,WARD,1
+1132,38272,phường,"Phường Đống Đa",1009,WARD,1
+1133,38273,phường,"Phường Tây Tựu",1009,WARD,1
+1134,38274,phường,"Phường Ô Chợ Dừa",1009,WARD,1
+1135,38275,phường,"Phường Hà Đông",1009,WARD,1
+1136,108,tỉnh,"Hà Tĩnh",NULL,PROVINCE,NULL
+1137,37045,xã,"Xã Thạch Khê",1136,WARD,3
+1138,37046,xã,"Xã Kỳ Xuân",1136,WARD,4
+1139,37047,xã,"Xã Thượng Đức",1136,WARD,4
+1140,37048,xã,"Xã Cẩm Xuyên",1136,WARD,4
+1141,37049,xã,"Xã Cẩm Lạc",1136,WARD,4
+1142,37050,xã,"Xã Kỳ Hoa",1136,WARD,3
+1143,37051,xã,"Xã Kỳ Lạc",1136,WARD,4
+1144,37052,xã,"Xã Đức Thịnh",1136,WARD,4
+1145,37053,xã,"Xã Hồng Lộc",1136,WARD,4
+1146,37054,xã,"Xã Tứ Mỹ",1136,WARD,4
+1147,37055,xã,"Xã Cẩm Hưng",1136,WARD,4
+1148,37056,xã,"Xã Sơn Giang",1136,WARD,4
+1149,37057,xã,"Xã Gia Hanh",1136,WARD,4
+1150,37058,xã,"Xã Đồng Lộc",1136,WARD,4
+1151,37059,xã,"Xã Cổ Đạm",1136,WARD,4
+1152,37060,xã,"Xã Kỳ Thượng",1136,WARD,4
+1153,37061,xã,"Xã Đan Hải",1136,WARD,4
+1154,37200,phường,"Phường Nam Hồng Lĩnh",1136,WARD,4
+1155,37201,xã,"Xã Lộc Hà",1136,WARD,4
+1156,37202,xã,"Xã Xuân Lộc",1136,WARD,4
+1157,37203,xã,"Xã Thạch Xuân",1136,WARD,4
+1158,37204,xã,"Xã Đức Thọ",1136,WARD,4
+1159,37205,xã,"Xã Cẩm Trung",1136,WARD,4
+1160,37206,xã,"Xã Việt Xuyên",1136,WARD,4
+1161,37207,xã,"Xã Thạch Hà",1136,WARD,4
+1162,37208,xã,"Xã Hương Xuân",1136,WARD,4
+1163,37209,xã,"Xã Đồng Tiến",1136,WARD,3
+1164,37210,phường,"Phường Hải Ninh",1136,WARD,3
+1165,37211,xã,"Xã Thạch Lạc",1136,WARD,3
+1166,37212,xã,"Xã Hà Linh",1136,WARD,4
+1167,37213,phường,"Phường Trần Phú",1136,WARD,3
+1168,37214,xã,"Xã Hương Đô",1136,WARD,4
+1169,37215,xã,"Xã Phúc Trạch",1136,WARD,4
+1170,37216,xã,"Xã Hương Phố",1136,WARD,4
+1171,37217,xã,"Xã Mai Phụ",1136,WARD,4
+1172,37218,xã,"Xã Cẩm Bình",1136,WARD,3
+1173,37219,phường,"Phường Thành Sen",1136,WARD,3
+1174,37062,xã,"Xã Hương Khê",1136,WARD,4
+1175,37063,xã,"Xã Sơn Tiến",1136,WARD,4
+1176,37064,xã,"Xã Đức Đồng",1136,WARD,4
+1177,37065,xã,"Xã Trường Lưu",1136,WARD,4
+1178,37066,xã,"Xã Kỳ Khang",1136,WARD,4
+1179,37067,xã,"Xã Đông Kinh",1136,WARD,4
+1180,37068,xã,"Xã Sơn Tây",1136,WARD,4
+1181,37069,phường,"Phường Hà Huy Tập",1136,WARD,3
+1182,37070,xã,"Xã Sơn Kim 2",1136,WARD,NULL
+1183,37071,xã,"Xã Mai Hoa",1136,WARD,4
+1184,37072,xã,"Xã Vũ Quang",1136,WARD,4
+1185,37073,xã,"Xã Kim Hoa",1136,WARD,4
+1186,37074,xã,"Xã Tiên Điền",1136,WARD,4
+1187,37075,xã,"Xã Kỳ Văn",1136,WARD,4
+1188,37076,xã,"Xã Đức Quang",1136,WARD,4
+1189,37077,xã,"Xã Tùng Lộc",1136,WARD,4
+1190,37078,xã,"Xã Nghi Xuân",1136,WARD,4
+1191,37079,phường,"Phường Bắc Hồng Lĩnh",1136,WARD,4
+1192,37080,xã,"Xã Kỳ Anh",1136,WARD,4
+1193,37081,xã,"Xã Toàn Lưu",1136,WARD,4
+1194,37082,xã,"Xã Sơn Hồng",1136,WARD,4
+1195,37083,xã,"Xã Cẩm Duệ",1136,WARD,4
+1196,37084,xã,"Xã Thiên Cầm",1136,WARD,4
+1197,37085,xã,"Xã Đức Minh",1136,WARD,4
+1198,37086,xã,"Xã Can Lộc",1136,WARD,4
+1199,37087,xã,"Xã Yên Hòa",1136,WARD,4
+1200,37088,phường,"Phường Sông Trí",1136,WARD,3
+1201,37089,xã,"Xã Hương Bình",1136,WARD,4
+1202,37090,xã,"Xã Sơn Kim 1",1136,WARD,4
+1203,37091,xã,"Xã Hương Sơn",1136,WARD,4
+1204,37092,phường,"Phường Hoành Sơn",1136,WARD,3
+1205,37093,phường,"Phường Vũng Áng",1136,WARD,3
+1206,82,"thành phố","Hải Phòng",NULL,PROVINCE,NULL
+1207,35584,phường,"Phường Ngô Quyền",1206,WARD,1
+1208,35585,xã,"Xã An Khánh",1206,WARD,1
+1209,35586,phường,"Phường Lưu Kiếm",1206,WARD,1
+1210,35587,xã,"Xã Tân Minh",1206,WARD,1
+1211,35588,xã,"Xã Nguyễn Bỉnh Khiêm",1206,WARD,1
+1212,37504,xã,"Xã Hồng Châu",1206,WARD,3
+1213,37505,xã,"Xã Tân An",1206,WARD,3
+1214,37506,phường,"Phường Kinh Môn",1206,WARD,2
+1215,37507,xã,"Xã Gia Phúc",1206,WARD,2
+1216,37508,xã,"Xã An Phú",1206,WARD,2
+1217,37509,xã,"Xã Yết Kiêu",1206,WARD,2
+1218,37510,phường,"Phường Chu Văn An",1206,WARD,2
+1219,37511,xã,"Xã Thượng Hồng",1206,WARD,2
+1220,37512,phường,"Phường Chí Linh",1206,WARD,2
+1221,37513,xã,"Xã Cẩm Giang",1206,WARD,2
+1222,37514,xã,"Xã Hà Bắc",1206,WARD,3
+1223,37515,phường,"Phường Bắc An Phụ",1206,WARD,2
+1224,37516,phường,"Phường Thạch Khôi",1206,WARD,1
+1225,37517,phường,"Phường Hải Dương",1206,WARD,1
+1226,37518,xã,"Xã Nam Thanh Miện",1206,WARD,3
+1227,37519,xã,"Xã Nguyên Giáp",1206,WARD,2
+1228,37520,xã,"Xã Tứ Kỳ",1206,WARD,2
+1229,37521,xã,"Xã Hải Hưng",1206,WARD,3
+1230,37522,xã,"Xã Bình Giang",1206,WARD,2
+1231,37523,xã,"Xã Tân Kỳ",1206,WARD,2
+1232,37524,xã,"Xã Trường Tân",1206,WARD,2
+1233,37525,xã,"Xã Mao Điền",1206,WARD,2
+1234,37526,phường,"Phường Trần Nhân Tông",1206,WARD,2
+1235,37527,xã,"Xã Hà Đông",1206,WARD,3
+1236,37528,phường,"Phường Tân Hưng",1206,WARD,1
+1237,37529,xã,"Xã Thái Tân",1206,WARD,2
+1238,37530,xã,"Xã Kim Thành",1206,WARD,2
+1239,37531,xã,"Xã An Thành",1206,WARD,2
+1240,37532,phường,"Phường Nhị Chiểu",1206,WARD,2
+1241,37533,xã,"Xã Thanh Miện",1206,WARD,3
+1242,37534,xã,"Xã Đường An",1206,WARD,2
+1243,37535,xã,"Xã Cẩm Giàng",1206,WARD,NULL
+1244,37536,xã,"Xã Nam Sách",1206,WARD,2
+1245,37537,xã,"Xã Ninh Giang",1206,WARD,3
+1246,37538,phường,"Phường Việt Hòa",1206,WARD,1
+1247,37539,phường,"Phường Ái Quốc",1206,WARD,1
+1248,37540,xã,"Xã Khúc Thừa Dụ",1206,WARD,3
+1249,37541,xã,"Xã Lai Khê",1206,WARD,2
+1250,37542,xã,"Xã Hà Nam",1206,WARD,3
+1251,37543,phường,"Phường Trần Hưng Đạo",1206,WARD,2
+1252,37576,xã,"Xã Tuệ Tĩnh",1206,WARD,2
+1253,37577,xã,"Xã Thanh Hà",1206,WARD,3
+1254,37578,xã,"Xã Hợp Tiến",1206,WARD,2
+1255,37579,phường,"Phường Nguyễn Trãi",1206,WARD,2
+1256,37580,xã,"Xã Kẻ Sặt",1206,WARD,2
+1257,37581,phường,"Phường Nam Đồng",1206,WARD,1
+1258,37582,xã,"Xã Gia Lộc",1206,WARD,2
+1259,37583,xã,"Xã Đại Sơn",1206,WARD,2
+1260,37584,xã,"Xã Chí Minh",1206,WARD,2
+1261,37419,xã,"Xã Hà Tây",1206,WARD,3
+1262,37420,phường,"Phường Lê Đại Hành",1206,WARD,2
+1263,37421,xã,"Xã Trần Phú",1206,WARD,2
+1264,37422,xã,"Xã Vĩnh Lại",1206,WARD,3
+1265,37423,phường,"Phường Phạm Sư Mạnh",1206,WARD,2
+1266,37424,phường,"Phường Lê Thanh Nghị",1206,WARD,1
+1267,37425,phường,"Phường Tứ Minh",1206,WARD,1
+1268,37426,xã,"Xã Nguyễn Lương Bằng",1206,WARD,2
+1269,37427,xã,"Xã Nam An Phụ",1206,WARD,2
+1270,37428,phường,"Phường Thành Đông",1206,WARD,1
+1271,37429,xã,"Xã Bắc Thanh Miện",1206,WARD,3
+1272,37430,xã,"Xã Lạc Phượng",1206,WARD,2
+1273,37431,xã,"Xã Phú Thái",1206,WARD,2
+1274,37432,phường,"Phường Trần Liễu",1206,WARD,2
+1275,37433,phường,"Phường Nguyễn Đại Năng",1206,WARD,2
+1276,38276,phường,"Phường Phù Liễn",1206,WARD,1
+1277,38277,phường,"Phường Hòa Bình",1206,WARD,1
+1278,38278,phường,"Phường Thiên Hương",1206,WARD,1
+1279,38279,phường,"Phường An Dương",1206,WARD,1
+1280,38280,xã,"Xã Hùng Thắng",1206,WARD,1
+1281,38281,phường,"Phường An Biên",1206,WARD,1
+1282,38282,xã,"Xã Vĩnh Hòa",1206,WARD,1
+1283,38283,xã,"Xã An Trường",1206,WARD,1
+1284,38284,phường,"Phường An Phong",1206,WARD,1
+1285,38285,phường,"Phường Nam Triệu",1206,WARD,1
+1286,38286,xã,"Xã Việt Khê",1206,WARD,1
+1287,38287,phường,"Phường An Hải",1206,WARD,1
+1288,38288,phường,"Phường Thủy Nguyên",1206,WARD,1
+1289,38289,phường,"Phường Bạch Đằng",1206,WARD,1
+1290,38290,xã,"Xã Vĩnh Thịnh",1206,WARD,1
+1291,38291,phường,"Phường Hải An",1206,WARD,1
+1292,38292,xã,"Xã Vĩnh Bảo",1206,WARD,1
+1293,38293,"đặc khu","Đặc khu Cát Hải",1206,WARD,1
+1294,38294,phường,"Phường Nam Đồ Sơn",1206,WARD,1
+1295,38295,"đặc khu","Đặc khu Bạch Long Vĩ",1206,WARD,2
+1296,38296,xã,"Xã Kiến Minh",1206,WARD,1
+1297,38297,xã,"Xã Vĩnh Am",1206,WARD,1
+1298,38298,phường,"Phường Dương Kinh",1206,WARD,1
+1299,38299,xã,"Xã Chấn Hưng",1206,WARD,1
+1300,38300,xã,"Xã Kiến Thụy",1206,WARD,1
+1301,38301,xã,"Xã An Hưng",1206,WARD,1
+1302,38302,xã,"Xã Nghi Dương",1206,WARD,1
+1303,38303,xã,"Xã Vĩnh Hải",1206,WARD,1
+1304,38304,xã,"Xã An Lão",1206,WARD,1
+1305,38305,xã,"Xã Kiến Hải",1206,WARD,1
+1306,38306,xã,"Xã An Quang",1206,WARD,1
+1307,38307,phường,"Phường Hưng Đạo",1206,WARD,1
+1308,38308,xã,"Xã Tiên Minh",1206,WARD,1
+1309,38309,xã,"Xã Tiên Lãng",1206,WARD,1
+1310,38310,phường,"Phường Đông Hải",1206,WARD,1
+1311,38311,xã,"Xã Vĩnh Thuận",1206,WARD,1
+1312,38312,phường,"Phường Lê Chân",1206,WARD,1
+1313,38313,phường,"Phường Gia Viên",1206,WARD,1
+1314,38314,phường,"Phường Kiến An",1206,WARD,1
+1315,38315,phường,"Phường Lê Ích Mộc",1206,WARD,1
+1316,38316,phường,"Phường Đồ Sơn",1206,WARD,1
+1317,38317,phường,"Phường Hồng Bàng",1206,WARD,1
+1318,38318,xã,"Xã Quyết Thắng",1206,WARD,1
+1319,38319,phường,"Phường Hồng An",1206,WARD,1
+1320,38320,xã,"Xã Kiến Hưng",1206,WARD,1
+1321,122,"thành phố","Hồ Chí Minh",NULL,PROVINCE,NULL
+1322,35066,phường,"Phường Thới Hòa",1321,WARD,1
+1323,35067,xã,"Xã Thanh An",1321,WARD,2
+1324,35040,phường,"Phường Thuận An",1321,WARD,1
+1325,35041,xã,"Xã Long Hòa",1321,WARD,1
+1326,35042,phường,"Phường Đông Hòa",1321,WARD,1
+1327,35043,xã,"Xã Trừ Văn Thố",1321,WARD,1
+1328,35044,xã,"Xã Thường Tân",1321,WARD,1
+1329,35045,xã,"Xã Bắc Tân Uyên",1321,WARD,1
+1330,35046,phường,"Phường Bình Dương",1321,WARD,1
+1331,35047,xã,"Xã An Long",1321,WARD,1
+1332,35048,phường,"Phường An Phú",1321,WARD,1
+1333,35049,phường,"Phường Tân Khánh",1321,WARD,1
+1334,35050,phường,"Phường Tây Nam",1321,WARD,1
+1335,35051,phường,"Phường Thủ Dầu Một",1321,WARD,1
+1336,35052,phường,"Phường Phú Lợi",1321,WARD,1
+1337,35053,xã,"Xã Phước Hòa",1321,WARD,1
+1338,35054,phường,"Phường Thuận Giao",1321,WARD,1
+1339,35055,phường,"Phường Dĩ An",1321,WARD,1
+1340,35056,xã,"Xã Phú Giáo",1321,WARD,1
+1341,35057,xã,"Xã Bàu Bàng",1321,WARD,1
+1342,35058,xã,"Xã Phước Thành",1321,WARD,1
+1343,35059,phường,"Phường Hòa Lợi",1321,WARD,1
+1344,35060,phường,"Phường Long Nguyên",1321,WARD,1
+1345,35061,phường,"Phường Phú An",1321,WARD,1
+1346,35062,phường,"Phường Bến Cát",1321,WARD,1
+1347,35063,phường,"Phường Chánh Hiệp",1321,WARD,1
+1348,35064,xã,"Xã Dầu Tiếng",1321,WARD,1
+1349,35065,phường,"Phường Tân Đông Hiệp",1321,WARD,1
+1350,35068,phường,"Phường Tân Hiệp",1321,WARD,1
+1351,35069,phường,"Phường Vĩnh Tân",1321,WARD,1
+1352,35070,phường,"Phường Lái Thiêu",1321,WARD,1
+1353,35071,phường,"Phường Chánh Phú Hòa",1321,WARD,1
+1354,35072,phường,"Phường Bình Hòa",1321,WARD,1
+1355,35073,phường,"Phường Tân Uyên",1321,WARD,1
+1356,35074,xã,"Xã Minh Thạnh",1321,WARD,1
+1357,35075,phường,"Phường Bình Cơ",1321,WARD,1
+1358,37127,phường,"Phường Bến Thành",1321,WARD,1
+1359,37128,phường,"Phường Phú Nhuận",1321,WARD,1
+1360,37129,phường,"Phường Bình Thạnh",1321,WARD,1
+1361,37130,xã,"Xã Nhà Bè",1321,WARD,1
+1362,37131,xã,"Xã Bình Chánh",1321,WARD,1
+1363,37132,phường,"Phường Bình Đông",1321,WARD,1
+1364,37133,phường,"Phường An Lạc",1321,WARD,1
+1365,37134,phường,"Phường Xóm Chiếu",1321,WARD,1
+1366,37135,phường,"Phường Tân Sơn",1321,WARD,1
+1367,37136,phường,"Phường Gò Vấp",1321,WARD,1
+1368,37137,phường,"Phường An Phú Đông",1321,WARD,1
+1369,37138,phường,"Phường Phước Long",1321,WARD,1
+1370,37139,phường,"Phường Linh Xuân",1321,WARD,1
+1371,37140,phường,"Phường Chợ Quán",1321,WARD,1
+1372,37141,phường,"Phường Vườn Lài",1321,WARD,1
+1373,37142,xã,"Xã Đông Thạnh",1321,WARD,1
+1374,37143,xã,"Xã Bình Mỹ",1321,WARD,1
+1375,37144,phường,"Phường Tân Định",1321,WARD,1
+1376,37145,phường,"Phường Cầu Kiệu",1321,WARD,1
+1377,37146,phường,"Phường Trung Mỹ Tây",1321,WARD,1
+1378,37147,phường,"Phường Bình Tây",1321,WARD,1
+1379,37148,phường,"Phường Đông Hưng Thuận",1321,WARD,1
+1380,37149,phường,"Phường Đức Nhuận",1321,WARD,1
+1381,37150,phường,"Phường Tân Sơn Nhất",1321,WARD,1
+1382,37151,phường,"Phường Nhiêu Lộc",1321,WARD,1
+1383,37152,phường,"Phường Bình Hưng Hòa",1321,WARD,1
+1384,37153,phường,"Phường Tân Mỹ",1321,WARD,1
+1385,37154,phường,"Phường Tân Hưng",1321,WARD,1
+1386,37155,phường,"Phường Xuân Hòa",1321,WARD,1
+1387,37156,phường,"Phường Tây Thạnh",1321,WARD,1
+1388,37157,phường,"Phường Long Bình",1321,WARD,1
+1389,37158,phường,"Phường Bình Tiên",1321,WARD,1
+1390,37159,phường,"Phường Bình Thới",1321,WARD,1
+1391,37160,xã,"Xã Cần Giờ",1321,WARD,2
+1392,37161,phường,"Phường Bình Quới",1321,WARD,1
+1393,37162,phường,"Phường An Nhơn",1321,WARD,1
+1394,37163,xã,"Xã Phú Hòa Đông",1321,WARD,1
+1395,37164,xã,"Xã An Nhơn Tây",1321,WARD,1
+1396,37165,phường,"Phường Vĩnh Hội",1321,WARD,1
+1397,37166,phường,"Phường Hiệp Bình",1321,WARD,1
+1398,37167,xã,"Xã Tân Nhựt",1321,WARD,1
+1399,37168,phường,"Phường Tân Thới Hiệp",1321,WARD,1
+1400,37169,phường,"Phường Phú Thọ",1321,WARD,1
+1401,37170,xã,"Xã Tân An Hội",1321,WARD,1
+1402,37171,phường,"Phường Thạnh Mỹ Tây",1321,WARD,1
+1403,37172,phường,"Phường Tân Sơn Hòa",1321,WARD,1
+1404,37173,xã,"Xã Xuân Thới Sơn",1321,WARD,1
+1405,37174,phường,"Phường Thới An",1321,WARD,1
+1406,37175,phường,"Phường Bình Trị Đông",1321,WARD,1
+1407,37176,xã,"Xã Nhuận Đức",1321,WARD,1
+1408,37177,xã,"Xã Hưng Long",1321,WARD,1
+1409,37178,phường,"Phường Chợ Lớn",1321,WARD,1
+1410,37179,phường,"Phường Diên Hồng",1321,WARD,1
+1411,37180,phường,"Phường Tân Phú",1321,WARD,1
+1412,37181,phường,"Phường Bình Phú",1321,WARD,1
+1413,37182,phường,"Phường An Hội Đông",1321,WARD,1
+1414,37183,xã,"Xã Thạnh An",1321,WARD,NULL
+1415,37184,phường,"Phường Phú Thọ Hòa",1321,WARD,1
+1416,37185,xã,"Xã Tân Vĩnh Lộc",1321,WARD,1
+1417,37186,phường,"Phường Gia Định",1321,WARD,1
+1418,37187,phường,"Phường Tam Bình",1321,WARD,1
+1419,37188,phường,"Phường Tân Hòa",1321,WARD,1
+1420,37189,phường,"Phường Chánh Hưng",1321,WARD,1
+1421,37190,phường,"Phường Thông Tây Hội",1321,WARD,1
+1422,37191,xã,"Xã Vĩnh Lộc",1321,WARD,1
+1423,37192,phường,"Phường Hòa Hưng",1321,WARD,1
+1424,37193,phường,"Phường Minh Phụng",1321,WARD,1
+1425,37194,phường,"Phường Long Trường",1321,WARD,1
+1426,37094,phường,"Phường Bảy Hiền",1321,WARD,1
+1427,37095,phường,"Phường Hạnh Thông",1321,WARD,1
+1428,37096,phường,"Phường Cầu Ông Lãnh",1321,WARD,1
+1429,37097,phường,"Phường Bình Lợi Trung",1321,WARD,1
+1430,37098,phường,"Phường Long Phước",1321,WARD,1
+1431,37099,xã,"Xã Bình Lợi",1321,WARD,1
+1432,37100,phường,"Phường Phú Thuận",1321,WARD,1
+1433,37101,phường,"Phường Bình Tân",1321,WARD,1
+1434,37102,xã,"Xã Thái Mỹ",1321,WARD,1
+1435,37103,xã,"Xã An Thới Đông",1321,WARD,2
+1436,37104,xã,"Xã Hiệp Phước",1321,WARD,1
+1437,37105,phường,"Phường Phú Lâm",1321,WARD,1
+1438,37106,phường,"Phường Cát Lái",1321,WARD,1
+1439,37107,phường,"Phường Tân Sơn Nhì",1321,WARD,1
+1440,37108,phường,"Phường Tân Thuận",1321,WARD,1
+1441,37109,phường,"Phường An Khánh",1321,WARD,1
+1442,37110,phường,"Phường Phú Thạnh",1321,WARD,1
+1443,37111,phường,"Phường Phú Định",1321,WARD,1
+1444,37112,phường,"Phường Tăng Nhơn Phú",1321,WARD,1
+1445,37113,phường,"Phường Sài Gòn",1321,WARD,1
+1446,37114,xã,"Xã Hóc Môn",1321,WARD,1
+1447,37115,phường,"Phường An Hội Tây",1321,WARD,1
+1448,37116,phường,"Phường Bàn Cờ",1321,WARD,1
+1449,37117,xã,"Xã Bình Hưng",1321,WARD,1
+1450,37118,phường,"Phường Tân Bình",1321,WARD,1
+1451,37119,xã,"Xã Bình Khánh",1321,WARD,2
+1452,37120,phường,"Phường Hòa Bình",1321,WARD,1
+1453,37121,phường,"Phường Thủ Đức",1321,WARD,1
+1454,37122,phường,"Phường Khánh Hội",1321,WARD,1
+1455,37123,phường,"Phường Tân Tạo",1321,WARD,1
+1456,37124,phường,"Phường An Đông",1321,WARD,1
+1457,37125,xã,"Xã Bà Điểm",1321,WARD,1
+1458,37126,xã,"Xã Củ Chi",1321,WARD,1
+1459,35934,phường,"Phường Phước Thắng",1321,WARD,1
+1460,35935,phường,"Phường Tân Thành",1321,WARD,1
+1461,35936,"đặc khu","Đặc khu Côn Đảo",1321,WARD,3
+1462,35937,xã,"Xã Bình Châu",1321,WARD,3
+1463,35938,xã,"Xã Nghĩa Thành",1321,WARD,3
+1464,35939,xã,"Xã Châu Pha",1321,WARD,1
+1465,35940,xã,"Xã Ngãi Giao",1321,WARD,3
+1466,35941,phường,"Phường Tân Phước",1321,WARD,1
+1467,35942,phường,"Phường Tân Hải",1321,WARD,1
+1468,35943,xã,"Xã Đất Đỏ",1321,WARD,3
+1469,35944,phường,"Phường Bà Rịa",1321,WARD,2
+1470,35945,xã,"Xã Hòa Hội",1321,WARD,3
+1471,35946,xã,"Xã Phước Hải",1321,WARD,3
+1472,35947,xã,"Xã Long Sơn",1321,WARD,1
+1473,35948,phường,"Phường Long Hương",1321,WARD,2
+1474,35949,xã,"Xã Xuân Sơn",1321,WARD,3
+1475,35950,phường,"Phường Phú Mỹ",1321,WARD,1
+1476,35951,xã,"Xã Long Hải",1321,WARD,3
+1477,35952,phường,"Phường Vũng Tàu",1321,WARD,1
+1478,35953,xã,"Xã Bàu Lâm",1321,WARD,3
+1479,35954,xã,"Xã Châu Đức",1321,WARD,3
+1480,35955,xã,"Xã Hòa Hiệp",1321,WARD,3
+1481,35956,xã,"Xã Bình Giã",1321,WARD,3
+1482,35957,xã,"Xã Long Điền",1321,WARD,3
+1483,35958,xã,"Xã Xuyên Mộc",1321,WARD,3
+1484,35959,phường,"Phường Tam Long",1321,WARD,2
+1485,35960,phường,"Phường Rạch Dừa",1321,WARD,1
+1486,35961,phường,"Phường Tam Thắng",1321,WARD,1
+1487,35962,xã,"Xã Hồ Tràm",1321,WARD,3
+1488,35963,xã,"Xã Kim Long",1321,WARD,3
+1489,35968,phường,"Phường Bình Trưng",1321,WARD,1
+1490,144,"thành phố",Huế,NULL,PROVINCE,NULL
+1491,37009,phường,"Phường Dương Nỗ",1490,WARD,2
+1492,37010,phường,"Phường Hóa Châu",1490,WARD,2
+1493,37011,xã,"Xã Khe Tre",1490,WARD,3
+1494,37012,phường,"Phường Mỹ Thượng",1490,WARD,2
+1495,37013,xã,"Xã Vinh Lộc",1490,WARD,3
+1496,37014,xã,"Xã Nam Đông",1490,WARD,3
+1497,37015,phường,"Phường Phú Bài",1490,WARD,3
+1498,37016,phường,"Phường An Cựu",1490,WARD,2
+1499,37017,phường,"Phường Phong Phú",1490,WARD,3
+1500,37018,phường,"Phường Hương Thủy",1490,WARD,3
+1501,37019,phường,"Phường Thuận Hóa",1490,WARD,2
+1502,37020,xã,"Xã Hưng Lộc",1490,WARD,3
+1503,37021,phường,"Phường Hương Trà",1490,WARD,3
+1504,37022,xã,"Xã Đan Điền",1490,WARD,3
+1505,37023,xã,"Xã A Lưới 5",1490,WARD,4
+1506,37024,xã,"Xã Quảng Điền",1490,WARD,3
+1507,37025,xã,"Xã Bình Điền",1490,WARD,3
+1508,37026,phường,"Phường Kim Long",1490,WARD,2
+1509,37027,xã,"Xã A Lưới 1",1490,WARD,4
+1510,37028,xã,"Xã Phú Vinh",1490,WARD,3
+1511,37029,phường,"Phường Phú Xuân",1490,WARD,2
+1512,37030,phường,"Phường Thanh Thủy",1490,WARD,3
+1513,37031,phường,"Phường Thủy Xuân",1490,WARD,2
+1514,37032,xã,"Xã A Lưới 2",1490,WARD,4
+1515,37033,phường,"Phường Phong Dinh",1490,WARD,3
+1516,37034,xã,"Xã Phú Hồ",1490,WARD,3
+1517,37035,phường,"Phường Phong Thái",1490,WARD,3
+1518,37036,xã,"Xã A Lưới 4",1490,WARD,4
+1519,37037,phường,"Phường Kim Trà",1490,WARD,3
+1520,37038,xã,"Xã A Lưới 3",1490,WARD,4
+1521,37039,xã,"Xã Phú Vang",1490,WARD,3
+1522,37040,xã,"Xã Phú Lộc",1490,WARD,3
+1523,37041,phường,"Phường Vỹ Dạ",1490,WARD,2
+1524,37042,phường,"Phường Phong Quảng",1490,WARD,3
+1525,37043,xã,"Xã Lộc An",1490,WARD,3
+1526,37044,phường,"Phường Hương An",1490,WARD,2
+1527,35759,xã,"Xã Chân Mây - Lăng Cô",1490,WARD,3
+1528,37888,phường,"Phường Thuận An",1490,WARD,2
+1529,37889,phường,"Phường Phong Điền",1490,WARD,3
+1530,37890,xã,"Xã Long Quảng",1490,WARD,3
+1531,84,tỉnh,"Hưng Yên",NULL,PROVINCE,NULL
+1532,35519,xã,"Xã Phụ Dực",1531,WARD,4
+1533,35520,xã,"Xã Nam Đông Hưng",1531,WARD,4
+1534,35521,phường,"Phường Thái Bình",1531,WARD,2
+1535,35522,xã,"Xã Ái Quốc",1531,WARD,3
+1536,35523,xã,"Xã Đông Quan",1531,WARD,4
+1537,35524,xã,"Xã Đông Hưng",1531,WARD,4
+1538,35525,xã,"Xã Thái Ninh",1531,WARD,3
+1539,35526,xã,"Xã Vạn Xuân",1531,WARD,4
+1540,35527,xã,"Xã Ngọc Lâm",1531,WARD,4
+1541,35528,xã,"Xã Lê Lợi",1531,WARD,4
+1542,35529,xã,"Xã Hưng Hà",1531,WARD,4
+1543,35530,xã,"Xã Nam Cường",1531,WARD,3
+1544,35531,xã,"Xã Vũ Tiên",1531,WARD,4
+1545,35532,xã,"Xã Thụy Anh",1531,WARD,3
+1546,35533,xã,"Xã Kiến Xương",1531,WARD,4
+1547,35534,xã,"Xã Thư Trì",1531,WARD,4
+1548,35535,xã,"Xã Nam Thái Ninh",1531,WARD,3
+1549,35536,xã,"Xã Bắc Tiên Hưng",1531,WARD,4
+1550,35537,xã,"Xã Tân Tiến",1531,WARD,4
+1551,35538,xã,"Xã Long Hưng",1531,WARD,4
+1552,35539,xã,"Xã Bình Định",1531,WARD,4
+1553,35540,xã,"Xã Nam Thụy Anh",1531,WARD,3
+1554,35541,xã,"Xã Trà Giang",1531,WARD,4
+1555,35542,xã,"Xã Tiền Hải",1531,WARD,3
+1556,35543,phường,"Phường Trần Lãm",1531,WARD,2
+1557,35544,xã,"Xã Hưng Phú",1531,WARD,3
+1558,35545,xã,"Xã Quỳnh Phụ",1531,WARD,4
+1559,35546,xã,"Xã Hồng Vũ",1531,WARD,4
+1560,35547,xã,"Xã Nam Tiền Hải",1531,WARD,3
+1561,35548,xã,"Xã Tiên La",1531,WARD,4
+1562,35549,xã,"Xã A Sào",1531,WARD,4
+1563,35550,xã,"Xã Vũ Thư",1531,WARD,4
+1564,35551,xã,"Xã Bình Nguyên",1531,WARD,4
+1565,35552,xã,"Xã Tây Thụy Anh",1531,WARD,3
+1566,35553,xã,"Xã Vũ Quý",1531,WARD,4
+1567,35554,phường,"Phường Trà Lý",1531,WARD,2
+1568,35555,xã,"Xã Đông Tiên Hưng",1531,WARD,4
+1569,35556,xã,"Xã Bắc Thụy Anh",1531,WARD,3
+1570,35557,xã,"Xã Thần Khê",1531,WARD,4
+1571,35558,xã,"Xã Tân Thuận",1531,WARD,4
+1572,35559,xã,"Xã Hồng Minh",1531,WARD,4
+1573,35560,xã,"Xã Quỳnh An",1531,WARD,4
+1574,35561,phường,"Phường Vũ Phúc",1531,WARD,2
+1575,35562,xã,"Xã Tiên Hưng",1531,WARD,4
+1576,35563,xã,"Xã Đông Tiền Hải",1531,WARD,3
+1577,35564,xã,"Xã Nguyễn Du",1531,WARD,4
+1578,35565,xã,"Xã Bắc Thái Ninh",1531,WARD,3
+1579,35566,xã,"Xã Quang Lịch",1531,WARD,4
+1580,35567,xã,"Xã Tây Thái Ninh",1531,WARD,3
+1581,35568,xã,"Xã Ngự Thiên",1531,WARD,4
+1582,35569,xã,"Xã Đông Thụy Anh",1531,WARD,3
+1583,35570,phường,"Phường Trần Hưng Đạo",1531,WARD,2
+1584,35571,xã,"Xã Diên Hà",1531,WARD,4
+1585,35572,xã,"Xã Thư Vũ",1531,WARD,4
+1586,35573,xã,"Xã Đồng Bằng",1531,WARD,4
+1587,35574,xã,"Xã Bắc Đông Quan",1531,WARD,4
+1588,35575,xã,"Xã Đông Thái Ninh",1531,WARD,3
+1589,35576,xã,"Xã Nam Tiên Hưng",1531,WARD,4
+1590,35577,xã,"Xã Đồng Châu",1531,WARD,3
+1591,35578,xã,"Xã Tây Tiền Hải",1531,WARD,3
+1592,35579,xã,"Xã Minh Thọ",1531,WARD,4
+1593,35580,xã,"Xã Bắc Đông Hưng",1531,WARD,4
+1594,35581,xã,"Xã Lê Quý Đôn",1531,WARD,4
+1595,35582,xã,"Xã Thái Thụy",1531,WARD,3
+1596,35583,xã,"Xã Bình Thanh",1531,WARD,4
+1597,37395,phường,"Phường Sơn Nam",1531,WARD,2
+1598,37396,xã,"Xã Lương Bằng",1531,WARD,3
+1599,37397,xã,"Xã Đại Đồng",1531,WARD,2
+1600,37398,phường,"Phường Hồng Châu",1531,WARD,2
+1601,37399,phường,"Phường Thượng Hồng",1531,WARD,2
+1602,37400,xã,"Xã Lạc Đạo",1531,WARD,2
+1603,37401,xã,"Xã Khoái Châu",1531,WARD,3
+1604,37402,xã,"Xã Hoàn Long",1531,WARD,2
+1605,37403,phường,"Phường Phố Hiến",1531,WARD,2
+1606,37404,xã,"Xã Như Quỳnh",1531,WARD,2
+1607,37405,xã,"Xã Tiên Hoa",1531,WARD,3
+1608,37406,xã,"Xã Phụng Công",1531,WARD,2
+1609,37407,xã,"Xã Hồng Quang",1531,WARD,3
+1610,37408,phường,"Phường Đường Hào",1531,WARD,2
+1611,37409,xã,"Xã Triệu Việt Vương",1531,WARD,3
+1612,37410,xã,"Xã Ân Thi",1531,WARD,3
+1613,37411,xã,"Xã Quang Hưng",1531,WARD,3
+1614,37412,phường,"Phường Mỹ Hào",1531,WARD,2
+1615,37413,xã,"Xã Đức Hợp",1531,WARD,3
+1616,37414,xã,"Xã Tân Hưng",1531,WARD,2
+1617,37415,xã,"Xã Hoàng Hoa Thám",1531,WARD,3
+1618,37416,xã,"Xã Việt Tiến",1531,WARD,3
+1619,37417,xã,"Xã Châu Ninh",1531,WARD,3
+1620,37418,xã,"Xã Tiên Tiến",1531,WARD,3
+1621,37464,xã,"Xã Nguyễn Văn Linh",1531,WARD,2
+1622,37465,xã,"Xã Mễ Sở",1531,WARD,2
+1623,37466,xã,"Xã Xuân Trúc",1531,WARD,3
+1624,37467,xã,"Xã Nghĩa Trụ",1531,WARD,2
+1625,37468,xã,"Xã Tiên Lữ",1531,WARD,3
+1626,37469,xã,"Xã Nguyễn Trãi",1531,WARD,3
+1627,37470,xã,"Xã Phạm Ngũ Lão",1531,WARD,3
+1628,37471,xã,"Xã Hiệp Cường",1531,WARD,3
+1629,37472,xã,"Xã Nghĩa Dân",1531,WARD,3
+1630,37473,xã,"Xã Tống Trân",1531,WARD,3
+1631,37474,xã,"Xã Văn Giang",1531,WARD,2
+1632,37475,xã,"Xã Đoàn Đào",1531,WARD,3
+1633,37476,xã,"Xã Yên Mỹ",1531,WARD,2
+1634,37477,xã,"Xã Chí Minh",1531,WARD,3
+1635,37258,xã,"Xã Việt Yên",1531,WARD,2
+1636,117,tỉnh,"Khánh Hòa",NULL,PROVINCE,NULL
+1637,36778,xã,"Xã Tân Định",1636,WARD,2
+1638,36779,xã,"Xã Trung Khánh Vĩnh",1636,WARD,4
+1639,36780,xã,"Xã Nam Khánh Vĩnh",1636,WARD,4
+1640,36781,xã,"Xã Cam An",1636,WARD,3
+1641,36782,xã,"Xã Đông Khánh Sơn",1636,WARD,4
+1642,36783,xã,"Xã Đại Lãnh",1636,WARD,3
+1643,36784,phường,"Phường Nam Nha Trang",1636,WARD,2
+1644,36785,phường,"Phường Hòa Thắng",1636,WARD,2
+1645,36786,xã,"Xã Vạn Hưng",1636,WARD,3
+1646,36787,xã,"Xã Diên Lâm",1636,WARD,3
+1647,36788,phường,"Phường Bắc Cam Ranh",1636,WARD,2
+1648,36794,xã,"Xã Nam Ninh Hòa",1636,WARD,2
+1649,36795,xã,"Xã Diên Điền",1636,WARD,3
+1650,36796,"đặc khu","Đặc khu Trường Sa",1636,WARD,4
+1651,36797,xã,"Xã Suối Dầu",1636,WARD,3
+1652,36798,xã,"Xã Vạn Ninh",1636,WARD,3
+1653,36799,phường,"Phường Bắc Nha Trang",1636,WARD,2
+1654,36800,xã,"Xã Diên Thọ",1636,WARD,3
+1655,36801,xã,"Xã Cam Lâm",1636,WARD,3
+1656,36802,phường,"Phường Ninh Hòa",1636,WARD,2
+1657,36803,phường,"Phường Đông Ninh Hòa",1636,WARD,2
+1658,36804,phường,"Phường Cam Ranh",1636,WARD,2
+1659,36805,xã,"Xã Khánh Vĩnh",1636,WARD,4
+1660,36806,xã,"Xã Cam Hiệp",1636,WARD,3
+1661,36807,xã,"Xã Tây Khánh Vĩnh",1636,WARD,4
+1662,36808,xã,"Xã Bắc Khánh Vĩnh",1636,WARD,4
+1663,36809,xã,"Xã Tu Bông",1636,WARD,3
+1664,36810,xã,"Xã Bắc Ninh Hòa",1636,WARD,2
+1665,36811,xã,"Xã Tây Ninh Hòa",1636,WARD,2
+1666,36812,phường,"Phường Nha Trang",1636,WARD,2
+1667,36813,xã,"Xã Nam Cam Ranh",1636,WARD,2
+1668,36814,xã,"Xã Khánh Sơn",1636,WARD,4
+1669,36815,xã,"Xã Suối Hiệp",1636,WARD,3
+1670,36816,phường,"Phường Ba Ngòi",1636,WARD,2
+1671,36817,phường,"Phường Tây Nha Trang",1636,WARD,2
+1672,36818,xã,"Xã Diên Lạc",1636,WARD,3
+1673,36819,xã,"Xã Vạn Thắng",1636,WARD,3
+1674,36820,xã,"Xã Tây Khánh Sơn",1636,WARD,4
+1675,36821,xã,"Xã Hòa Trí",1636,WARD,2
+1676,36822,phường,"Phường Cam Linh",1636,WARD,2
+1677,35325,xã,"Xã Ninh Phước",1636,WARD,3
+1678,35326,xã,"Xã Phước Hữu",1636,WARD,3
+1679,35327,xã,"Xã Ninh Hải",1636,WARD,3
+1680,35328,xã,"Xã Anh Dũng",1636,WARD,4
+1681,35329,phường,"Phường Phan Rang",1636,WARD,3
+1682,35330,phường,"Phường Bảo An",1636,WARD,3
+1683,35331,xã,"Xã Bác Ái Đông",1636,WARD,4
+1684,35332,phường,"Phường Ninh Chử",1636,WARD,3
+1685,35333,xã,"Xã Cà Ná",1636,WARD,4
+1686,35334,xã,"Xã Xuân Hải",1636,WARD,3
+1687,35335,xã,"Xã Phước Dinh",1636,WARD,3
+1688,35336,xã,"Xã Công Hải",1636,WARD,3
+1689,35337,xã,"Xã Thuận Nam",1636,WARD,4
+1690,35338,xã,"Xã Vĩnh Hải",1636,WARD,3
+1691,35339,phường,"Phường Đô Vinh",1636,WARD,3
+1692,35340,xã,"Xã Mỹ Sơn",1636,WARD,4
+1693,35341,xã,"Xã Ninh Sơn",1636,WARD,4
+1694,35342,phường,"Phường Đông Hải",1636,WARD,3
+1695,35343,xã,"Xã Thuận Bắc",1636,WARD,3
+1696,35344,xã,"Xã Bác Ái",1636,WARD,4
+1697,35345,xã,"Xã Bác Ái Tây",1636,WARD,4
+1698,35346,xã,"Xã Lâm Sơn",1636,WARD,4
+1699,35347,xã,"Xã Phước Hậu",1636,WARD,3
+1700,35348,xã,"Xã Phước Hà",1636,WARD,4
+1701,38114,xã,"Xã Diên Khánh",1636,WARD,3
+1702,103,tỉnh,"Lai Châu",NULL,PROVINCE,NULL
+1703,37849,xã,"Xã Hồng Thu",1702,WARD,4
+1704,37850,xã,"Xã Sin Suối Hồ",1702,WARD,4
+1705,37851,xã,"Xã Pắc Ta",1702,WARD,4
+1706,37852,xã,"Xã Pu Sam Cáp",1702,WARD,4
+1707,37853,phường,"Phường Tân Phong",1702,WARD,3
+1708,37854,xã,"Xã Mường Khoa",1702,WARD,4
+1709,37855,xã,"Xã Khổng Lào",1702,WARD,4
+1710,37856,xã,"Xã Nậm Cuổi",1702,WARD,4
+1711,37857,xã,"Xã Mù Cả",1702,WARD,4
+1712,37858,xã,"Xã Bum Tở",1702,WARD,4
+1713,37859,xã,"Xã Nậm Hàng",1702,WARD,4
+1714,37860,phường,"Phường Đoàn Kết",1702,WARD,3
+1715,37861,xã,"Xã Tả Lèng",1702,WARD,4
+1716,37862,xã,"Xã Bản Bo",1702,WARD,4
+1717,37863,xã,"Xã Dào San",1702,WARD,4
+1718,37864,xã,"Xã Phong Thổ",1702,WARD,4
+1719,37865,xã,"Xã Mường Than",1702,WARD,4
+1720,37866,xã,"Xã Pa Ủ",1702,WARD,4
+1721,37867,xã,"Xã Bình Lư",1702,WARD,4
+1722,37868,xã,"Xã Sì Lở Lầu",1702,WARD,4
+1723,37869,xã,"Xã Tà Tổng",1702,WARD,4
+1724,37870,xã,"Xã Mường Kim",1702,WARD,4
+1725,37871,xã,"Xã Thu Lũm",1702,WARD,4
+1726,37872,xã,"Xã Khoen On",1702,WARD,4
+1727,37873,xã,"Xã Lê Lợi",1702,WARD,4
+1728,37874,xã,"Xã Pa Tần",1702,WARD,4
+1729,37875,xã,"Xã Nậm Tăm",1702,WARD,4
+1730,37876,xã,"Xã Mường Tè",1702,WARD,4
+1731,37877,xã,"Xã Tủa Sín Chải",1702,WARD,4
+1732,37878,xã,"Xã Nậm Mạ",1702,WARD,4
+1733,37879,xã,"Xã Hua Bum",1702,WARD,4
+1734,37880,xã,"Xã Sìn Hồ",1702,WARD,4
+1735,37881,xã,"Xã Tân Uyên",1702,WARD,4
+1736,37882,xã,"Xã Nậm Sỏ",1702,WARD,4
+1737,37883,xã,"Xã Bum Nưa",1702,WARD,4
+1738,37884,xã,"Xã Mường Mô",1702,WARD,4
+1739,37885,xã,"Xã Than Uyên",1702,WARD,4
+1740,37886,xã,"Xã Khun Há",1702,WARD,4
+1741,123,tỉnh,"Lâm Đồng",NULL,PROVINCE,NULL
+1742,36139,xã,"Xã Hàm Kiệm",1741,WARD,3
+1743,36140,xã,"Xã La Dạ",1741,WARD,3
+1744,36141,xã,"Xã Tuy Phong",1741,WARD,4
+1745,36142,xã,"Xã Hàm Liêm",1741,WARD,3
+1746,36143,xã,"Xã Hàm Thạnh",1741,WARD,3
+1747,36144,xã,"Xã Hòa Thắng",1741,WARD,4
+1748,36145,xã,"Xã Trà Tân",1741,WARD,4
+1749,36146,xã,"Xã Tân Hải",1741,WARD,3
+1750,36147,phường,"Phường Phú Thủy",1741,WARD,2
+1751,36148,xã,"Xã Hồng Thái",1741,WARD,4
+1752,36149,xã,"Xã Phan Rí Cửa",1741,WARD,4
+1753,36150,xã,"Xã Bắc Ruộng",1741,WARD,4
+1754,36151,xã,"Xã Nam Thành",1741,WARD,4
+1755,36152,xã,"Xã Hải Ninh",1741,WARD,4
+1756,36153,xã,"Xã Hàm Thuận",1741,WARD,3
+1757,36154,phường,"Phường La Gi",1741,WARD,3
+1758,36155,phường,"Phường Bình Thuận",1741,WARD,2
+1759,36156,xã,"Xã Đồng Kho",1741,WARD,4
+1760,36157,xã,"Xã Tân Lập",1741,WARD,3
+1761,36158,phường,"Phường Mũi Né",1741,WARD,2
+1762,36159,xã,"Xã Hồng Sơn",1741,WARD,3
+1763,36160,xã,"Xã Tuyên Quang",1741,WARD,2
+1764,36161,xã,"Xã Sơn Mỹ",1741,WARD,4
+1765,36162,xã,"Xã Bắc Bình",1741,WARD,4
+1766,36163,xã,"Xã Phan Sơn",1741,WARD,4
+1767,36164,phường,"Phường Tiến Thành",1741,WARD,2
+1768,36165,xã,"Xã Suối Kiết",1741,WARD,4
+1769,36166,xã,"Xã Nghị Đức",1741,WARD,4
+1770,36167,xã,"Xã Đức Linh",1741,WARD,4
+1771,36168,phường,"Phường Phan Thiết",1741,WARD,2
+1772,36169,xã,"Xã Hàm Tân",1741,WARD,4
+1773,36170,xã,"Xã Lương Sơn",1741,WARD,4
+1774,36171,xã,"Xã Hàm Thuận Bắc",1741,WARD,3
+1775,36172,phường,"Phường Phước Hội",1741,WARD,3
+1776,36174,xã,"Xã Tánh Linh",1741,WARD,4
+1777,36175,xã,"Xã Sông Lũy",1741,WARD,4
+1778,36176,xã,"Xã Tân Thành",1741,WARD,3
+1779,36177,xã,"Xã Tân Minh",1741,WARD,4
+1780,36178,"đặc khu","Đặc khu Phú Quý",1741,WARD,4
+1781,36179,phường,"Phường Hàm Thắng",1741,WARD,2
+1782,36180,xã,"Xã Đông Giang",1741,WARD,3
+1783,36403,xã,"Xã Quảng Tân",1741,WARD,4
+1784,36404,xã,"Xã Tà Đùng",1741,WARD,4
+1785,36405,xã,"Xã Nam Đà",1741,WARD,4
+1786,36406,xã,"Xã Đắk Sắk",1741,WARD,4
+1787,36407,phường,"Phường Bắc Gia Nghĩa",1741,WARD,3
+1788,36408,phường,"Phường Nam Gia Nghĩa",1741,WARD,3
+1789,36409,xã,"Xã Trường Xuân",1741,WARD,4
+1790,36410,xã,"Xã Đắk Wil",1741,WARD,4
+1791,36411,xã,"Xã Cư Jút",1741,WARD,4
+1792,36412,xã,"Xã Quảng Hòa",1741,WARD,4
+1793,36413,xã,"Xã Đức Lập",1741,WARD,4
+1794,36414,xã,"Xã Nhân Cơ",1741,WARD,4
+1795,36415,xã,"Xã Krông Nô",1741,WARD,4
+1796,36416,phường,"Phường Đông Gia Nghĩa",1741,WARD,3
+1797,36417,xã,"Xã Đắk Mil",1741,WARD,4
+1798,36418,xã,"Xã Quảng Tín",1741,WARD,4
+1799,36419,xã,"Xã Quảng Sơn",1741,WARD,4
+1800,36420,xã,"Xã Quảng Khê",1741,WARD,4
+1801,36421,xã,"Xã Thuận An",1741,WARD,4
+1802,36422,xã,"Xã Nam Dong",1741,WARD,4
+1803,36423,xã,"Xã Đức An",1741,WARD,4
+1804,36424,xã,"Xã Quảng Phú",1741,WARD,4
+1805,36425,xã,"Xã Nâm Nung",1741,WARD,4
+1806,36426,xã,"Xã Kiến Đức",1741,WARD,4
+1807,36427,xã,"Xã Thuận Hạnh",1741,WARD,4
+1808,36428,xã,"Xã Quảng Trực",1741,WARD,4
+1809,36429,xã,"Xã Đắk Song",1741,WARD,4
+1810,36430,xã,"Xã Tuy Đức",1741,WARD,4
+1811,35274,xã,"Xã Bảo Lâm 1",1741,WARD,4
+1812,35275,xã,"Xã D'Ran",1741,WARD,4
+1813,35276,xã,"Xã Cát Tiên 2",1741,WARD,4
+1814,35277,xã,"Xã Phúc Thọ Lâm Hà",1741,WARD,NULL
+1815,35278,xã,"Xã Đạ Huoai 2",1741,WARD,4
+1816,35279,xã,"Xã Đam Rông 4",1741,WARD,4
+1817,35280,xã,"Xã Hiệp Thạnh",1741,WARD,3
+1818,35281,phường,"Phường Cam Ly - Đà Lạt",1741,WARD,2
+1819,35282,xã,"Xã Đơn Dương",1741,WARD,4
+1820,35283,xã,"Xã Đam Rông 2",1741,WARD,4
+1821,35284,phường,"Phường Xuân Hương - Đà Lạt",1741,WARD,2
+1822,35285,xã,"Xã Đức Trọng",1741,WARD,3
+1823,35286,xã,"Xã Đam Rông 1",1741,WARD,4
+1824,35287,xã,"Xã Đạ Huoai",1741,WARD,4
+1825,35288,xã,"Xã Bảo Lâm 2",1741,WARD,4
+1826,35289,phường,"Phường Lang Biang - Đà Lạt",1741,WARD,NULL
+1827,35290,xã,"Xã Tà Năng",1741,WARD,3
+1828,35291,phường,"Phường Xuân Trường - Đà Lạt",1741,WARD,2
+1829,35292,xã,"Xã Phú Sơn Lâm Hà",1741,WARD,NULL
+1830,35293,xã,"Xã Lạc Dương",1741,WARD,4
+1831,35294,xã,"Xã Đạ Tẻh 2",1741,WARD,4
+1832,35295,xã,"Xã Tân Hội",1741,WARD,3
+1833,35296,xã,"Xã Ninh Gia",1741,WARD,3
+1834,35297,xã,"Xã Đạ Huoai 3",1741,WARD,4
+1835,35298,xã,"Xã Đam Rông 3",1741,WARD,4
+1836,35299,xã,"Xã Ka Đô",1741,WARD,4
+1837,35300,xã,"Xã Đinh Văn Lâm Hà",1741,WARD,NULL
+1838,35301,xã,"Xã Gia Hiệp",1741,WARD,3
+1839,35302,xã,"Xã Đạ Tẻh",1741,WARD,4
+1840,35303,xã,"Xã Bảo Lâm 4",1741,WARD,4
+1841,35304,phường,"Phường B'Lao",1741,WARD,NULL
+1842,35305,xã,"Xã Cát Tiên",1741,WARD,4
+1843,35306,xã,"Xã Quảng Lập",1741,WARD,4
+1844,35307,phường,"Phường Lâm Viên - Đà Lạt",1741,WARD,2
+1845,35308,xã,"Xã Nam Ban Lâm Hà",1741,WARD,NULL
+1846,35309,xã,"Xã Đạ Tẻh 3",1741,WARD,4
+1847,35310,xã,"Xã Tân Hà Lâm Hà",1741,WARD,NULL
+1848,35311,xã,"Xã Đinh Trang Thượng",1741,WARD,3
+1849,35312,phường,"Phường 1 Bảo Lộc",1741,WARD,2
+1850,35313,phường,"Phường 2 Bảo Lộc",1741,WARD,2
+1851,35314,xã,"Xã Cát Tiên 3",1741,WARD,4
+1852,35315,phường,"Phường 3 Bảo Lộc",1741,WARD,2
+1853,35316,xã,"Xã Sơn Điền",1741,WARD,3
+1854,35317,xã,"Xã Hòa Ninh",1741,WARD,3
+1855,35318,xã,"Xã Tà Hine",1741,WARD,3
+1856,35319,xã,"Xã Bảo Lâm 5",1741,WARD,4
+1857,35320,xã,"Xã Nam Hà Lâm Hà",1741,WARD,NULL
+1858,35321,xã,"Xã Di Linh",1741,WARD,3
+1859,35322,xã,"Xã Bảo Thuận",1741,WARD,3
+1860,35323,xã,"Xã Bảo Lâm 3",1741,WARD,4
+1861,35324,xã,"Xã Hòa Bắc",1741,WARD,3
+1862,35964,xã,"Xã Liên Hương",1741,WARD,4
+1863,35965,xã,"Xã Vĩnh Hảo",1741,WARD,4
+1864,35966,xã,"Xã Hàm Thuận Nam",1741,WARD,3
+1865,35967,xã,"Xã Hoài Đức",1741,WARD,4
+1866,93,tỉnh,"Lạng Sơn",NULL,PROVINCE,NULL
+1867,37723,xã,"Xã Na Dương",1866,WARD,4
+1868,37724,xã,"Xã Vân Nham",1866,WARD,4
+1869,37725,xã,"Xã Khánh Khê",1866,WARD,4
+1870,37726,xã,"Xã Điềm He",1866,WARD,4
+1871,37727,xã,"Xã Đoàn Kết",1866,WARD,4
+1872,37728,xã,"Xã Cao Lộc",1866,WARD,4
+1873,37729,xã,"Xã Tuấn Sơn",1866,WARD,4
+1874,37730,xã,"Xã Quốc Khánh",1866,WARD,4
+1875,37731,xã,"Xã Tràng Định",1866,WARD,4
+1876,37732,xã,"Xã Thiện Thuật",1866,WARD,4
+1877,37733,xã,"Xã Xuân Dương",1866,WARD,4
+1878,37734,xã,"Xã Cai Kinh",1866,WARD,4
+1879,37735,xã,"Xã Tân Thành",1866,WARD,4
+1880,37736,xã,"Xã Vạn Linh",1866,WARD,4
+1881,37737,xã,"Xã Chiến Thắng",1866,WARD,4
+1882,37738,xã,"Xã Đồng Đăng",1866,WARD,4
+1883,37739,xã,"Xã Tân Tri",1866,WARD,4
+1884,37740,xã,"Xã Kiên Mộc",1866,WARD,4
+1885,37741,xã,"Xã Hoàng Văn Thụ",1866,WARD,3
+1886,37742,xã,"Xã Thất Khê",1866,WARD,4
+1887,37743,xã,"Xã Tân Tiến",1866,WARD,4
+1888,37744,xã,"Xã Đình Lập",1866,WARD,4
+1889,37745,phường,"Phường Đông Kinh",1866,WARD,3
+1890,37746,xã,"Xã Vũ Lễ",1866,WARD,4
+1891,37747,xã,"Xã Hoa Thám",1866,WARD,4
+1892,37748,xã,"Xã Tân Đoàn",1866,WARD,4
+1893,37749,xã,"Xã Thiện Hòa",1866,WARD,4
+1894,37750,xã,"Xã Quý Hòa",1866,WARD,4
+1895,37751,xã,"Xã Nhất Hòa",1866,WARD,4
+1896,37752,xã,"Xã Thái Bình",1866,WARD,4
+1897,37753,xã,"Xã Tri Lễ",1866,WARD,4
+1898,37754,xã,"Xã Thiện Long",1866,WARD,4
+1899,37755,phường,"Phường Tam Thanh",1866,WARD,3
+1900,37756,xã,"Xã Hữu Lũng",1866,WARD,4
+1901,37757,xã,"Xã Mẫu Sơn",1866,WARD,4
+1902,37758,xã,"Xã Hưng Vũ",1866,WARD,4
+1903,37759,xã,"Xã Thống Nhất",1866,WARD,4
+1904,37760,xã,"Xã Thụy Hùng",1866,WARD,4
+1905,37761,xã,"Xã Bình Gia",1866,WARD,4
+1906,37762,xã,"Xã Tân Văn",1866,WARD,4
+1907,37763,xã,"Xã Công Sơn",1866,WARD,4
+1908,37764,xã,"Xã Yên Bình",1866,WARD,4
+1909,37765,xã,"Xã Quốc Việt",1866,WARD,4
+1910,37767,xã,"Xã Khuất Xá",1866,WARD,4
+1911,37768,xã,"Xã Chi Lăng",1866,WARD,4
+1912,37769,xã,"Xã Hồng Phong",1866,WARD,4
+1913,37770,xã,"Xã Vũ Lăng",1866,WARD,4
+1914,37771,xã,"Xã Châu Sơn",1866,WARD,4
+1915,37772,xã,"Xã Bắc Sơn",1866,WARD,4
+1916,37773,phường,"Phường Lương Văn Tri",1866,WARD,3
+1917,37774,xã,"Xã Nhân Lý",1866,WARD,4
+1918,37775,xã,"Xã Ba Sơn",1866,WARD,4
+1919,37776,xã,"Xã Hữu Liên",1866,WARD,4
+1920,37777,xã,"Xã Văn Quan",1866,WARD,4
+1921,37778,xã,"Xã Văn Lãng",1866,WARD,4
+1922,37779,xã,"Xã Hội Hoan",1866,WARD,4
+1923,37780,xã,"Xã Quan Sơn",1866,WARD,4
+1924,37781,xã,"Xã Bằng Mạc",1866,WARD,4
+1925,37782,phường,"Phường Kỳ Lừa",1866,WARD,NULL
+1926,37783,xã,"Xã Yên Phúc",1866,WARD,4
+1927,37784,xã,"Xã Na Sầm",1866,WARD,4
+1928,37785,xã,"Xã Kháng Chiến",1866,WARD,4
+1929,37786,xã,"Xã Lộc Bình",1866,WARD,4
+1930,37787,xã,"Xã Thiện Tân",1866,WARD,4
+1931,37788,xã,"Xã Lợi Bác",1866,WARD,4
+1932,91,tỉnh,"Lào Cai",NULL,PROVINCE,NULL
+1933,35223,xã,"Xã Tân Lĩnh",1932,WARD,4
+1934,35224,xã,"Xã Nậm Có",1932,WARD,4
+1935,35225,xã,"Xã Lao Chải",1932,WARD,4
+1936,35226,xã,"Xã Thác Bà",1932,WARD,4
+1937,35227,xã,"Xã Hưng Khánh",1932,WARD,4
+1938,35228,phường,"Phường Cầu Thia",1932,WARD,4
+1939,35229,xã,"Xã Cát Thịnh",1932,WARD,4
+1940,35230,xã,"Xã Quy Mông",1932,WARD,4
+1941,35231,xã,"Xã Mù Cang Chải",1932,WARD,4
+1942,35232,xã,"Xã Khánh Hòa",1932,WARD,4
+1943,35233,xã,"Xã Lương Thịnh",1932,WARD,4
+1944,35234,xã,"Xã Khao Mang",1932,WARD,4
+1945,35235,xã,"Xã Phình Hồ",1932,WARD,4
+1946,35236,phường,"Phường Yên Bái",1932,WARD,3
+1947,35237,xã,"Xã Bảo Ái",1932,WARD,4
+1948,35238,xã,"Xã Phúc Lợi",1932,WARD,4
+1949,35239,xã,"Xã Phong Dụ Thượng",1932,WARD,4
+1950,35240,phường,"Phường Văn Phú",1932,WARD,3
+1951,35241,xã,"Xã Trấn Yên",1932,WARD,4
+1952,35242,xã,"Xã Lục Yên",1932,WARD,4
+1953,35243,xã,"Xã Mỏ Vàng",1932,WARD,4
+1954,35244,xã,"Xã Mường Lai",1932,WARD,4
+1955,35245,xã,"Xã Tú Lệ",1932,WARD,4
+1956,35246,xã,"Xã Púng Luông",1932,WARD,4
+1957,35247,xã,"Xã Sơn Lương",1932,WARD,4
+1958,35248,xã,"Xã Tà Xi Láng",1932,WARD,4
+1959,35249,xã,"Xã Tân Hợp",1932,WARD,4
+1960,35250,xã,"Xã Đông Cuông",1932,WARD,4
+1961,35251,xã,"Xã Lâm Giang",1932,WARD,4
+1962,36299,xã,"Xã Cảm Nhân",1932,WARD,4
+1963,36300,xã,"Xã Chế Tạo",1932,WARD,4
+1964,36301,xã,"Xã Việt Hồng",1932,WARD,4
+1965,36302,xã,"Xã Châu Quế",1932,WARD,4
+1966,35833,phường,"Phường Sa Pa",1932,WARD,3
+1967,35834,xã,"Xã Mường Khương",1932,WARD,4
+1968,35835,xã,"Xã Cốc Lầu",1932,WARD,4
+1969,35836,xã,"Xã Ngũ Chỉ Sơn",1932,WARD,3
+1970,35837,xã,"Xã Bản Liền",1932,WARD,4
+1971,35838,xã,"Xã Bảo Thắng",1932,WARD,3
+1972,35839,xã,"Xã Khánh Yên",1932,WARD,4
+1973,35840,xã,"Xã Minh Lương",1932,WARD,4
+1974,35841,xã,"Xã Cao Sơn",1932,WARD,4
+1975,35842,xã,"Xã Si Ma Cai",1932,WARD,4
+1976,35843,xã,"Xã Văn Bàn",1932,WARD,4
+1977,35844,xã,"Xã Mường Hum",1932,WARD,4
+1978,35845,xã,"Xã Mường Bo",1932,WARD,3
+1979,35846,xã,"Xã Võ Lao",1932,WARD,4
+1980,35847,xã,"Xã Bảo Hà",1932,WARD,4
+1981,35848,xã,"Xã Trịnh Tường",1932,WARD,4
+1982,35849,xã,"Xã Xuân Quang",1932,WARD,3
+1983,35850,xã,"Xã Pha Long",1932,WARD,4
+1984,35851,xã,"Xã Cốc San",1932,WARD,2
+1985,35852,xã,"Xã Xuân Hòa",1932,WARD,4
+1986,35853,xã,"Xã Bản Xèo",1932,WARD,4
+1987,35854,xã,"Xã Thượng Hà",1932,WARD,4
+1988,35855,xã,"Xã Tả Củ Tỷ",1932,WARD,4
+1989,35856,xã,"Xã Phúc Khánh",1932,WARD,4
+1990,35857,xã,"Xã Tả Phìn",1932,WARD,3
+1991,35858,phường,"Phường Cam Đường",1932,WARD,2
+1992,35859,xã,"Xã Phong Hải",1932,WARD,3
+1993,35860,xã,"Xã Gia Phú",1932,WARD,2
+1994,35861,xã,"Xã Dền Sáng",1932,WARD,4
+1995,35862,xã,"Xã Y Tý",1932,WARD,4
+1996,35863,xã,"Xã A Mú Sung",1932,WARD,4
+1997,35864,phường,"Phường Lào Cai",1932,WARD,2
+1998,35865,xã,"Xã Bắc Hà",1932,WARD,4
+1999,35866,xã,"Xã Bảo Yên",1932,WARD,4
+2000,35867,xã,"Xã Bảo Nhai",1932,WARD,4
+2001,35868,xã,"Xã Nghĩa Đô",1932,WARD,4
+2002,35869,xã,"Xã Bát Xát",1932,WARD,4
+2003,35870,xã,"Xã Tả Van",1932,WARD,3
+2004,35871,xã,"Xã Nậm Xé",1932,WARD,4
+2005,35872,xã,"Xã Chiềng Ken",1932,WARD,4
+2006,35873,xã,"Xã Bản Lầu",1932,WARD,4
+2007,35874,xã,"Xã Nậm Chày",1932,WARD,4
+2008,35875,xã,"Xã Lùng Phình",1932,WARD,4
+2009,35876,xã,"Xã Dương Quỳ",1932,WARD,4
+2010,35877,xã,"Xã Sín Chéng",1932,WARD,4
+2011,35878,xã,"Xã Hợp Thành",1932,WARD,2
+2012,35879,xã,"Xã Tằng Loỏng",1932,WARD,3
+2013,35880,xã,"Xã Bản Hồ",1932,WARD,3
+2014,35252,xã,"Xã Phong Dụ Hạ",1932,WARD,4
+2015,35253,xã,"Xã Yên Thành",1932,WARD,4
+2016,35254,xã,"Xã Gia Hội",1932,WARD,4
+2017,35255,phường,"Phường Nghĩa Lộ",1932,WARD,4
+2018,35256,xã,"Xã Chấn Thịnh",1932,WARD,4
+2019,35257,xã,"Xã Mậu A",1932,WARD,4
+2020,35258,phường,"Phường Nam Cường",1932,WARD,3
+2021,35259,xã,"Xã Thượng Bằng La",1932,WARD,4
+2022,35260,xã,"Xã Hạnh Phúc",1932,WARD,4
+2023,35261,xã,"Xã Lâm Thượng",1932,WARD,4
+2024,35262,xã,"Xã Trạm Tấu",1932,WARD,4
+2025,35263,xã,"Xã Yên Bình",1932,WARD,4
+2026,35264,xã,"Xã Liên Sơn",1932,WARD,4
+2027,35265,phường,"Phường Trung Tâm",1932,WARD,4
+2028,35266,xã,"Xã Nghĩa Tâm",1932,WARD,4
+2029,35267,phường,"Phường Âu Lâu",1932,WARD,3
+2030,35268,xã,"Xã Xuân Ái",1932,WARD,4
+2031,35273,xã,"Xã Văn Chấn",1932,WARD,4
+2032,107,tỉnh,"Nghệ An",NULL,PROVINCE,NULL
+2033,35134,xã,"Xã Tam Thái",2032,WARD,4
+2034,35135,xã,"Xã Mậu Thạch",2032,WARD,4
+2035,35136,xã,"Xã Tam Quang",2032,WARD,4
+2036,35137,xã,"Xã Nam Đàn",2032,WARD,3
+2037,35138,xã,"Xã Nghĩa Lâm",2032,WARD,3
+2038,35139,xã,"Xã Đông Thành",2032,WARD,3
+2039,35140,xã,"Xã Lượng Minh",2032,WARD,4
+2040,35141,xã,"Xã Quang Đồng",2032,WARD,3
+2041,35142,xã,"Xã Bích Hào",2032,WARD,4
+2042,35143,xã,"Xã Quan Thành",2032,WARD,3
+2043,35144,phường,"Phường Tân Mai",2032,WARD,3
+2044,35145,xã,"Xã Quỳ Châu",2032,WARD,4
+2045,35146,xã,"Xã Đông Lộc",2032,WARD,2
+2046,35147,xã,"Xã Vân Tụ",2032,WARD,3
+2047,35148,xã,"Xã Hùng Châu",2032,WARD,3
+2048,35149,xã,"Xã Nhôn Mai",2032,WARD,4
+2049,35150,xã,"Xã Tri Lễ",2032,WARD,4
+2050,35151,xã,"Xã Quỳnh Sơn",2032,WARD,3
+2051,35152,xã,"Xã Bạch Hà",2032,WARD,3
+2052,35153,phường,"Phường Trường Vinh",2032,WARD,2
+2053,35154,xã,"Xã Yên Trung",2032,WARD,2
+2054,35155,xã,"Xã Tiền Phong",2032,WARD,4
+2055,35156,xã,"Xã Tân Kỳ",2032,WARD,4
+2056,35157,xã,"Xã Bạch Ngọc",2032,WARD,3
+2057,35158,xã,"Xã Châu Tiến",2032,WARD,4
+2058,35159,xã,"Xã Yên Na",2032,WARD,4
+2059,35160,xã,"Xã Nghĩa Thọ",2032,WARD,3
+2060,35161,xã,"Xã Hoa Quân",2032,WARD,4
+2061,35162,xã,"Xã Hùng Chân",2032,WARD,4
+2062,35163,xã,"Xã Mường Típ",2032,WARD,4
+2063,35164,xã,"Xã Nghĩa Lộc",2032,WARD,3
+2064,35165,xã,"Xã Thông Thụ",2032,WARD,4
+2065,35166,phường,"Phường Cửa Lò",2032,WARD,2
+2066,35167,xã,"Xã Thần Lĩnh",2032,WARD,2
+2067,35168,xã,"Xã Yên Thành",2032,WARD,3
+2068,35169,xã,"Xã Yên Hòa",2032,WARD,4
+2069,35170,xã,"Xã Minh Hợp",2032,WARD,4
+2070,35171,xã,"Xã Chiêu Lưu",2032,WARD,4
+2071,35172,phường,"Phường Quỳnh Mai",2032,WARD,3
+2072,35173,xã,"Xã Con Cuông",2032,WARD,4
+2073,35174,xã,"Xã Vân Du",2032,WARD,3
+2074,35175,xã,"Xã Nậm Cắn",2032,WARD,4
+2075,35176,phường,"Phường Vinh Lộc",2032,WARD,2
+2076,35177,xã,"Xã Nghĩa Đồng",2032,WARD,4
+2077,35178,xã,"Xã Vĩnh Tường",2032,WARD,4
+2078,35179,xã,"Xã Kim Bảng",2032,WARD,4
+2079,35180,xã,"Xã Đô Lương",2032,WARD,3
+2080,35181,xã,"Xã Môn Sơn",2032,WARD,4
+2081,35182,phường,"Phường Vinh Hưng",2032,WARD,2
+2082,35183,xã,"Xã Anh Sơn",2032,WARD,4
+2083,35184,xã,"Xã Xuân Lâm",2032,WARD,4
+2084,35185,xã,"Xã Cam Phục",2032,WARD,4
+2085,35186,xã,"Xã Hưng Nguyên Nam",2032,WARD,2
+2086,35187,xã,"Xã Nghĩa Mai",2032,WARD,3
+2087,35188,xã,"Xã Lam Thành",2032,WARD,2
+2088,35189,phường,"Phường Thái Hòa",2032,WARD,3
+2089,35190,xã,"Xã Tân Châu",2032,WARD,3
+2090,35191,xã,"Xã Bình Chuẩn",2032,WARD,4
+2091,35192,xã,"Xã Na Ngoi",2032,WARD,4
+2092,35193,xã,"Xã Châu Khê",2032,WARD,4
+2093,35194,xã,"Xã Thành Bình Thọ",2032,WARD,4
+2094,35195,xã,"Xã Quỳ Hợp",2032,WARD,4
+2095,35196,phường,"Phường Hoàng Mai",2032,WARD,3
+2096,35197,xã,"Xã Nghi Lộc",2032,WARD,2
+2097,35198,xã,"Xã Nghĩa Khánh",2032,WARD,3
+2098,35199,xã,"Xã Hợp Minh",2032,WARD,3
+2099,35200,xã,"Xã Châu Lộc",2032,WARD,4
+2100,35201,xã,"Xã Giai Lạc",2032,WARD,3
+2101,35202,xã,"Xã Châu Bình",2032,WARD,4
+2102,35203,xã,"Xã Đại Đồng",2032,WARD,4
+2103,35204,xã,"Xã Mỹ Lý",2032,WARD,4
+2104,35205,xã,"Xã Đại Huệ",2032,WARD,3
+2105,35206,xã,"Xã Nhân Hòa",2032,WARD,4
+2106,35207,xã,"Xã Mường Ham",2032,WARD,4
+2107,35208,xã,"Xã Sơn Lâm",2032,WARD,4
+2108,35209,xã,"Xã Bắc Lý",2032,WARD,4
+2109,35210,xã,"Xã Quảng Châu",2032,WARD,3
+2110,35211,xã,"Xã Quỳnh Văn",2032,WARD,3
+2111,35212,xã,"Xã Tiên Đồng",2032,WARD,4
+2112,35213,xã,"Xã Thiên Nhẫn",2032,WARD,3
+2113,35214,xã,"Xã Vạn An",2032,WARD,3
+2114,35215,xã,"Xã Tương Dương",2032,WARD,4
+2115,35216,xã,"Xã Quỳnh Anh",2032,WARD,3
+2116,35217,xã,"Xã Nga My",2032,WARD,4
+2117,35218,xã,"Xã Keng Đu",2032,WARD,4
+2118,35090,xã,"Xã Quỳnh Thắng",2032,WARD,3
+2119,35091,xã,"Xã Bình Minh",2032,WARD,3
+2120,35092,xã,"Xã Mường Quàng",2032,WARD,4
+2121,35093,xã,"Xã Quỳnh Lưu",2032,WARD,3
+2122,35094,xã,"Xã Hữu Kiệm",2032,WARD,4
+2123,35095,xã,"Xã Đức Châu",2032,WARD,3
+2124,35096,xã,"Xã Quỳnh Tam",2032,WARD,3
+2125,35097,xã,"Xã Nghĩa Hành",2032,WARD,4
+2126,35098,phường,"Phường Thành Vinh",2032,WARD,2
+2127,35099,phường,"Phường Tây Hiếu",2032,WARD,3
+2128,35100,xã,"Xã Hữu Khuông",2032,WARD,4
+2129,35101,xã,"Xã Quỳnh Phú",2032,WARD,3
+2130,35102,xã,"Xã Anh Sơn Đông",2032,WARD,4
+2131,35103,xã,"Xã Minh Châu",2032,WARD,3
+2132,35104,xã,"Xã Giai Xuân",2032,WARD,4
+2133,35105,xã,"Xã An Châu",2032,WARD,3
+2134,35106,xã,"Xã Hải Châu",2032,WARD,3
+2135,35107,xã,"Xã Diễn Châu",2032,WARD,3
+2136,35108,xã,"Xã Văn Hiến",2032,WARD,3
+2137,35109,xã,"Xã Hưng Nguyên",2032,WARD,2
+2138,35110,xã,"Xã Thuần Trung",2032,WARD,3
+2139,35111,xã,"Xã Châu Hồng",2032,WARD,4
+2140,35112,xã,"Xã Quế Phong",2032,WARD,4
+2141,35113,xã,"Xã Na Loi",2032,WARD,4
+2142,35114,xã,"Xã Tam Hợp",2032,WARD,4
+2143,35115,xã,"Xã Huồi Tụ",2032,WARD,4
+2144,35116,xã,"Xã Hải Lộc",2032,WARD,2
+2145,35117,xã,"Xã Văn Kiều",2032,WARD,2
+2146,35118,xã,"Xã Hạnh Lâm",2032,WARD,4
+2147,35119,xã,"Xã Kim Liên",2032,WARD,3
+2148,35120,xã,"Xã Lương Sơn",2032,WARD,3
+2149,35121,xã,"Xã Nghĩa Đàn",2032,WARD,3
+2150,35122,xã,"Xã Tam Đồng",2032,WARD,4
+2151,35123,xã,"Xã Mường Xén",2032,WARD,4
+2152,35124,xã,"Xã Mường Chọng",2032,WARD,4
+2153,35125,xã,"Xã Phúc Lộc",2032,WARD,2
+2154,35126,xã,"Xã Tân Phú",2032,WARD,4
+2155,35127,phường,"Phường Vinh Phú",2032,WARD,2
+2156,35128,xã,"Xã Đông Hiếu",2032,WARD,3
+2157,35129,xã,"Xã Mường Lống",2032,WARD,4
+2158,35130,xã,"Xã Trung Lộc",2032,WARD,2
+2159,35131,xã,"Xã Tân An",2032,WARD,4
+2160,35132,xã,"Xã Cát Ngạn",2032,WARD,4
+2161,35133,xã,"Xã Nghĩa Hưng",2032,WARD,3
+2162,35269,xã,"Xã Yên Xuân",2032,WARD,4
+2163,88,tỉnh,"Ninh Bình",NULL,PROVINCE,NULL
+2164,36072,xã,"Xã Nam Lý",2163,WARD,4
+2165,36073,xã,"Xã Vĩnh Trụ",2163,WARD,4
+2166,36074,phường,"Phường Tiên Sơn",2163,WARD,3
+2167,36075,xã,"Xã Lý Nhân",2163,WARD,4
+2168,36076,phường,"Phường Lý Thường Kiệt",2163,WARD,3
+2169,36077,phường,"Phường Phù Vân",2163,WARD,3
+2170,36078,xã,"Xã Nhân Hà",2163,WARD,4
+2171,36079,xã,"Xã Thanh Lâm",2163,WARD,4
+2172,36080,xã,"Xã Nam Xang",2163,WARD,4
+2173,36081,phường,"Phường Phủ Lý",2163,WARD,3
+2174,36082,phường,"Phường Duy Tân",2163,WARD,3
+2175,36083,xã,"Xã Thanh Bình",2163,WARD,4
+2176,36084,phường,"Phường Nguyễn Úy",2163,WARD,3
+2177,36085,xã,"Xã Bình Giang",2163,WARD,4
+2178,36086,phường,"Phường Kim Bảng",2163,WARD,3
+2179,36087,xã,"Xã Bình Lục",2163,WARD,4
+2180,36792,phường,"Phường Đông Hoa Lư",2163,WARD,2
+2181,36793,xã,"Xã Khánh Nhạc",2163,WARD,3
+2182,36088,phường,"Phường Duy Hà",2163,WARD,3
+2183,36089,xã,"Xã Tân Thanh",2163,WARD,4
+2184,36090,xã,"Xã Trần Thương",2163,WARD,4
+2185,36091,phường,"Phường Châu Sơn",2163,WARD,3
+2186,36092,xã,"Xã Bình Sơn",2163,WARD,4
+2187,36093,xã,"Xã Bắc Lý",2163,WARD,4
+2188,36094,phường,"Phường Đồng Văn",2163,WARD,3
+2189,36095,xã,"Xã Bình An",2163,WARD,4
+2190,36096,phường,"Phường Duy Tiên",2163,WARD,3
+2191,36097,xã,"Xã Thanh Liêm",2163,WARD,4
+2192,36098,xã,"Xã Liêm Hà",2163,WARD,4
+2193,36099,xã,"Xã Bình Mỹ",2163,WARD,4
+2194,36100,phường,"Phường Lê Hồ",2163,WARD,3
+2195,36101,phường,"Phường Hà Nam",2163,WARD,3
+2196,36102,phường,"Phường Liêm Tuyền",2163,WARD,3
+2197,36103,phường,"Phường Tam Chúc",2163,WARD,3
+2198,36104,phường,"Phường Kim Thanh",2163,WARD,3
+2199,37491,xã,"Xã Hải Anh",2163,WARD,3
+2200,37492,xã,"Xã Xuân Giang",2163,WARD,3
+2201,37493,xã,"Xã Vụ Bản",2163,WARD,3
+2202,37494,xã,"Xã Nam Minh",2163,WARD,3
+2203,37495,xã,"Xã Nghĩa Hưng",2163,WARD,3
+2204,37496,xã,"Xã Giao Phúc",2163,WARD,3
+2205,37497,xã,"Xã Cổ Lễ",2163,WARD,3
+2206,37498,xã,"Xã Phong Doanh",2163,WARD,3
+2207,37499,xã,"Xã Trực Ninh",2163,WARD,3
+2208,37500,xã,"Xã Nam Đồng",2163,WARD,3
+2209,37501,xã,"Xã Xuân Hồng",2163,WARD,3
+2210,37502,phường,"Phường Thành Nam",2163,WARD,2
+2211,37503,xã,"Xã Xuân Hưng",2163,WARD,3
+2212,37478,xã,"Xã Minh Thái",2163,WARD,3
+2213,37479,xã,"Xã Quỹ Nhất",2163,WARD,3
+2214,37480,xã,"Xã Giao Hòa",2163,WARD,3
+2215,37481,xã,"Xã Minh Tân",2163,WARD,3
+2216,37482,xã,"Xã Nam Ninh",2163,WARD,3
+2217,37483,xã,"Xã Ninh Giang",2163,WARD,3
+2218,37484,xã,"Xã Giao Hưng",2163,WARD,3
+2219,37485,xã,"Xã Nghĩa Sơn",2163,WARD,3
+2220,37486,xã,"Xã Vũ Dương",2163,WARD,3
+2221,37487,xã,"Xã Yên Cường",2163,WARD,3
+2222,37488,phường,"Phường Thiên Trường",2163,WARD,2
+2223,37489,xã,"Xã Đồng Thịnh",2163,WARD,3
+2224,37490,xã,"Xã Cát Thành",2163,WARD,3
+2225,36554,xã,"Xã Lai Thành",2163,WARD,4
+2226,36555,xã,"Xã Phát Diệm",2163,WARD,4
+2227,36556,xã,"Xã Bình Minh",2163,WARD,4
+2228,36557,xã,"Xã Đồng Thái",2163,WARD,4
+2229,36558,xã,"Xã Yên Mô",2163,WARD,4
+2230,36559,phường,"Phường Tam Điệp",2163,WARD,3
+2231,36560,xã,"Xã Gia Trấn",2163,WARD,3
+2232,36561,xã,"Xã Định Hóa",2163,WARD,4
+2233,36562,phường,"Phường Tây Hoa Lư",2163,WARD,2
+2234,36563,xã,"Xã Kim Đông",2163,WARD,4
+2235,36564,xã,"Xã Gia Vân",2163,WARD,3
+2236,36565,xã,"Xã Quang Thiện",2163,WARD,4
+2237,37639,xã,"Xã Đại Hoàng",2163,WARD,3
+2238,37640,xã,"Xã Khánh Trung",2163,WARD,3
+2239,37641,xã,"Xã Yên Khánh",2163,WARD,3
+2240,37642,phường,"Phường Hoa Lư",2163,WARD,2
+2241,37643,xã,"Xã Gia Viễn",2163,WARD,3
+2242,37644,xã,"Xã Quỳnh Lưu",2163,WARD,4
+2243,37645,xã,"Xã Phú Sơn",2163,WARD,4
+2244,37646,xã,"Xã Cúc Phương",2163,WARD,4
+2245,37647,phường,"Phường Yên Sơn",2163,WARD,3
+2246,37648,xã,"Xã Phú Long",2163,WARD,4
+2247,37649,phường,"Phường Trung Sơn",2163,WARD,3
+2248,37650,xã,"Xã Thanh Sơn",2163,WARD,4
+2249,37651,xã,"Xã Gia Tường",2163,WARD,4
+2250,37652,xã,"Xã Yên Mạc",2163,WARD,4
+2251,37653,xã,"Xã Khánh Hội",2163,WARD,3
+2252,37654,xã,"Xã Gia Lâm",2163,WARD,4
+2253,37655,xã,"Xã Chất Bình",2163,WARD,4
+2254,37656,phường,"Phường Yên Thắng",2163,WARD,3
+2255,37657,xã,"Xã Kim Sơn",2163,WARD,4
+2256,37658,xã,"Xã Gia Hưng",2163,WARD,3
+2257,37659,xã,"Xã Khánh Thiện",2163,WARD,3
+2258,37660,phường,"Phường Nam Hoa Lư",2163,WARD,2
+2259,37661,xã,"Xã Gia Phong",2163,WARD,3
+2260,37662,xã,"Xã Nho Quan",2163,WARD,4
+2261,37663,xã,"Xã Yên Từ",2163,WARD,4
+2262,37692,phường,"Phường Đông A",2163,WARD,2
+2263,37693,xã,"Xã Yên Đồng",2163,WARD,3
+2264,37694,xã,"Xã Giao Minh",2163,WARD,3
+2265,37695,phường,"Phường Mỹ Lộc",2163,WARD,2
+2266,37696,phường,"Phường Vị Khê",2163,WARD,2
+2267,37697,xã,"Xã Hiển Khánh",2163,WARD,3
+2268,37698,xã,"Xã Nam Hồng",2163,WARD,3
+2269,37699,xã,"Xã Liên Minh",2163,WARD,3
+2270,37700,xã,"Xã Nam Trực",2163,WARD,3
+2271,37701,xã,"Xã Ninh Cường",2163,WARD,3
+2272,37702,xã,"Xã Hải Tiến",2163,WARD,3
+2273,37703,phường,"Phường Hồng Quang",2163,WARD,2
+2274,37704,xã,"Xã Giao Bình",2163,WARD,3
+2275,37705,xã,"Xã Giao Ninh",2163,WARD,3
+2276,37706,xã,"Xã Xuân Trường",2163,WARD,3
+2277,37707,xã,"Xã Rạng Đông",2163,WARD,3
+2278,37708,xã,"Xã Giao Thủy",2163,WARD,3
+2279,37709,xã,"Xã Hải Thịnh",2163,WARD,3
+2280,37710,phường,"Phường Nam Định",2163,WARD,2
+2281,37711,xã,"Xã Ý Yên",2163,WARD,3
+2282,37712,xã,"Xã Quang Hưng",2163,WARD,3
+2283,37713,xã,"Xã Nghĩa Lâm",2163,WARD,3
+2284,37714,xã,"Xã Hải Xuân",2163,WARD,3
+2285,37715,xã,"Xã Hồng Phong",2163,WARD,3
+2286,37716,phường,"Phường Trường Thi",2163,WARD,2
+2287,37717,xã,"Xã Hải Hưng",2163,WARD,3
+2288,37718,xã,"Xã Vạn Thắng",2163,WARD,3
+2289,37719,xã,"Xã Hải An",2163,WARD,3
+2290,37720,xã,"Xã Hải Quang",2163,WARD,3
+2291,37721,xã,"Xã Tân Minh",2163,WARD,3
+2292,37722,xã,"Xã Hải Hậu",2163,WARD,3
+2293,97,tỉnh,"Phú Thọ",NULL,PROVINCE,NULL
+2294,36823,xã,"Xã Hải Lựu",2293,WARD,3
+2295,36824,xã,"Xã Tam Dương Bắc",2293,WARD,3
+2296,36825,xã,"Xã Liên Châu",2293,WARD,2
+2297,36826,phường,"Phường Vĩnh Phúc",2293,WARD,2
+2298,36827,xã,"Xã Tam Đảo",2293,WARD,3
+2299,36828,xã,"Xã Thái Hòa",2293,WARD,3
+2300,36829,xã,"Xã Yên Lãng",2293,WARD,3
+2301,36830,xã,"Xã Tề Lỗ",2293,WARD,2
+2302,36831,xã,"Xã Hội Thịnh",2293,WARD,3
+2303,36832,xã,"Xã Nguyệt Đức",2293,WARD,2
+2304,36833,xã,"Xã Vĩnh Hưng",2293,WARD,3
+2305,36834,xã,"Xã Tam Dương",2293,WARD,3
+2306,36835,xã,"Xã Bình Nguyên",2293,WARD,2
+2307,36836,xã,"Xã Hoàng An",2293,WARD,3
+2308,36837,xã,"Xã Đạo Trù",2293,WARD,3
+2309,36838,xã,"Xã Hợp Lý",2293,WARD,3
+2310,36839,xã,"Xã Vĩnh Phú",2293,WARD,3
+2311,36840,xã,"Xã Thổ Tang",2293,WARD,3
+2312,36841,xã,"Xã Xuân Lãng",2293,WARD,2
+2313,36842,xã,"Xã Yên Lạc",2293,WARD,2
+2314,36843,phường,"Phường Phúc Yên",2293,WARD,2
+2315,36844,xã,"Xã Tam Sơn",2293,WARD,3
+2316,36845,xã,"Xã Bình Tuyền",2293,WARD,2
+2317,36884,xã,"Xã Mường Hoa",2293,WARD,4
+2318,36885,phường,"Phường Kỳ Sơn",2293,WARD,2
+2319,36886,xã,"Xã Cao Dương",2293,WARD,2
+2320,36887,xã,"Xã Dũng Tiến",2293,WARD,4
+2321,36888,xã,"Xã Mai Châu",2293,WARD,4
+2322,36889,xã,"Xã An Nghĩa",2293,WARD,4
+2323,36890,xã,"Xã Kim Bôi",2293,WARD,4
+2324,36891,xã,"Xã Pà Cò",2293,WARD,4
+2325,36892,xã,"Xã Mai Hạ",2293,WARD,4
+2326,36893,xã,"Xã Tiền Phong",2293,WARD,4
+2327,36894,xã,"Xã Cao Sơn",2293,WARD,4
+2328,36895,xã,"Xã Bao La",2293,WARD,4
+2329,36896,xã,"Xã Đà Bắc",2293,WARD,4
+2330,36897,xã,"Xã Nhân Nghĩa",2293,WARD,4
+2331,36898,xã,"Xã Lạc Sơn",2293,WARD,4
+2332,36899,xã,"Xã Thượng Cốc",2293,WARD,4
+2333,36900,xã,"Xã Vân Sơn",2293,WARD,4
+2334,36901,xã,"Xã Hợp Kim",2293,WARD,4
+2335,36902,xã,"Xã Yên Thủy",2293,WARD,4
+2336,36903,xã,"Xã Lạc Lương",2293,WARD,4
+2337,36904,xã,"Xã Thịnh Minh",2293,WARD,2
+2338,36905,xã,"Xã Đại Đồng",2293,WARD,4
+2339,36906,xã,"Xã Đức Nhàn",2293,WARD,4
+2340,36907,xã,"Xã Ngọc Sơn",2293,WARD,4
+2341,36908,xã,"Xã Liên Sơn",2293,WARD,2
+2342,36909,xã,"Xã Cao Phong",2293,WARD,4
+2343,36910,xã,"Xã Yên Phú",2293,WARD,4
+2344,36911,xã,"Xã An Bình",2293,WARD,4
+2345,36912,xã,"Xã Tân Pheo",2293,WARD,4
+2346,36913,xã,"Xã Yên Trị",2293,WARD,4
+2347,36914,xã,"Xã Quyết Thắng",2293,WARD,4
+2348,36915,xã,"Xã Mường Bi",2293,WARD,4
+2349,36916,xã,"Xã Quy Đức",2293,WARD,4
+2350,36917,phường,"Phường Thống Nhất",2293,WARD,2
+2351,36918,xã,"Xã Thung Nai",2293,WARD,4
+2352,36919,phường,"Phường Hòa Bình",2293,WARD,2
+2353,36920,xã,"Xã Toàn Thắng",2293,WARD,4
+2354,36921,xã,"Xã Tân Mai",2293,WARD,4
+2355,36922,xã,"Xã Tân Lạc",2293,WARD,4
+2356,36923,xã,"Xã Mường Động",2293,WARD,4
+2357,36924,xã,"Xã Lương Sơn",2293,WARD,2
+2358,36925,xã,"Xã Mường Vang",2293,WARD,4
+2359,36926,xã,"Xã Nật Sơn",2293,WARD,4
+2360,36927,xã,"Xã Lạc Thủy",2293,WARD,4
+2361,36928,xã,"Xã Mường Thàng",2293,WARD,4
+2362,36929,phường,"Phường Tân Hòa",2293,WARD,2
+2363,35650,xã,"Xã Phùng Nguyên",2293,WARD,3
+2364,36475,xã,"Xã Đại Đình",2293,WARD,3
+2365,36476,xã,"Xã Lập Thạch",2293,WARD,3
+2366,36477,xã,"Xã Vĩnh An",2293,WARD,3
+2367,36478,phường,"Phường Xuân Hòa",2293,WARD,2
+2368,36479,xã,"Xã Liên Hòa",2293,WARD,3
+2369,36480,xã,"Xã Vĩnh Tường",2293,WARD,3
+2370,36481,xã,"Xã Vĩnh Thành",2293,WARD,3
+2371,36482,xã,"Xã Tiên Lữ",2293,WARD,3
+2372,36483,xã,"Xã Sơn Đông",2293,WARD,3
+2373,36484,xã,"Xã Bình Xuyên",2293,WARD,2
+2374,36485,xã,"Xã Tam Hồng",2293,WARD,2
+2375,36486,phường,"Phường Vĩnh Yên",2293,WARD,2
+2376,36487,xã,"Xã Sông Lô",2293,WARD,3
+2377,35349,xã,"Xã Văn Lang",2293,WARD,4
+2378,35350,xã,"Xã Thanh Ba",2293,WARD,3
+2379,35351,xã,"Xã Liên Minh",2293,WARD,3
+2380,35352,phường,"Phường Thanh Miếu",2293,WARD,2
+2381,35353,xã,"Xã Dân Chủ",2293,WARD,3
+2382,35354,xã,"Xã Hiền Lương",2293,WARD,4
+2383,35355,xã,"Xã Tam Nông",2293,WARD,3
+2384,35356,xã,"Xã Vạn Xuân",2293,WARD,3
+2385,35357,xã,"Xã Khả Cửu",2293,WARD,4
+2386,35358,xã,"Xã Xuân Viên",2293,WARD,4
+2387,35359,xã,"Xã Tân Sơn",2293,WARD,4
+2388,35360,xã,"Xã Phú Khê",2293,WARD,4
+2389,35361,xã,"Xã Long Cốc",2293,WARD,4
+2390,35362,xã,"Xã Hiền Quan",2293,WARD,3
+2391,35363,xã,"Xã Yên Sơn",2293,WARD,4
+2392,35364,xã,"Xã Yên Kỳ",2293,WARD,4
+2393,35365,xã,"Xã Xuân Đài",2293,WARD,4
+2394,35366,xã,"Xã Bình Phú",2293,WARD,3
+2395,35367,xã,"Xã Thanh Sơn",2293,WARD,4
+2396,35368,phường,"Phường Nông Trang",2293,WARD,2
+2397,35369,xã,"Xã Tiên Lương",2293,WARD,4
+2398,35370,xã,"Xã Thọ Văn",2293,WARD,3
+2399,35371,xã,"Xã Đông Thành",2293,WARD,3
+2400,35372,xã,"Xã Hương Cần",2293,WARD,4
+2401,35373,xã,"Xã Trung Sơn",2293,WARD,4
+2402,35374,xã,"Xã Vĩnh Chân",2293,WARD,4
+2403,35375,xã,"Xã Bản Nguyên",2293,WARD,3
+2404,35376,xã,"Xã Cẩm Khê",2293,WARD,4
+2405,35377,xã,"Xã Minh Hòa",2293,WARD,4
+2406,35378,xã,"Xã Yên Lập",2293,WARD,4
+2407,35379,xã,"Xã Hy Cương",2293,WARD,2
+2408,35380,xã,"Xã Thượng Long",2293,WARD,4
+2409,35381,xã,"Xã Phú Mỹ",2293,WARD,3
+2410,35382,xã,"Xã Đoan Hùng",2293,WARD,4
+2411,35383,xã,"Xã Võ Miếu",2293,WARD,4
+2412,35384,xã,"Xã Hùng Việt",2293,WARD,4
+2413,35385,xã,"Xã Đan Thượng",2293,WARD,4
+2414,35386,xã,"Xã Lâm Thao",2293,WARD,3
+2415,35387,xã,"Xã Chí Đám",2293,WARD,4
+2416,35388,xã,"Xã Cự Đồng",2293,WARD,4
+2417,35389,xã,"Xã Tu Vũ",2293,WARD,4
+2418,35390,xã,"Xã Vân Bán",2293,WARD,4
+2419,35391,xã,"Xã Tây Cốc",2293,WARD,4
+2420,35392,xã,"Xã Bằng Luân",2293,WARD,4
+2421,35393,xã,"Xã Sơn Lương",2293,WARD,4
+2422,35394,xã,"Xã Hoàng Cương",2293,WARD,3
+2423,35395,xã,"Xã Thu Cúc",2293,WARD,4
+2424,35396,xã,"Xã Chân Mộng",2293,WARD,4
+2425,35397,xã,"Xã Minh Đài",2293,WARD,4
+2426,35398,xã,"Xã Xuân Lũng",2293,WARD,3
+2427,35399,xã,"Xã Văn Miếu",2293,WARD,4
+2428,35400,phường,"Phường Phú Thọ",2293,WARD,3
+2429,35401,xã,"Xã Phù Ninh",2293,WARD,3
+2430,35402,phường,"Phường Vân Phú",2293,WARD,2
+2431,35403,xã,"Xã Thanh Thủy",2293,WARD,4
+2432,35404,phường,"Phường Việt Trì",2293,WARD,2
+2433,35405,xã,"Xã Đào Xá",2293,WARD,4
+2434,35406,xã,"Xã Trạm Thản",2293,WARD,3
+2435,35407,xã,"Xã Đồng Lương",2293,WARD,4
+2436,35408,phường,"Phường Phong Châu",2293,WARD,3
+2437,35409,xã,"Xã Lai Đồng",2293,WARD,4
+2438,35410,phường,"Phường Âu Cơ",2293,WARD,3
+2439,35411,xã,"Xã Hạ Hòa",2293,WARD,4
+2440,35412,xã,"Xã Quảng Yên",2293,WARD,3
+2441,35413,xã,"Xã Chí Tiên",2293,WARD,3
+2442,114,tỉnh,"Quảng Ngãi",NULL,PROVINCE,NULL
+2443,36724,xã,"Xã Sơn Tịnh",2442,WARD,3
+2444,36725,xã,"Xã Sơn Hạ",2442,WARD,4
+2445,36726,phường,"Phường Đức Phổ",2442,WARD,4
+2446,36727,xã,"Xã Nguyễn Nghiêm",2442,WARD,4
+2447,36728,xã,"Xã Khánh Cường",2442,WARD,4
+2448,36729,xã,"Xã Mộ Đức",2442,WARD,4
+2449,36730,xã,"Xã Minh Long",2442,WARD,4
+2450,36731,xã,"Xã Ba Tô",2442,WARD,4
+2451,36732,xã,"Xã Sơn Linh",2442,WARD,4
+2452,36733,xã,"Xã Thanh Bồng",2442,WARD,4
+2453,36734,xã,"Xã Trà Bồng",2442,WARD,4
+2454,36735,xã,"Xã Vạn Tường",2442,WARD,3
+2455,36736,xã,"Xã Đông Sơn",2442,WARD,3
+2456,36737,xã,"Xã Mỏ Cày",2442,WARD,4
+2457,36738,xã,"Xã Ba Động",2442,WARD,4
+2458,36739,"đặc khu","Đặc khu Lý Sơn",2442,WARD,4
+2459,36740,phường,"Phường Trương Quang Trọng",2442,WARD,3
+2460,36741,xã,"Xã Đông Trà Bồng",2442,WARD,4
+2461,36742,xã,"Xã Ba Vì",2442,WARD,4
+2462,36743,xã,"Xã Sơn Tây Hạ",2442,WARD,4
+2463,36744,xã,"Xã Tư Nghĩa",2442,WARD,4
+2464,36745,xã,"Xã Nghĩa Hành",2442,WARD,4
+2465,36746,xã,"Xã Trường Giang",2442,WARD,3
+2466,36747,xã,"Xã Đặng Thùy Trâm",2442,WARD,4
+2467,36748,xã,"Xã Ba Gia",2442,WARD,3
+2468,36749,xã,"Xã Tây Trà",2442,WARD,4
+2469,36750,xã,"Xã Ba Vinh",2442,WARD,4
+2470,36751,xã,"Xã Sơn Thủy",2442,WARD,4
+2471,36752,xã,"Xã Vệ Giang",2442,WARD,4
+2472,36753,xã,"Xã Ba Dinh",2442,WARD,4
+2473,36754,xã,"Xã Bình Chương",2442,WARD,3
+2474,36755,xã,"Xã Bình Sơn",2442,WARD,3
+2475,36756,xã,"Xã An Phú",2442,WARD,3
+2476,36757,xã,"Xã Ba Tơ",2442,WARD,NULL
+2477,36758,xã,"Xã Trà Giang",2442,WARD,4
+2478,36759,phường,"Phường Nghĩa Lộ",2442,WARD,3
+2479,36760,xã,"Xã Thiện Tín",2442,WARD,4
+2480,36761,phường,"Phường Sa Huỳnh",2442,WARD,4
+2481,36762,phường,"Phường Trà Câu",2442,WARD,4
+2482,36763,xã,"Xã Nghĩa Giang",2442,WARD,4
+2483,36764,xã,"Xã Sơn Hà",2442,WARD,NULL
+2484,36765,xã,"Xã Lân Phong",2442,WARD,4
+2485,36766,xã,"Xã Sơn Tây",2442,WARD,4
+2486,36767,xã,"Xã Thọ Phong",2442,WARD,3
+2487,36768,xã,"Xã Phước Giang",2442,WARD,4
+2488,36769,xã,"Xã Cà Đam",2442,WARD,4
+2489,36770,xã,"Xã Bình Minh",2442,WARD,3
+2490,36771,xã,"Xã Long Phụng",2442,WARD,4
+2491,36772,xã,"Xã Đình Cương",2442,WARD,4
+2492,36773,xã,"Xã Sơn Mai",2442,WARD,4
+2493,36774,xã,"Xã Sơn Kỳ",2442,WARD,4
+2494,36775,phường,"Phường Cẩm Thành",2442,WARD,3
+2495,36776,xã,"Xã Tịnh Khê",2442,WARD,3
+2496,36777,xã,"Xã Sơn Tây Thượng",2442,WARD,4
+2497,36930,xã,"Xã Măng Bút",2442,WARD,4
+2498,36931,xã,"Xã Ya Ly",2442,WARD,4
+2499,36932,xã,"Xã Rờ Kơi",2442,WARD,4
+2500,36933,xã,"Xã Đăk Tô",2442,WARD,4
+2501,36934,xã,"Xã Ia Đal",2442,WARD,4
+2502,36935,xã,"Xã Đăk PLô",2442,WARD,4
+2503,36936,xã,"Xã Đăk Rơ Wa",2442,WARD,3
+2504,36937,xã,"Xã Đăk Mar",2442,WARD,3
+2505,36938,xã,"Xã Đăk Rve",2442,WARD,4
+2506,36939,xã,"Xã Ngọk Tụ",2442,WARD,4
+2507,36940,xã,"Xã Đăk Môn",2442,WARD,4
+2508,36941,phường,"Phường Đăk BLa",2442,WARD,3
+2509,36942,xã,"Xã Mô Rai",2442,WARD,4
+2510,36943,xã,"Xã Dục Nông",2442,WARD,4
+2511,36944,xã,"Xã Đăk Kôi",2442,WARD,4
+2512,36945,xã,"Xã Đăk Hà",2442,WARD,3
+2513,36946,xã,"Xã Ia Tơi",2442,WARD,4
+2514,36947,xã,"Xã Đăk Pxi",2442,WARD,3
+2515,36948,xã,"Xã Đăk Sao",2442,WARD,4
+2516,36949,xã,"Xã Ngọk Bay",2442,WARD,3
+2517,36950,xã,"Xã Sa Bình",2442,WARD,4
+2518,36951,xã,"Xã Kon Plông",2442,WARD,4
+2519,36952,xã,"Xã Sa Loong",2442,WARD,4
+2520,36953,xã,"Xã Đăk Tơ Kan",2442,WARD,4
+2521,36954,xã,"Xã Kon Đào",2442,WARD,4
+2522,36955,xã,"Xã Măng Đen",2442,WARD,4
+2523,36956,xã,"Xã Ngọk Réo",2442,WARD,3
+2524,36957,xã,"Xã Ia Chim",2442,WARD,3
+2525,36958,xã,"Xã Tu Mơ Rông",2442,WARD,4
+2526,36959,xã,"Xã Măng Ri",2442,WARD,4
+2527,36960,xã,"Xã Đăk Pék",2442,WARD,4
+2528,36961,xã,"Xã Sa Thầy",2442,WARD,4
+2529,36962,phường,"Phường Đăk Cấm",2442,WARD,3
+2530,36963,xã,"Xã Bờ Y",2442,WARD,4
+2531,36964,xã,"Xã Đăk Ui",2442,WARD,3
+2532,36965,xã,"Xã Xốp",2442,WARD,4
+2533,36966,xã,"Xã Đăk Long",2442,WARD,4
+2534,36967,xã,"Xã Kon Braih",2442,WARD,4
+2535,36968,xã,"Xã Ngọc Linh",2442,WARD,4
+2536,36969,phường,"Phường Kon Tum",2442,WARD,3
+2537,38112,xã,"Xã Tây Trà Bồng",2442,WARD,4
+2538,38113,xã,"Xã Ba Xa",2442,WARD,4
+2539,101,tỉnh,"Quảng Ninh",NULL,PROVINCE,NULL
+2540,37585,phường,"Phường Liên Hòa",2539,WARD,1
+2541,37586,phường,"Phường Móng Cái 2",2539,WARD,1
+2542,37587,phường,"Phường Hồng Gai",2539,WARD,1
+2543,37588,phường,"Phường Vàng Danh",2539,WARD,1
+2544,37589,xã,"Xã Đông Ngũ",2539,WARD,3
+2545,37590,phường,"Phường An Sinh",2539,WARD,1
+2546,37591,xã,"Xã Điền Xá",2539,WARD,3
+2547,37592,phường,"Phường Bãi Cháy",2539,WARD,1
+2548,37593,phường,"Phường Mông Dương",2539,WARD,2
+2549,37594,phường,"Phường Bình Khê",2539,WARD,1
+2550,37595,phường,"Phường Yên Tử",2539,WARD,1
+2551,37596,phường,"Phường Đông Triều",2539,WARD,1
+2552,37597,xã,"Xã Thống Nhất",2539,WARD,1
+2553,37598,phường,"Phường Mạo Khê",2539,WARD,1
+2554,37599,"đặc khu","Đặc khu Cô Tô",2539,WARD,4
+2555,37600,xã,"Xã Quảng Tân",2539,WARD,3
+2556,37601,xã,"Xã Hải Hòa",2539,WARD,2
+2557,37602,xã,"Xã Hải Lạng",2539,WARD,3
+2558,37603,"đặc khu","Đặc khu Vân Đồn",2539,WARD,3
+2559,37604,xã,"Xã Hải Ninh",2539,WARD,1
+2560,37605,xã,"Xã Quảng Hà",2539,WARD,3
+2561,37606,xã,"Xã Lục Hồn",2539,WARD,4
+2562,37607,phường,"Phường Hà Tu",2539,WARD,1
+2563,37608,phường,"Phường Hạ Long",2539,WARD,1
+2564,37609,phường,"Phường Hà An",2539,WARD,1
+2565,37610,phường,"Phường Việt Hưng",2539,WARD,1
+2566,37611,xã,"Xã Lương Minh",2539,WARD,1
+2567,37612,phường,"Phường Cao Xanh",2539,WARD,1
+2568,37613,xã,"Xã Hải Sơn",2539,WARD,1
+2569,37614,phường,"Phường Quảng Yên",2539,WARD,1
+2570,37615,xã,"Xã Ba Chẽ",2539,WARD,4
+2571,37616,xã,"Xã Quảng La",2539,WARD,1
+2572,37617,phường,"Phường Quang Hanh",2539,WARD,2
+2573,37618,phường,"Phường Hoàng Quế",2539,WARD,1
+2574,37619,phường,"Phường Hà Lầm",2539,WARD,1
+2575,37620,xã,"Xã Cái Chiên",2539,WARD,3
+2576,37621,xã,"Xã Hoành Mô",2539,WARD,4
+2577,37622,phường,"Phường Tuần Châu",2539,WARD,1
+2578,37623,xã,"Xã Tiên Yên",2539,WARD,3
+2579,37624,phường,"Phường Hiệp Hòa",2539,WARD,1
+2580,37625,phường,"Phường Cửa Ông",2539,WARD,2
+2581,37626,xã,"Xã Bình Liêu",2539,WARD,4
+2582,37627,xã,"Xã Vĩnh Thực",2539,WARD,1
+2583,37628,xã,"Xã Đường Hoa",2539,WARD,3
+2584,37629,phường,"Phường Uông Bí",2539,WARD,1
+2585,37630,phường,"Phường Đông Mai",2539,WARD,1
+2586,37631,phường,"Phường Móng Cái 1",2539,WARD,1
+2587,37632,xã,"Xã Quảng Đức",2539,WARD,3
+2588,37633,phường,"Phường Móng Cái 3",2539,WARD,1
+2589,37634,phường,"Phường Hoành Bồ",2539,WARD,1
+2590,37635,xã,"Xã Kỳ Thượng",2539,WARD,1
+2591,37636,phường,"Phường Cẩm Phả",2539,WARD,2
+2592,37637,phường,"Phường Phong Cốc",2539,WARD,1
+2593,37638,xã,"Xã Đầm Hà",2539,WARD,3
+2594,110,tỉnh,"Quảng Trị",NULL,PROVINCE,NULL
+2595,36970,xã,"Xã Cam Hồng",2594,WARD,3
+2596,36971,xã,"Xã Thượng Trạch",2594,WARD,3
+2597,36972,xã,"Xã Dân Hóa",2594,WARD,4
+2598,36973,xã,"Xã Hòa Trạch",2594,WARD,3
+2599,36974,phường,"Phường Đồng Hới",2594,WARD,2
+2600,36975,xã,"Xã Hoàn Lão",2594,WARD,3
+2601,36976,xã,"Xã Tuyên Bình",2594,WARD,4
+2602,36977,xã,"Xã Nam Trạch",2594,WARD,3
+2603,36978,xã,"Xã Kim Điền",2594,WARD,4
+2604,36979,xã,"Xã Quảng Trạch",2594,WARD,3
+2605,36980,xã,"Xã Tuyên Lâm",2594,WARD,4
+2606,36981,xã,"Xã Tuyên Hóa",2594,WARD,4
+2607,36982,xã,"Xã Quảng Ninh",2594,WARD,3
+2608,36983,xã,"Xã Bắc Trạch",2594,WARD,3
+2609,36984,xã,"Xã Đồng Lê",2594,WARD,4
+2610,36985,xã,"Xã Trung Thuần",2594,WARD,3
+2611,36986,xã,"Xã Phong Nha",2594,WARD,3
+2612,36987,xã,"Xã Kim Ngân",2594,WARD,3
+2613,36988,xã,"Xã Sen Ngư",2594,WARD,3
+2614,36989,xã,"Xã Tuyên Sơn",2594,WARD,4
+2615,36990,xã,"Xã Minh Hóa",2594,WARD,4
+2616,36991,xã,"Xã Nam Gianh",2594,WARD,3
+2617,36992,xã,"Xã Trường Ninh",2594,WARD,3
+2618,36993,xã,"Xã Kim Phú",2594,WARD,4
+2619,36994,xã,"Xã Trường Phú",2594,WARD,3
+2620,36995,phường,"Phường Đồng Sơn",2594,WARD,2
+2621,36996,phường,"Phường Đồng Thuận",2594,WARD,2
+2622,36997,xã,"Xã Nam Ba Đồn",2594,WARD,3
+2623,36998,phường,"Phường Bắc Gianh",2594,WARD,3
+2624,36999,xã,"Xã Lệ Thủy",2594,WARD,3
+2625,37000,phường,"Phường Ba Đồn",2594,WARD,3
+2626,37001,xã,"Xã Trường Sơn",2594,WARD,3
+2627,37002,xã,"Xã Ninh Châu",2594,WARD,3
+2628,37003,xã,"Xã Đông Trạch",2594,WARD,3
+2629,37004,xã,"Xã Phú Trạch",2594,WARD,3
+2630,37005,xã,"Xã Tân Thành",2594,WARD,4
+2631,37006,xã,"Xã Lệ Ninh",2594,WARD,3
+2632,37007,xã,"Xã Tân Mỹ",2594,WARD,3
+2633,37008,xã,"Xã Tân Gianh",2594,WARD,3
+2634,35651,xã,"Xã Tuyên Phú",2594,WARD,4
+2635,36517,xã,"Xã Hải Lăng",2594,WARD,4
+2636,36518,xã,"Xã Cửa Việt",2594,WARD,4
+2637,36519,xã,"Xã Đakrông",2594,WARD,4
+2638,36520,phường,"Phường Quảng Trị",2594,WARD,4
+2639,36521,xã,"Xã Cam Lộ",2594,WARD,4
+2640,36522,xã,"Xã Lìa",2594,WARD,4
+2641,36523,xã,"Xã Vĩnh Hoàng",2594,WARD,4
+2642,36524,xã,"Xã Vĩnh Định",2594,WARD,4
+2643,36525,xã,"Xã A Dơi",2594,WARD,4
+2644,36526,xã,"Xã La Lay",2594,WARD,4
+2645,36527,xã,"Xã Tà Rụt",2594,WARD,4
+2646,36528,xã,"Xã Mỹ Thủy",2594,WARD,4
+2647,36529,xã,"Xã Diên Sanh",2594,WARD,4
+2648,36530,xã,"Xã Ba Lòng",2594,WARD,4
+2649,36531,xã,"Xã Nam Hải Lăng",2594,WARD,4
+2650,36532,xã,"Xã Khe Sanh",2594,WARD,4
+2651,36533,xã,"Xã Triệu Bình",2594,WARD,4
+2652,36534,xã,"Xã Triệu Phong",2594,WARD,4
+2653,36535,xã,"Xã Hiếu Giang",2594,WARD,4
+2654,36536,xã,"Xã Lao Bảo",2594,WARD,4
+2655,36537,xã,"Xã Tân Lập",2594,WARD,4
+2656,36538,xã,"Xã Vĩnh Thủy",2594,WARD,4
+2657,36539,xã,"Xã Hướng Lập",2594,WARD,4
+2658,36540,xã,"Xã Vĩnh Linh",2594,WARD,4
+2659,36541,xã,"Xã Cồn Tiên",2594,WARD,4
+2660,36542,xã,"Xã Ái Tử",2594,WARD,4
+2661,36543,xã,"Xã Bến Hải",2594,WARD,4
+2662,36544,phường,"Phường Đông Hà",2594,WARD,3
+2663,36545,xã,"Xã Gio Linh",2594,WARD,4
+2664,36546,xã,"Xã Bến Quan",2594,WARD,4
+2665,36547,xã,"Xã Nam Cửa Việt",2594,WARD,4
+2666,36548,xã,"Xã Hướng Phùng",2594,WARD,4
+2667,36549,xã,"Xã Cửa Tùng",2594,WARD,4
+2668,36550,xã,"Xã Hướng Hiệp",2594,WARD,4
+2669,36551,"đặc khu","Đặc khu Cồn Cỏ",2594,WARD,4
+2670,36552,xã,"Xã Triệu Cơ",2594,WARD,4
+2671,36553,phường,"Phường Nam Đông Hà",2594,WARD,3
+2672,35414,xã,"Xã Bố Trạch",2594,WARD,3
+2673,104,tỉnh,"Sơn La",NULL,PROVINCE,NULL
+2674,37355,xã,"Xã Chiềng Lao",2673,WARD,4
+2675,37356,xã,"Xã Chiềng Hoa",2673,WARD,4
+2676,37357,xã,"Xã Chiềng Sơn",2673,WARD,4
+2677,37358,phường,"Phường Chiềng Cơi",2673,WARD,3
+2678,37359,xã,"Xã Sốp Cộp",2673,WARD,4
+2679,37360,xã,"Xã Thuận Châu",2673,WARD,4
+2680,37361,xã,"Xã Mường La",2673,WARD,4
+2681,37362,xã,"Xã Kim Bon",2673,WARD,4
+2682,37363,xã,"Xã Đoàn Kết",2673,WARD,4
+2683,37364,xã,"Xã Quỳnh Nhai",2673,WARD,4
+2684,37365,xã,"Xã Yên Sơn",2673,WARD,4
+2685,37366,xã,"Xã Chiềng Hặc",2673,WARD,4
+2686,37367,xã,"Xã Chiềng Mai",2673,WARD,4
+2687,37368,xã,"Xã Nậm Lầu",2673,WARD,4
+2688,37369,phường,"Phường Mộc Sơn",2673,WARD,4
+2689,37370,phường,"Phường Tô Hiệu",2673,WARD,3
+2690,37371,xã,"Xã Tô Múa",2673,WARD,4
+2691,37372,xã,"Xã Xuân Nha",2673,WARD,4
+2692,37373,xã,"Xã Tà Xùa",2673,WARD,4
+2693,37374,xã,"Xã Nậm Ty",2673,WARD,4
+2694,37375,xã,"Xã Long Hẹ",2673,WARD,4
+2695,37376,xã,"Xã Mường Bang",2673,WARD,4
+2696,37377,xã,"Xã Sông Mã",2673,WARD,4
+2697,37378,xã,"Xã Púng Bánh",2673,WARD,4
+2698,37379,xã,"Xã Bình Thuận",2673,WARD,4
+2699,37380,xã,"Xã Mường Bám",2673,WARD,4
+2700,37381,phường,"Phường Chiềng An",2673,WARD,3
+2701,37382,xã,"Xã Mường Giôn",2673,WARD,4
+2702,37383,xã,"Xã Lóng Sập",2673,WARD,4
+2703,37384,xã,"Xã Mai Sơn",2673,WARD,4
+2704,37385,xã,"Xã Phiêng Khoài",2673,WARD,4
+2705,37195,xã,"Xã Chiềng Sơ",2673,WARD,4
+2706,37196,xã,"Xã Chiềng La",2673,WARD,4
+2707,37197,xã,"Xã Mường Cơi",2673,WARD,4
+2708,37198,xã,"Xã Tân Yên",2673,WARD,4
+2709,37199,phường,"Phường Mộc Châu",2673,WARD,4
+2710,37386,xã,"Xã Mường Khiêng",2673,WARD,4
+2711,37387,xã,"Xã Mường É",2673,WARD,4
+2712,37388,phường,"Phường Chiềng Sinh",2673,WARD,3
+2713,37389,xã,"Xã Vân Hồ",2673,WARD,4
+2714,37390,xã,"Xã Tân Phong",2673,WARD,4
+2715,37391,xã,"Xã Phiêng Cằm",2673,WARD,4
+2716,37392,xã,"Xã Xím Vàng",2673,WARD,4
+2717,37393,xã,"Xã Bắc Yên",2673,WARD,4
+2718,37394,xã,"Xã Tà Hộc",2673,WARD,4
+2719,37434,phường,"Phường Vân Sơn",2673,WARD,4
+2720,37435,xã,"Xã Chiềng Mung",2673,WARD,4
+2721,37436,xã,"Xã Pắc Ngà",2673,WARD,4
+2722,37437,xã,"Xã Mường Chanh",2673,WARD,4
+2723,37438,xã,"Xã Ngọc Chiến",2673,WARD,4
+2724,37439,xã,"Xã Suối Tọ",2673,WARD,4
+2725,37440,xã,"Xã Mường Hung",2673,WARD,4
+2726,37441,xã,"Xã Mường Lầm",2673,WARD,4
+2727,37442,xã,"Xã Tường Hạ",2673,WARD,4
+2728,37443,phường,"Phường Thảo Nguyên",2673,WARD,4
+2729,37444,xã,"Xã Phiêng Pằn",2673,WARD,4
+2730,37445,xã,"Xã Huổi Một",2673,WARD,4
+2731,37446,xã,"Xã Bó Sinh",2673,WARD,4
+2732,37447,xã,"Xã Tạ Khoa",2673,WARD,4
+2733,37448,xã,"Xã Gia Phù",2673,WARD,4
+2734,37449,xã,"Xã Lóng Phiêng",2673,WARD,4
+2735,37450,xã,"Xã Muổi Nọi",2673,WARD,4
+2736,37451,xã,"Xã Mường Sại",2673,WARD,4
+2737,37452,xã,"Xã Song Khủa",2673,WARD,4
+2738,37453,xã,"Xã Mường Lạn",2673,WARD,4
+2739,37454,xã,"Xã Chiềng Khoong",2673,WARD,4
+2740,37455,xã,"Xã Mường Chiên",2673,WARD,4
+2741,37456,xã,"Xã Co Mạ",2673,WARD,4
+2742,37457,xã,"Xã Chiềng Sung",2673,WARD,4
+2743,37458,xã,"Xã Yên Châu",2673,WARD,4
+2744,37459,xã,"Xã Chiềng Khương",2673,WARD,4
+2745,37460,xã,"Xã Mường Lèo",2673,WARD,4
+2746,37461,xã,"Xã Mường Bú",2673,WARD,4
+2747,37462,xã,"Xã Chiềng Sại",2673,WARD,4
+2748,37463,xã,"Xã Phù Yên",2673,WARD,4
+2749,126,tỉnh,"Tây Ninh",NULL,PROVINCE,NULL
+2750,35219,phường,"Phường Ninh Thạnh",2749,WARD,2
+2751,35220,phường,"Phường Trảng Bàng",2749,WARD,2
+2752,35221,phường,"Phường Hòa Thành",2749,WARD,2
+2753,35654,xã,"Xã Tân Lập",2749,WARD,3
+2754,35691,phường,"Phường Long Hoa",2749,WARD,2
+2755,35692,xã,"Xã Hảo Đước",2749,WARD,3
+2756,35693,xã,"Xã Tân Châu",2749,WARD,3
+2757,35694,xã,"Xã Truông Mít",2749,WARD,2
+2758,35695,xã,"Xã Dương Minh Châu",2749,WARD,3
+2759,35696,xã,"Xã Phước Thạnh",2749,WARD,2
+2760,35697,xã,"Xã Tân Hội",2749,WARD,3
+2761,35698,xã,"Xã Hòa Hội",2749,WARD,3
+2762,35699,phường,"Phường Bình Minh",2749,WARD,2
+2763,35700,xã,"Xã Hưng Thuận",2749,WARD,2
+2764,35701,phường,"Phường An Tịnh",2749,WARD,2
+2765,35702,xã,"Xã Phước Vinh",2749,WARD,3
+2766,35703,phường,"Phường Gia Lộc",2749,WARD,2
+2767,35704,xã,"Xã Thạnh Bình",2749,WARD,3
+2768,35705,xã,"Xã Tân Hòa",2749,WARD,3
+2769,35706,xã,"Xã Bến Cầu",2749,WARD,3
+2770,35707,xã,"Xã Tân Đông",2749,WARD,3
+2771,35708,phường,"Phường Tân Ninh",2749,WARD,2
+2772,35709,phường,"Phường Thanh Điền",2749,WARD,2
+2773,35710,xã,"Xã Lộc Ninh",2749,WARD,3
+2774,35711,xã,"Xã Ninh Điền",2749,WARD,3
+2775,35712,xã,"Xã Long Chữ",2749,WARD,3
+2776,35713,xã,"Xã Trà Vong",2749,WARD,3
+2777,35714,phường,"Phường Gò Dầu",2749,WARD,2
+2778,35715,xã,"Xã Tân Biên",2749,WARD,3
+2779,35716,xã,"Xã Phước Chỉ",2749,WARD,2
+2780,35717,xã,"Xã Long Thuận",2749,WARD,3
+2781,35718,xã,"Xã Châu Thành",2749,WARD,3
+2782,35719,xã,"Xã Tân Phú",2749,WARD,3
+2783,35720,xã,"Xã Tân Thành",2749,WARD,3
+2784,35721,xã,"Xã Cầu Khởi",2749,WARD,3
+2785,35272,xã,"Xã Thạnh Đức",2749,WARD,2
+2786,37824,xã,"Xã Mỹ Lệ",2749,WARD,2
+2787,37825,phường,"Phường Long An",2749,WARD,1
+2788,37826,phường,"Phường Khánh Hậu",2749,WARD,1
+2789,37827,xã,"Xã Bình Hòa",2749,WARD,4
+2790,37828,xã,"Xã Tân Tập",2749,WARD,1
+2791,37829,xã,"Xã Mỹ Lộc",2749,WARD,1
+2792,37830,xã,"Xã Vĩnh Hưng",2749,WARD,4
+2793,37831,phường,"Phường Tân An",2749,WARD,1
+2794,37832,xã,"Xã Mỹ Quý",2749,WARD,3
+2795,37833,xã,"Xã Vĩnh Châu",2749,WARD,4
+2796,37834,xã,"Xã Nhơn Hòa Lập",2749,WARD,4
+2797,37835,xã,"Xã An Lục Long",2749,WARD,3
+2798,37836,xã,"Xã Bình Hiệp",2749,WARD,2
+2799,37837,xã,"Xã Tân Tây",2749,WARD,3
+2800,37838,xã,"Xã Đức Huệ",2749,WARD,3
+2801,37839,xã,"Xã Vàm Cỏ",2749,WARD,3
+2802,37840,xã,"Xã Thuận Mỹ",2749,WARD,3
+2803,37841,xã,"Xã Hậu Thạnh",2749,WARD,4
+2804,37842,xã,"Xã Tân Hưng",2749,WARD,4
+2805,37843,xã,"Xã Khánh Hưng",2749,WARD,4
+2806,37844,xã,"Xã Hưng Điền",2749,WARD,4
+2807,37845,xã,"Xã Lương Hòa",2749,WARD,1
+2808,37846,xã,"Xã Đức Hòa",2749,WARD,1
+2809,37847,xã,"Xã Mỹ An",2749,WARD,2
+2810,37848,xã,"Xã Nhựt Tảo",2749,WARD,2
+2811,37789,xã,"Xã Thủ Thừa",2749,WARD,2
+2812,37790,xã,"Xã Tân Long",2749,WARD,2
+2813,37791,xã,"Xã An Ninh",2749,WARD,1
+2814,37792,xã,"Xã Đức Lập",2749,WARD,1
+2815,37793,xã,"Xã Mỹ Hạnh",2749,WARD,1
+2816,37794,xã,"Xã Vĩnh Thạnh",2749,WARD,4
+2817,37795,xã,"Xã Mỹ Thạnh",2749,WARD,2
+2818,37796,xã,"Xã Tuyên Thạnh",2749,WARD,2
+2819,37797,xã,"Xã Thạnh Hóa",2749,WARD,3
+2820,37798,xã,"Xã Hòa Khánh",2749,WARD,1
+2821,37799,xã,"Xã Cần Đước",2749,WARD,2
+2822,37800,xã,"Xã Phước Lý",2749,WARD,1
+2823,37801,phường,"Phường Kiến Tường",2749,WARD,2
+2824,37802,xã,"Xã Rạch Kiến",2749,WARD,2
+2825,37803,xã,"Xã Tầm Vu",2749,WARD,3
+2826,37804,xã,"Xã Tuyên Bình",2749,WARD,4
+2827,37805,xã,"Xã Mộc Hóa",2749,WARD,4
+2828,37806,xã,"Xã Bình Thành",2749,WARD,3
+2829,37807,xã,"Xã Vĩnh Công",2749,WARD,3
+2830,37808,xã,"Xã Long Hựu",2749,WARD,2
+2831,37809,xã,"Xã Đông Thành",2749,WARD,3
+2832,37810,xã,"Xã Tân Lân",2749,WARD,2
+2833,37811,xã,"Xã Hậu Nghĩa",2749,WARD,1
+2834,37812,xã,"Xã Long Cang",2749,WARD,2
+2835,37813,xã,"Xã Tân Trụ",2749,WARD,3
+2836,37814,xã,"Xã Bình Đức",2749,WARD,1
+2837,37815,xã,"Xã Nhơn Ninh",2749,WARD,4
+2838,37816,xã,"Xã Bến Lức",2749,WARD,1
+2839,37817,xã,"Xã Thạnh Lợi",2749,WARD,1
+2840,37818,xã,"Xã Phước Vĩnh Tây",2749,WARD,1
+2841,37819,xã,"Xã Mỹ Yên",2749,WARD,1
+2842,37820,xã,"Xã Hiệp Hòa",2749,WARD,1
+2843,37821,xã,"Xã Cần Giuộc",2749,WARD,1
+2844,37822,xã,"Xã Tân Thạnh",2749,WARD,NULL
+2845,37823,xã,"Xã Thạnh Phước",2749,WARD,3
+2846,96,tỉnh,"Thái Nguyên",NULL,PROVINCE,NULL
+2847,35466,xã,"Xã Thần Sa",2846,WARD,4
+2848,35467,phường,"Phường Vạn Xuân",2846,WARD,2
+2849,35653,phường,"Phường Tích Lương",2846,WARD,2
+2850,36262,xã,"Xã Nghĩa Tá",2846,WARD,4
+2851,36263,xã,"Xã Yên Phong",2846,WARD,4
+2852,36264,xã,"Xã Thanh Mai",2846,WARD,4
+2853,36265,xã,"Xã Chợ Mới",2846,WARD,4
+2854,36266,xã,"Xã Vĩnh Thông",2846,WARD,4
+2855,36267,xã,"Xã Hiệp Lực",2846,WARD,4
+2856,36268,xã,"Xã Nam Cường",2846,WARD,4
+2857,36269,xã,"Xã Phúc Lộc",2846,WARD,4
+2858,36270,xã,"Xã Đồng Phúc",2846,WARD,4
+2859,36271,xã,"Xã Phong Quang",2846,WARD,3
+2860,36272,xã,"Xã Yên Thịnh",2846,WARD,4
+2861,36273,xã,"Xã Bằng Thành",2846,WARD,4
+2862,36274,xã,"Xã Nà Phặc",2846,WARD,4
+2863,36275,xã,"Xã Xuân Dương",2846,WARD,4
+2864,36276,xã,"Xã Bằng Vân",2846,WARD,4
+2865,36277,xã,"Xã Na Rì",2846,WARD,4
+2866,36278,xã,"Xã Tân Kỳ",2846,WARD,4
+2867,36279,xã,"Xã Bạch Thông",2846,WARD,4
+2868,36280,xã,"Xã Yên Bình",2846,WARD,4
+2869,36281,xã,"Xã Thanh Thịnh",2846,WARD,4
+2870,36282,xã,"Xã Nghiên Loan",2846,WARD,4
+2871,36283,xã,"Xã Cẩm Giàng",2846,WARD,4
+2872,36284,xã,"Xã Cường Lợi",2846,WARD,4
+2873,36285,xã,"Xã Cao Minh",2846,WARD,4
+2874,36286,phường,"Phường Đức Xuân",2846,WARD,3
+2875,36287,xã,"Xã Chợ Đồn",2846,WARD,4
+2876,36288,xã,"Xã Thượng Quan",2846,WARD,4
+2877,36289,xã,"Xã Phủ Thông",2846,WARD,4
+2878,36290,phường,"Phường Bắc Kạn",2846,WARD,3
+2879,36291,xã,"Xã Trần Phú",2846,WARD,4
+2880,36292,xã,"Xã Quảng Bạch",2846,WARD,4
+2881,36293,xã,"Xã Ba Bể",2846,WARD,4
+2882,36294,xã,"Xã Ngân Sơn",2846,WARD,4
+2883,36295,xã,"Xã Thượng Minh",2846,WARD,4
+2884,36296,xã,"Xã Chợ Rã",2846,WARD,4
+2885,36297,xã,"Xã Côn Minh",2846,WARD,4
+2886,36298,xã,"Xã Văn Lang",2846,WARD,4
+2887,37260,xã,"Xã Đồng Hỷ",2846,WARD,3
+2888,37261,xã,"Xã Vô Tranh",2846,WARD,3
+2889,37262,xã,"Xã Phú Đình",2846,WARD,4
+2890,37263,xã,"Xã Phú Thịnh",2846,WARD,3
+2891,37264,xã,"Xã Định Hóa",2846,WARD,4
+2892,37265,xã,"Xã Văn Lăng",2846,WARD,NULL
+2893,37266,phường,"Phường Quyết Thắng",2846,WARD,2
+2894,37267,xã,"Xã Quân Chu",2846,WARD,3
+2895,37268,xã,"Xã Văn Hán",2846,WARD,3
+2896,37269,xã,"Xã Dân Tiến",2846,WARD,4
+2897,37270,xã,"Xã Kim Phượng",2846,WARD,4
+2898,37271,xã,"Xã Tràng Xá",2846,WARD,4
+2899,37272,phường,"Phường Bá Xuyên",2846,WARD,2
+2900,37273,xã,"Xã Phú Lạc",2846,WARD,3
+2901,37274,xã,"Xã La Bằng",2846,WARD,3
+2902,37275,phường,"Phường Phúc Thuận",2846,WARD,2
+2903,37276,xã,"Xã Bình Thành",2846,WARD,4
+2904,37277,phường,"Phường Bách Quang",2846,WARD,2
+2905,37278,phường,"Phường Phổ Yên",2846,WARD,2
+2906,37279,xã,"Xã Phú Lương",2846,WARD,3
+2907,37280,xã,"Xã Võ Nhai",2846,WARD,4
+2908,37281,xã,"Xã Tân Cương",2846,WARD,2
+2909,37282,xã,"Xã Điềm Thụy",2846,WARD,3
+2910,37283,xã,"Xã Trại Cau",2846,WARD,3
+2911,37284,xã,"Xã Đại Phúc",2846,WARD,2
+2912,37285,xã,"Xã Phú Bình",2846,WARD,3
+2913,37286,xã,"Xã Thành Công",2846,WARD,2
+2914,37287,phường,"Phường Quan Triều",2846,WARD,2
+2915,37288,phường,"Phường Sông Công",2846,WARD,2
+2916,37289,phường,"Phường Gia Sàng",2846,WARD,2
+2917,37290,xã,"Xã Nam Hòa",2846,WARD,3
+2918,37291,xã,"Xã Phú Xuyên",2846,WARD,3
+2919,37292,phường,"Phường Linh Sơn",2846,WARD,2
+2920,37293,xã,"Xã Quang Sơn",2846,WARD,3
+2921,37294,xã,"Xã Nghinh Tường",2846,WARD,4
+2922,37295,xã,"Xã Sảng Mộc",2846,WARD,4
+2923,37296,xã,"Xã Trung Hội",2846,WARD,4
+2924,37297,xã,"Xã Tân Khánh",2846,WARD,3
+2925,37298,xã,"Xã Đại Từ",2846,WARD,3
+2926,37299,phường,"Phường Trung Thành",2846,WARD,2
+2927,37300,xã,"Xã La Hiên",2846,WARD,4
+2928,37301,xã,"Xã Yên Trạch",2846,WARD,3
+2929,37302,xã,"Xã Bình Yên",2846,WARD,4
+2930,37303,xã,"Xã Phượng Tiến",2846,WARD,4
+2931,37304,xã,"Xã Đức Lương",2846,WARD,3
+2932,37305,xã,"Xã An Khánh",2846,WARD,3
+2933,37306,xã,"Xã Hợp Thành",2846,WARD,3
+2934,37307,xã,"Xã Tân Thành",2846,WARD,3
+2935,37308,phường,"Phường Phan Đình Phùng",2846,WARD,2
+2936,37309,xã,"Xã Lam Vỹ",2846,WARD,4
+2937,37310,xã,"Xã Vạn Phú",2846,WARD,3
+2938,37311,xã,"Xã Kha Sơn",2846,WARD,3
+2939,106,tỉnh,"Thanh Hóa",NULL,PROVINCE,NULL
+2940,37891,xã,"Xã Tam Chung",2939,WARD,4
+2941,37892,xã,"Xã Thượng Ninh",2939,WARD,4
+2942,37893,xã,"Xã Cẩm Thủy",2939,WARD,4
+2943,37894,xã,"Xã Bát Mọt",2939,WARD,4
+2944,37895,xã,"Xã Tân Ninh",2939,WARD,3
+2945,37896,xã,"Xã Quảng Ninh",2939,WARD,3
+2946,37897,xã,"Xã Văn Nho",2939,WARD,4
+2947,37898,xã,"Xã Thọ Phú",2939,WARD,3
+2948,37899,xã,"Xã Thanh Kỳ",2939,WARD,4
+2949,37900,xã,"Xã Thọ Lập",2939,WARD,3
+2950,37901,xã,"Xã Các Sơn",2939,WARD,2
+2951,37902,phường,"Phường Tân Dân",2939,WARD,2
+2952,37903,xã,"Xã Mường Lý",2939,WARD,4
+2953,37904,xã,"Xã Hoằng Giang",2939,WARD,3
+2954,37905,xã,"Xã Yên Định",2939,WARD,3
+2955,37906,xã,"Xã Trung Sơn",2939,WARD,4
+2956,37907,xã,"Xã Xuân Thái",2939,WARD,4
+2957,37908,xã,"Xã An Nông",2939,WARD,3
+2958,37909,phường,"Phường Bỉm Sơn",2939,WARD,2
+2959,37910,xã,"Xã Cẩm Vân",2939,WARD,4
+2960,37911,xã,"Xã Kiên Thọ",2939,WARD,4
+2961,37912,xã,"Xã Như Xuân",2939,WARD,4
+2962,37913,phường,"Phường Quang Trung",2939,WARD,2
+2963,37914,xã,"Xã Thạch Bình",2939,WARD,4
+2964,37915,xã,"Xã Thọ Ngọc",2939,WARD,3
+2965,37916,xã,"Xã Tống Sơn",2939,WARD,3
+2966,37917,phường,"Phường Đông Sơn",2939,WARD,2
+2967,37918,phường,"Phường Sầm Sơn",2939,WARD,2
+2968,37919,xã,"Xã Hoằng Châu",2939,WARD,3
+2969,37920,xã,"Xã Quảng Ngọc",2939,WARD,3
+2970,37921,xã,"Xã Tân Tiến",2939,WARD,3
+2971,37922,xã,"Xã Văn Phú",2939,WARD,4
+2972,37923,phường,"Phường Hải Bình",2939,WARD,2
+2973,37924,phường,"Phường Đông Quang",2939,WARD,2
+2974,37925,xã,"Xã Ngọc Lặc",2939,WARD,4
+2975,37926,xã,"Xã Hồ Vương",2939,WARD,3
+2976,37927,xã,"Xã Điền Lư",2939,WARD,4
+2977,37928,xã,"Xã Luận Thành",2939,WARD,4
+2978,37929,xã,"Xã Hoằng Phú",2939,WARD,3
+2979,37930,xã,"Xã Cẩm Tân",2939,WARD,4
+2980,37931,xã,"Xã Quan Sơn",2939,WARD,4
+2981,37932,xã,"Xã Nga Sơn",2939,WARD,3
+2982,37933,xã,"Xã Ngọc Trạo",2939,WARD,4
+2983,37934,xã,"Xã Pù Nhi",2939,WARD,4
+2984,37935,phường,"Phường Trúc Lâm",2939,WARD,2
+2985,37936,xã,"Xã Đồng Tiến",2939,WARD,3
+2986,37937,xã,"Xã Tượng Lĩnh",2939,WARD,3
+2987,37938,xã,"Xã Cẩm Tú",2939,WARD,4
+2988,37939,xã,"Xã Xuân Lập",2939,WARD,3
+2989,37940,xã,"Xã Lam Sơn",2939,WARD,3
+2990,37941,phường,"Phường Quảng Phú",2939,WARD,2
+2991,37942,xã,"Xã Thạch Lập",2939,WARD,4
+2992,37943,xã,"Xã Nga Thắng",2939,WARD,3
+2993,37944,xã,"Xã Đồng Lương",2939,WARD,4
+2994,37945,xã,"Xã Mậu Lâm",2939,WARD,4
+2995,37946,xã,"Xã Sơn Điện",2939,WARD,4
+2996,37947,xã,"Xã Trung Lý",2939,WARD,4
+2997,37948,xã,"Xã Mường Lát",2939,WARD,4
+2998,37949,xã,"Xã Nhi Sơn",2939,WARD,4
+2999,37950,xã,"Xã Na Mèo",2939,WARD,4
+3000,37951,xã,"Xã Thiệu Trung",2939,WARD,3
+3001,37952,xã,"Xã Tam Thanh",2939,WARD,4
+3002,37953,xã,"Xã Thiết Ống",2939,WARD,4
+3003,37954,xã,"Xã Giao An",2939,WARD,4
+3004,37955,xã,"Xã Tam Lư",2939,WARD,4
+3005,37956,xã,"Xã Minh Sơn",2939,WARD,4
+3006,37957,xã,"Xã Triệu Sơn",2939,WARD,3
+3007,37958,xã,"Xã Thắng Lợi",2939,WARD,3
+3008,37959,xã,"Xã Yên Khương",2939,WARD,4
+3009,37960,xã,"Xã Đông Thành",2939,WARD,3
+3010,37961,xã,"Xã Tiên Trang",2939,WARD,3
+3011,37962,xã,"Xã Định Hòa",2939,WARD,3
+3012,37963,xã,"Xã Công Chính",2939,WARD,3
+3013,37964,xã,"Xã Thạch Quảng",2939,WARD,4
+3014,37965,xã,"Xã Pù Luông",2939,WARD,4
+3015,37966,xã,"Xã Hiền Kiệt",2939,WARD,4
+3016,37967,xã,"Xã Thắng Lộc",2939,WARD,4
+3017,37968,xã,"Xã Nông Cống",2939,WARD,3
+3018,37969,xã,"Xã Hoằng Tiến",2939,WARD,3
+3019,37970,xã,"Xã Vĩnh Lộc",2939,WARD,3
+3020,37971,xã,"Xã Quang Chiểu",2939,WARD,4
+3021,37972,xã,"Xã Điền Quang",2939,WARD,4
+3022,37973,xã,"Xã Phú Lệ",2939,WARD,4
+3023,37974,xã,"Xã Trường Văn",2939,WARD,3
+3024,37975,xã,"Xã Thanh Phong",2939,WARD,4
+3025,37976,xã,"Xã Nam Xuân",2939,WARD,4
+3026,37977,xã,"Xã Hợp Tiến",2939,WARD,3
+3027,37978,xã,"Xã Thăng Bình",2939,WARD,3
+3028,37979,xã,"Xã Hồi Xuân",2939,WARD,4
+3029,37980,xã,"Xã Thiên Phủ",2939,WARD,4
+3030,37981,xã,"Xã Trung Hạ",2939,WARD,4
+3031,37982,phường,"Phường Nam Sầm Sơn",2939,WARD,2
+3032,37983,xã,"Xã Yên Nhân",2939,WARD,4
+3033,37984,phường,"Phường Đào Duy Từ",2939,WARD,2
+3034,37985,xã,"Xã Lưu Vệ",2939,WARD,3
+3035,37986,xã,"Xã Cổ Lũng",2939,WARD,4
+3036,37987,xã,"Xã Mường Chanh",2939,WARD,4
+3037,37988,xã,"Xã Ba Đình",2939,WARD,3
+3038,37989,xã,"Xã Vân Du",2939,WARD,4
+3039,37990,xã,"Xã Tây Đô",2939,WARD,3
+3040,37991,xã,"Xã Xuân Bình",2939,WARD,4
+3041,37992,phường,"Phường Hàm Rồng",2939,WARD,2
+3042,37993,phường,"Phường Nguyệt Viên",2939,WARD,2
+3043,37994,phường,"Phường Hạc Thành",2939,WARD,2
+3044,37995,phường,"Phường Nghi Sơn",2939,WARD,2
+3045,37996,xã,"Xã Linh Sơn",2939,WARD,4
+3046,37997,xã,"Xã Mường Mìn",2939,WARD,4
+3047,37998,xã,"Xã Trường Lâm",2939,WARD,2
+3048,37999,xã,"Xã Hậu Lộc",2939,WARD,3
+3049,38000,xã,"Xã Thọ Xuân",2939,WARD,3
+3050,38001,xã,"Xã Lĩnh Toại",2939,WARD,3
+3051,38002,xã,"Xã Sơn Thủy",2939,WARD,4
+3052,38003,xã,"Xã Kim Tân",2939,WARD,4
+3053,38004,xã,"Xã Quảng Chính",2939,WARD,3
+3054,38005,xã,"Xã Hoằng Thanh",2939,WARD,3
+3055,38006,xã,"Xã Định Tân",2939,WARD,3
+3056,38007,xã,"Xã Hoằng Hóa",2939,WARD,3
+3057,38008,xã,"Xã Vạn Lộc",2939,WARD,3
+3058,38009,xã,"Xã Hà Long",2939,WARD,3
+3059,38010,xã,"Xã Nga An",2939,WARD,3
+3060,38011,xã,"Xã Như Thanh",2939,WARD,4
+3061,38012,xã,"Xã Thọ Long",2939,WARD,3
+3062,38013,xã,"Xã Yên Trường",2939,WARD,3
+3063,38014,xã,"Xã Trung Chính",2939,WARD,3
+3064,38015,xã,"Xã Yên Thắng",2939,WARD,4
+3065,38016,xã,"Xã Hóa Quỳ",2939,WARD,4
+3066,38017,xã,"Xã Xuân Hòa",2939,WARD,3
+3067,38018,xã,"Xã Quảng Yên",2939,WARD,3
+3068,38019,xã,"Xã Sao Vàng",2939,WARD,3
+3069,38020,xã,"Xã Thiệu Quang",2939,WARD,3
+3070,38021,phường,"Phường Đông Tiến",2939,WARD,NULL
+3071,38022,xã,"Xã Quảng Bình",2939,WARD,3
+3072,38023,xã,"Xã Yên Phú",2939,WARD,3
+3073,38024,xã,"Xã Thiệu Hóa",2939,WARD,3
+3074,38025,xã,"Xã Bá Thước",2939,WARD,4
+3075,38026,xã,"Xã Thường Xuân",2939,WARD,4
+3076,38027,xã,"Xã Biện Thượng",2939,WARD,3
+3077,38028,xã,"Xã Nguyệt Ấn",2939,WARD,4
+3078,38029,xã,"Xã Hoằng Sơn",2939,WARD,3
+3079,38030,xã,"Xã Vạn Xuân",2939,WARD,4
+3080,38031,xã,"Xã Hoằng Lộc",2939,WARD,3
+3081,38032,xã,"Xã Thành Vinh",2939,WARD,4
+3082,38033,xã,"Xã Phú Xuân",2939,WARD,4
+3083,38034,xã,"Xã Thanh Quân",2939,WARD,4
+3084,38035,xã,"Xã Thiệu Toán",2939,WARD,3
+3085,38036,xã,"Xã Quý Lương",2939,WARD,4
+3086,38037,xã,"Xã Thọ Bình",2939,WARD,3
+3087,38038,xã,"Xã Triệu Lộc",2939,WARD,3
+3088,38039,xã,"Xã Lương Sơn",2939,WARD,4
+3089,38040,phường,"Phường Tĩnh Gia",2939,WARD,2
+3090,38041,xã,"Xã Trung Thành",2939,WARD,4
+3091,38042,phường,"Phường Hải Lĩnh",2939,WARD,2
+3092,38043,xã,"Xã Tân Thành",2939,WARD,4
+3093,38044,xã,"Xã Quý Lộc",2939,WARD,3
+3094,38045,xã,"Xã Xuân Tín",2939,WARD,3
+3095,38046,xã,"Xã Hoa Lộc",2939,WARD,3
+3096,38047,xã,"Xã Cẩm Thạch",2939,WARD,4
+3097,38048,xã,"Xã Yên Ninh",2939,WARD,3
+3098,38049,xã,"Xã Yên Thọ",2939,WARD,4
+3099,38050,xã,"Xã Xuân Du",2939,WARD,4
+3100,38051,phường,"Phường Ngọc Sơn",2939,WARD,2
+3101,38052,xã,"Xã Hoạt Giang",2939,WARD,3
+3102,38053,xã,"Xã Thiệu Tiến",2939,WARD,3
+3103,38054,xã,"Xã Ngọc Liên",2939,WARD,4
+3104,38055,xã,"Xã Hà Trung",2939,WARD,3
+3105,38056,xã,"Xã Xuân Chinh",2939,WARD,4
+3106,94,tỉnh,"Tuyên Quang",NULL,PROVINCE,NULL
+3107,36721,phường,"Phường Minh Xuân",3106,WARD,3
+3108,36722,xã,"Xã Hòa An",3106,WARD,4
+3109,36723,xã,"Xã Lực Hành",3106,WARD,4
+3110,35760,xã,"Xã Thượng Sơn",3106,WARD,4
+3111,35761,xã,"Xã Bạch Đích",3106,WARD,4
+3112,35762,xã,"Xã Yên Thành",3106,WARD,4
+3113,35763,xã,"Xã Vĩnh Tuy",3106,WARD,4
+3114,35764,xã,"Xã Thuận Hòa",3106,WARD,4
+3115,35765,xã,"Xã Bắc Quang",3106,WARD,4
+3116,35766,xã,"Xã Quảng Nguyên",3106,WARD,4
+3117,35767,xã,"Xã Tùng Vài",3106,WARD,4
+3118,35768,xã,"Xã Mậu Duệ",3106,WARD,4
+3119,35769,xã,"Xã Minh Tân",3106,WARD,4
+3120,35770,xã,"Xã Sà Phìn",3106,WARD,4
+3121,35771,xã,"Xã Phố Bảng",3106,WARD,NULL
+3122,35772,xã,"Xã Tùng Bá",3106,WARD,4
+3123,35773,xã,"Xã Nghĩa Thuận",3106,WARD,4
+3124,35774,xã,"Xã Bản Máy",3106,WARD,4
+3125,35775,xã,"Xã Tiên Yên",3106,WARD,4
+3126,35776,xã,"Xã Đường Hồng",3106,WARD,4
+3127,35777,xã,"Xã Nậm Dịch",3106,WARD,4
+3128,35778,xã,"Xã Minh Sơn",3106,WARD,4
+3129,35779,xã,"Xã Quản Bạ",3106,WARD,4
+3130,35780,xã,"Xã Việt Lâm",3106,WARD,4
+3131,35781,xã,"Xã Linh Hồ",3106,WARD,4
+3132,35782,xã,"Xã Pà Vầy Sủ",3106,WARD,4
+3133,35783,xã,"Xã Đồng Văn",3106,WARD,4
+3134,35784,xã,"Xã Lao Chải",3106,WARD,4
+3135,35785,phường,"Phường Hà Giang 2",3106,WARD,3
+3136,35786,xã,"Xã Pờ Ly Ngài",3106,WARD,4
+3137,35787,xã,"Xã Cao Bồ",3106,WARD,4
+3138,35788,xã,"Xã Tân Tiến",3106,WARD,4
+3139,35789,xã,"Xã Bằng Hành",3106,WARD,4
+3140,35790,xã,"Xã Xín Mần",3106,WARD,4
+3141,35791,xã,"Xã Yên Cường",3106,WARD,4
+3142,35792,xã,"Xã Nấm Dẩn",3106,WARD,4
+3143,35793,xã,"Xã Hoàng Su Phì",3106,WARD,4
+3144,35794,xã,"Xã Thàng Tín",3106,WARD,4
+3145,35795,xã,"Xã Xuân Giang",3106,WARD,4
+3146,35796,xã,"Xã Ngọc Đường",3106,WARD,3
+3147,35797,xã,"Xã Sơn Vĩ",3106,WARD,4
+3148,35798,xã,"Xã Tân Trịnh",3106,WARD,4
+3149,35799,xã,"Xã Lũng Phìn",3106,WARD,NULL
+3150,35800,xã,"Xã Tiên Nguyên",3106,WARD,4
+3151,35801,xã,"Xã Liên Hiệp",3106,WARD,4
+3152,35802,xã,"Xã Bằng Lang",3106,WARD,4
+3153,35803,xã,"Xã Bạch Ngọc",3106,WARD,4
+3154,35804,phường,"Phường Hà Giang 1",3106,WARD,3
+3155,35805,xã,"Xã Trung Thịnh",3106,WARD,4
+3156,35806,xã,"Xã Yên Minh",3106,WARD,4
+3157,35807,xã,"Xã Thông Nguyên",3106,WARD,4
+3158,35808,xã,"Xã Sủng Máng",3106,WARD,4
+3159,35809,xã,"Xã Khâu Vai",3106,WARD,4
+3160,35810,xã,"Xã Vị Xuyên",3106,WARD,4
+3161,35811,xã,"Xã Mèo Vạc",3106,WARD,4
+3162,35812,xã,"Xã Lũng Cú",3106,WARD,4
+3163,35813,xã,"Xã Khuôn Lùng",3106,WARD,4
+3164,35814,xã,"Xã Quang Bình",3106,WARD,4
+3165,35815,xã,"Xã Du Già",3106,WARD,4
+3166,35816,xã,"Xã Đồng Yên",3106,WARD,4
+3167,35817,xã,"Xã Tát Ngà",3106,WARD,4
+3168,35818,xã,"Xã Cán Tỷ",3106,WARD,4
+3169,35819,xã,"Xã Giáp Trung",3106,WARD,4
+3170,35820,xã,"Xã Thanh Thủy",3106,WARD,4
+3171,35821,xã,"Xã Đường Thượng",3106,WARD,4
+3172,35822,xã,"Xã Hồ Thầu",3106,WARD,4
+3173,35823,xã,"Xã Bắc Mê",3106,WARD,4
+3174,35824,xã,"Xã Niêm Sơn",3106,WARD,4
+3175,35825,xã,"Xã Ngọc Long",3106,WARD,4
+3176,35826,xã,"Xã Hùng An",3106,WARD,4
+3177,35827,xã,"Xã Phú Linh",3106,WARD,4
+3178,35828,xã,"Xã Lùng Tám",3106,WARD,4
+3179,35829,xã,"Xã Tân Quang",3106,WARD,4
+3180,35830,xã,"Xã Minh Ngọc",3106,WARD,4
+3181,35831,xã,"Xã Đồng Tâm",3106,WARD,4
+3182,35832,xã,"Xã Thắng Mố",3106,WARD,4
+3183,36673,xã,"Xã Phú Lương",3106,WARD,4
+3184,36674,xã,"Xã Tri Phú",3106,WARD,4
+3185,36675,xã,"Xã Tân Long",3106,WARD,4
+3186,36676,xã,"Xã Tân Thanh",3106,WARD,4
+3187,36677,xã,"Xã Thái Bình",3106,WARD,4
+3188,36678,xã,"Xã Nà Hang",3106,WARD,4
+3189,36679,xã,"Xã Kim Bình",3106,WARD,4
+3190,36680,xã,"Xã Hàm Yên",3106,WARD,4
+3191,36681,xã,"Xã Hùng Đức",3106,WARD,4
+3192,36682,xã,"Xã Thái Sơn",3106,WARD,4
+3193,36683,xã,"Xã Đông Thọ",3106,WARD,4
+3194,36684,xã,"Xã Yên Lập",3106,WARD,4
+3195,36685,xã,"Xã Hồng Thái",3106,WARD,4
+3196,36686,xã,"Xã Hùng Lợi",3106,WARD,4
+3197,36687,phường,"Phường Mỹ Lâm",3106,WARD,3
+3198,36688,xã,"Xã Thượng Lâm",3106,WARD,4
+3199,36689,xã,"Xã Tân Trào",3106,WARD,4
+3200,36690,xã,"Xã Tân Mỹ",3106,WARD,4
+3201,36691,xã,"Xã Kiến Thiết",3106,WARD,4
+3202,36692,xã,"Xã Thượng Nông",3106,WARD,4
+3203,36693,xã,"Xã Phù Lưu",3106,WARD,4
+3204,36694,xã,"Xã Nhữ Khê",3106,WARD,4
+3205,36695,xã,"Xã Trung Hà",3106,WARD,4
+3206,36696,xã,"Xã Trung Sơn",3106,WARD,4
+3207,36697,xã,"Xã Kiên Đài",3106,WARD,4
+3208,36698,phường,"Phường Bình Thuận",3106,WARD,3
+3209,36699,xã,"Xã Sơn Thủy",3106,WARD,4
+3210,36700,xã,"Xã Thái Hòa",3106,WARD,4
+3211,36701,xã,"Xã Bạch Xa",3106,WARD,4
+3212,36702,xã,"Xã Yên Phú",3106,WARD,4
+3213,36703,xã,"Xã Hồng Sơn",3106,WARD,4
+3214,36704,xã,"Xã Yên Hoa",3106,WARD,4
+3215,36705,xã,"Xã Xuân Vân",3106,WARD,4
+3216,36706,xã,"Xã Bình An",3106,WARD,4
+3217,36707,xã,"Xã Sơn Dương",3106,WARD,4
+3218,36708,xã,"Xã Bình Xa",3106,WARD,4
+3219,36709,xã,"Xã Minh Quang",3106,WARD,4
+3220,36710,xã,"Xã Minh Thanh",3106,WARD,4
+3221,36711,xã,"Xã Lâm Bình",3106,WARD,4
+3222,36712,xã,"Xã Yên Nguyên",3106,WARD,4
+3223,36713,xã,"Xã Côn Lôn",3106,WARD,4
+3224,36714,phường,"Phường An Tường",3106,WARD,3
+3225,36715,xã,"Xã Yên Sơn",3106,WARD,4
+3226,36716,xã,"Xã Chiêm Hóa",3106,WARD,4
+3227,36717,xã,"Xã Bình Ca",3106,WARD,4
+3228,36718,xã,"Xã Tân An",3106,WARD,4
+3229,36719,phường,"Phường Nông Tiến",3106,WARD,3
+3230,36720,xã,"Xã Trường Sinh",3106,WARD,4
+3231,135,tỉnh,"Vĩnh Long",NULL,PROVINCE,NULL
+3232,36846,xã,"Xã Phong Thạnh",3231,WARD,4
+3233,36847,xã,"Xã Long Hòa",3231,WARD,4
+3234,36848,xã,"Xã Song Lộc",3231,WARD,4
+3235,36849,xã,"Xã Hiệp Mỹ",3231,WARD,4
+3236,36850,xã,"Xã An Trường",3231,WARD,4
+3237,36851,xã,"Xã Tập Sơn",3231,WARD,4
+3238,36852,xã,"Xã Mỹ Long",3231,WARD,4
+3239,36853,xã,"Xã Lưu Nghiệp Anh",3231,WARD,4
+3240,36854,xã,"Xã Cầu Ngang",3231,WARD,4
+3241,36855,phường,"Phường Long Đức",3231,WARD,2
+3242,36856,xã,"Xã Tập Ngãi",3231,WARD,4
+3243,36857,xã,"Xã Hòa Minh",3231,WARD,4
+3244,36858,phường,"Phường Hòa Thuận",3231,WARD,2
+3245,36859,xã,"Xã Càng Long",3231,WARD,4
+3246,36860,xã,"Xã Hưng Mỹ",3231,WARD,4
+3247,36861,xã,"Xã Trà Cú",3231,WARD,4
+3248,36862,xã,"Xã Châu Thành",3231,WARD,4
+3249,36863,phường,"Phường Nguyệt Hóa",3231,WARD,2
+3250,36864,xã,"Xã Long Hữu",3231,WARD,3
+3251,36865,xã,"Xã Tân Hòa",3231,WARD,4
+3252,36866,xã,"Xã Đôn Châu",3231,WARD,4
+3253,36867,xã,"Xã Hàm Giang",3231,WARD,4
+3254,36868,xã,"Xã Nhị Trường",3231,WARD,4
+3255,36869,phường,"Phường Duyên Hải",3231,WARD,3
+3256,36870,xã,"Xã Vinh Kim",3231,WARD,4
+3257,36871,phường,"Phường Trà Vinh",3231,WARD,2
+3258,36872,phường,"Phường Trường Long Hòa",3231,WARD,3
+3259,36873,xã,"Xã Long Vĩnh",3231,WARD,4
+3260,36874,xã,"Xã Tiểu Cần",3231,WARD,4
+3261,36875,xã,"Xã An Phú Tân",3231,WARD,4
+3262,36876,xã,"Xã Long Thành",3231,WARD,4
+3263,36877,xã,"Xã Nhị Long",3231,WARD,4
+3264,36878,xã,"Xã Đông Hải",3231,WARD,4
+3265,36879,xã,"Xã Cầu Kè",3231,WARD,4
+3266,36880,xã,"Xã Tân An",3231,WARD,4
+3267,36881,xã,"Xã Tam Ngãi",3231,WARD,4
+3268,36882,xã,"Xã Đại An",3231,WARD,4
+3269,36883,xã,"Xã Ngũ Lạc",3231,WARD,4
+3270,35722,xã,"Xã Hiếu Thành",3231,WARD,4
+3271,35723,xã,"Xã Cái Nhum",3231,WARD,3
+3272,35724,phường,"Phường Tân Hạnh",3231,WARD,2
+3273,35725,xã,"Xã Trà Ôn",3231,WARD,4
+3274,35726,xã,"Xã Vĩnh Xuân",3231,WARD,4
+3275,35727,xã,"Xã Quới Thiện",3231,WARD,4
+3276,35728,xã,"Xã Quới An",3231,WARD,4
+3277,35729,xã,"Xã Song Phú",3231,WARD,4
+3278,35730,phường,"Phường Tân Ngãi",3231,WARD,2
+3279,35731,phường,"Phường Bình Minh",3231,WARD,2
+3280,35732,phường,"Phường Thanh Đức",3231,WARD,2
+3281,35733,xã,"Xã Hiếu Phụng",3231,WARD,4
+3282,35734,xã,"Xã Tân Lược",3231,WARD,4
+3283,35735,xã,"Xã Trà Côn",3231,WARD,4
+3284,35736,xã,"Xã Nhơn Phú",3231,WARD,3
+3285,35737,phường,"Phường Đông Thành",3231,WARD,2
+3286,35738,phường,"Phường Cái Vồn",3231,WARD,2
+3287,35739,xã,"Xã Lục Sỹ Thành",3231,WARD,4
+3288,35740,xã,"Xã Trung Ngãi",3231,WARD,4
+3289,35741,xã,"Xã Hòa Bình",3231,WARD,4
+3290,35742,xã,"Xã Tân Long Hội",3231,WARD,3
+3291,35743,phường,"Phường Phước Hậu",3231,WARD,2
+3292,35744,xã,"Xã Ngãi Tứ",3231,WARD,4
+3293,35745,phường,"Phường Long Châu",3231,WARD,2
+3294,35746,xã,"Xã Mỹ Thuận",3231,WARD,4
+3295,35747,xã,"Xã Hòa Hiệp",3231,WARD,4
+3296,35748,xã,"Xã Bình Phước",3231,WARD,3
+3297,35749,xã,"Xã Long Hồ",3231,WARD,3
+3298,35750,xã,"Xã Trung Thành",3231,WARD,4
+3299,35751,xã,"Xã Tam Bình",3231,WARD,4
+3300,35752,xã,"Xã An Bình",3231,WARD,3
+3301,35753,xã,"Xã Trung Hiệp",3231,WARD,4
+3302,35754,xã,"Xã Tân Quới",3231,WARD,4
+3303,35755,xã,"Xã Phú Quới",3231,WARD,3
+3304,35756,xã,"Xã Cái Ngang",3231,WARD,4
+3305,35758,xã,"Xã Mỏ Cày",3231,WARD,3
+3306,36303,xã,"Xã Lương Phú",3231,WARD,4
+3307,36304,xã,"Xã Thới Thuận",3231,WARD,3
+3308,36305,phường,"Phường Phú Khương",3231,WARD,2
+3309,36306,xã,"Xã Vĩnh Thành",3231,WARD,4
+3310,36307,xã,"Xã Châu Hưng",3231,WARD,3
+3311,36308,xã,"Xã Tân Xuân",3231,WARD,3
+3312,36309,xã,"Xã Chợ Lách",3231,WARD,4
+3313,36310,xã,"Xã Thạnh Hải",3231,WARD,4
+3314,36311,xã,"Xã Lương Hòa",3231,WARD,4
+3315,36312,xã,"Xã Thành Thới",3231,WARD,3
+3316,36313,xã,"Xã Quới Điền",3231,WARD,4
+3317,36314,xã,"Xã Tân Thành Bình",3231,WARD,4
+3318,36315,xã,"Xã Giồng Tôm",3231,WARD,NULL
+3319,36316,phường,"Phường Bến Tre",3231,WARD,2
+3320,36317,xã,"Xã An Hiệp",3231,WARD,3
+3321,36318,xã,"Xã An Định",3231,WARD,3
+3322,36319,xã,"Xã An Ngãi Trung",3231,WARD,3
+3323,36320,xã,"Xã Ba Tri",3231,WARD,3
+3324,36321,xã,"Xã Bảo Thạnh",3231,WARD,3
+3325,36322,xã,"Xã Châu Hòa",3231,WARD,4
+3326,36323,xã,"Xã Phú Thuận",3231,WARD,3
+3327,36324,xã,"Xã Thạnh Phước",3231,WARD,3
+3328,36325,xã,"Xã Lộc Thuận",3231,WARD,3
+3329,36326,xã,"Xã Thạnh Trị",3231,WARD,3
+3330,36327,xã,"Xã Giao Long",3231,WARD,2
+3331,36328,xã,"Xã Hưng Khánh Trung",3231,WARD,4
+3332,36329,xã,"Xã Nhuận Phú Tân",3231,WARD,4
+3333,36330,xã,"Xã Tân Hào",3231,WARD,4
+3334,36331,xã,"Xã Hương Mỹ",3231,WARD,3
+3335,36332,xã,"Xã Phước Mỹ Trung",3231,WARD,4
+3336,36333,xã,"Xã Bình Đại",3231,WARD,3
+3337,36334,phường,"Phường Sơn Đông",3231,WARD,2
+3338,36335,xã,"Xã Thạnh Phong",3231,WARD,4
+3339,36336,xã,"Xã Mỹ Chánh Hòa",3231,WARD,3
+3340,36337,xã,"Xã Phước Long",3231,WARD,4
+3341,36338,xã,"Xã Thạnh Phú",3231,WARD,4
+3342,36339,xã,"Xã Phú Túc",3231,WARD,2
+3343,36340,phường,"Phường Phú Tân",3231,WARD,2
+3344,36341,xã,"Xã Đồng Khởi",3231,WARD,3
+3345,36342,xã,"Xã Phú Phụng",3231,WARD,4
+3346,36343,xã,"Xã Tiên Thủy",3231,WARD,2
+3347,36344,xã,"Xã Tân Thủy",3231,WARD,3
+3348,36345,phường,"Phường An Hội",3231,WARD,2
+3349,36346,xã,"Xã An Qui",3231,WARD,4
+3350,38128,xã,"Xã Bình Phú",3231,WARD,4
+3351,38129,xã,"Xã Hùng Hòa",3231,WARD,4
+3352,38130,xã,"Xã Long Hiệp",3231,WARD,4
+3353,38131,xã,"Xã Tân Phú",3231,WARD,2
+3354,38132,xã,"Xã Đại Điền",3231,WARD,4
+3355,38133,xã,"Xã Hưng Nhượng",3231,WARD,3

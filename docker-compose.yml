@@ -1,0 +1,38 @@
+services:
+  app:
+    image: ndthaiw/cenvi_launch:latest
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8100}:${APP_PORT:-8100}"
+    env_file:
+      - .env
+    labels:
+      - "com.centurylabs.watchtower.scope=autoupdate"
+
+  # Cloudflare Tunnel — public app ra domain của bạn
+  # Thay YOUR_TUNNEL_TOKEN bằng token lấy từ Cloudflare Zero Trust dashboard
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      - app
+
+  # Watchtower — tự động pull image mới và restart container
+  watchtower:
+    image: containrrr/watchtower:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Credentials Docker Hub (sau khi docker login trên máy)
+      - ${USERPROFILE}/.docker/config.json:/config.json:ro
+    environment:
+      # Kiểm tra image mới mỗi 5 phút
+      - WATCHTOWER_POLL_INTERVAL=300
+      # Chỉ watch container "app", không động vào tunnel/watchtower
+      - WATCHTOWER_SCOPE=autoupdate
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+    command: --scope autoupdate

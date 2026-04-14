@@ -1,0 +1,44 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Environment & secrets
+.env
+*.env.*
+
+# Docs & config meta
+CLAUDE.md
+*.md
+!README.md
+
+# Dev scripts
+scripts/
+
+# DB files
+*.db
+*.sqlite
+
+# UI source (only need the built dist)
+ui/node_modules/
+ui/src/
+ui/public/
+ui/.vite/
+ui/dist/
+
+# IDE / OS
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.github/
