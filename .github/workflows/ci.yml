@@ -47,5 +47,4 @@ jobs:
           tags: |
             ndthaiw/cenvi_launch:${{ steps.get_version.outputs.VERSION }}
             ndthaiw/cenvi_launch:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          no-cache: true

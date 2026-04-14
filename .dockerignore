@@ -28,8 +28,6 @@ scripts/
 
 # UI source (only need the built dist)
 ui/node_modules/
-ui/src/
-ui/public/
 ui/.vite/
 ui/dist/
 
