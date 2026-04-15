@@ -22,8 +22,10 @@ import {
 } from 'lucide-react';
 import { hkdApi, exportApi, govApi, govJobStorage } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
+import SearchableSelect from '../Common/SearchableSelect';
 import UploadModal from './UploadModal';
 import GovProgressModal from './GovProgressModal';
+
 
 const IndustrySelect = ({ industries, onSelect, onClose }) => {
   const [query, setQuery] = useState('');
@@ -495,17 +497,21 @@ const HKDEditor = ({
 
               <div className="col-span-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Tỉnh/Thành phố</label>
-                <select className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-black text-sm outline-none appearance-none" value={formData.company_info?.address?.province_id || ''} onChange={(e) => { updateFormData('company_info.address.province_id', parseInt(e.target.value)); loadWards('hkd', e.target.value); }}>
-                  <option value="">-- Chọn --</option>
-                  {provinces.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-                </select>
+                <SearchableSelect
+                  value={formData.company_info?.address?.province_id || ''}
+                  onChange={(id) => { updateFormData('company_info.address.province_id', id); loadWards('hkd', id); }}
+                  options={provinces}
+                  placeholder="-- Chọn --"
+                />
               </div>
               <div className="col-span-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Phường/Xã</label>
-                <select className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-black text-sm outline-none appearance-none" value={formData.company_info?.address?.ward_id || ''} onChange={(e) => updateFormData('company_info.address.ward_id', parseInt(e.target.value))}>
-                  <option value="">-- Chọn --</option>
-                  {wardOptions?.hkd?.map(w => <option key={w.id} value={w.id}>{w.name}</option>)}
-                </select>
+                <SearchableSelect
+                  value={formData.company_info?.address?.ward_id || ''}
+                  onChange={(id) => updateFormData('company_info.address.ward_id', id)}
+                  options={wardOptions?.hkd || []}
+                  placeholder="-- Chọn --"
+                />
               </div>
               <div className="col-span-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Số nhà, tên đường</label>
@@ -608,12 +614,20 @@ const HKDEditor = ({
               <div className="col-span-6 bg-slate-50/50 p-4 rounded-2xl border border-dashed border-slate-200">
                 <h4 className="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-3">Địa chỉ thường trú</h4>
                 <div className="grid grid-cols-3 gap-3">
-                  <select disabled={syncAddress} className="px-3 py-2.5 rounded-xl bg-white border border-slate-200 font-bold text-xs appearance-none outline-none" value={formData.owner_info?.contact_address?.province_id || ''} onChange={(e) => { updateFormData('owner_info.contact_address.province_id', parseInt(e.target.value)); loadWards('owner', e.target.value); }}>
-                    <option value="">Tỉnh/Thành</option>{provinces.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-                  </select>
-                  <select disabled={syncAddress} className="px-3 py-2.5 rounded-xl bg-white border border-slate-200 font-bold text-xs appearance-none outline-none" value={formData.owner_info?.contact_address?.ward_id || ''} onChange={(e) => updateFormData('owner_info.contact_address.ward_id', parseInt(e.target.value))}>
-                    <option value="">Phường/Xã</option>{wardOptions?.owner?.map(w => <option key={w.id} value={w.id}>{w.name}</option>)}
-                  </select>
+                  <SearchableSelect
+                    value={formData.owner_info?.contact_address?.province_id || ''}
+                    onChange={(id) => { updateFormData('owner_info.contact_address.province_id', id); loadWards('owner', id); }}
+                    options={provinces}
+                    placeholder="Tỉnh/Thành"
+                    disabled={syncAddress}
+                  />
+                  <SearchableSelect
+                    value={formData.owner_info?.contact_address?.ward_id || ''}
+                    onChange={(id) => updateFormData('owner_info.contact_address.ward_id', id)}
+                    options={wardOptions?.owner || []}
+                    placeholder="Phường/Xã"
+                    disabled={syncAddress}
+                  />
                   <input disabled={syncAddress} className="px-3 py-2.5 rounded-xl bg-white border border-slate-200 font-bold text-xs outline-none" placeholder="Số nhà, đường..." value={formData.owner_info?.contact_address?.street || ''} onChange={(e) => updateFormData('owner_info.contact_address.street', e.target.value)} />
                 </div>
               </div>

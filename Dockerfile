@@ -36,6 +36,6 @@ COPY --from=ui-builder /ui/dist ./ui/dist
 RUN useradd -m appuser && chown -R appuser /app
 USER appuser
 
-EXPOSE ${APP_PORT:-8100}
+EXPOSE ${APP_PORT:-8200}
 
-CMD uvicorn main:app --host 0.0.0.0 --port ${APP_PORT:-8100}
+CMD uvicorn main:app --host 0.0.0.0 --port ${APP_PORT:-8200}

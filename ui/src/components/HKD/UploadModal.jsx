@@ -7,8 +7,8 @@ const DOCUMENT_LABELS = [
   // { id: '000', name: 'Hướng dẫn ký' },
   { id: '001', name: 'Giấy đề nghị đăng ký HKD' },
   { id: '002', name: 'Hợp đồng dịch vụ' },
-  { id: '003', name: 'Giấy giới thiệu nhận' },
-  { id: '004', name: 'Giấy giới thiệu nộp' },
+  { id: '003', name: 'Công chứng 2 mặt CCCD' },
+  { id: '004', name: 'Giấy giới thiệu nhận & nộp' },
 ];
 
 const UploadModal = ({ isOpen, onClose, hkdId, folderId, onFolderCreated }) => {

@@ -11,6 +11,8 @@ class GoogleSettings(BaseModel):
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Cenvi Launch BE"
     API_V1_STR: str = "/api/v1"
+    APP_VERSION: str = "1.0.0"
+    APP_PORT: int = 8200
 
     # MySQL Database Configuration
     MYSQL_USER: str = "root"

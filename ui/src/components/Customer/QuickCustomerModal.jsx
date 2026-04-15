@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Save, UserPlus, Phone, LayoutGrid } from 'lucide-react';
 import Modal from '../Common/Modal';
+import SearchableSelect from '../Common/SearchableSelect';
 import { customerApi, adminUnitsApi } from '../../services/api';
 import { BRANCHES } from '../../constants';
 
@@ -129,18 +130,22 @@ const QuickCustomerModal = ({ isOpen, onClose, onCreated, sources, staff }) => {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-[9px] font-black uppercase text-slate-400 mb-1 block px-1">Tỉnh / Thành phố</label>
-              <select className={inp + ' appearance-none text-xs'} value={formData.province_id}
-                onChange={(e) => { const v = e.target.value; setFormData({ ...formData, province_id: v, ward_id: '' }); loadWards(v); }}>
-                <option value="">-- Chọn --</option>
-                {provinces.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-              </select>
+              <SearchableSelect
+                value={formData.province_id ? parseInt(formData.province_id) : ''}
+                onChange={(id) => { setFormData({ ...formData, province_id: id, ward_id: '' }); loadWards(id); }}
+                options={provinces}
+                placeholder="-- Chọn --"
+              />
             </div>
             <div>
               <label className="text-[9px] font-black uppercase text-slate-400 mb-1 block px-1">Phường / Xã</label>
-              <select className={inp + ' appearance-none text-xs'} value={formData.ward_id} onChange={(e) => setFormData({ ...formData, ward_id: e.target.value })} disabled={!wards.length}>
-                <option value="">-- Chọn --</option>
-                {wards.map(w => <option key={w.id} value={w.id}>{w.name}</option>)}
-              </select>
+              <SearchableSelect
+                value={formData.ward_id ? parseInt(formData.ward_id) : ''}
+                onChange={(id) => setFormData({ ...formData, ward_id: id })}
+                options={wards}
+                placeholder="-- Chọn --"
+                disabled={!wards.length}
+              />
             </div>
             <div className="col-span-2">
               <label className="text-[9px] font-black uppercase text-slate-400 mb-1 block px-1">Số nhà, tên đường</label>

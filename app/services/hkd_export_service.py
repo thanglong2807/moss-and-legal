@@ -335,7 +335,9 @@ def _build_gui_kh(data: dict) -> Dict:
         "cus_address": _join_address(
             ca.get("street", ""), ca.get("ward", ""), ca.get("province", "")
         ),
-        "hkd_phone": ci.get("phone", ""),
+        "hkd_phone":   contact.get("phone", ""),
+        "hkd_fax":     contact.get("fax", ""),
+        "hkd_web":     contact.get("website", ""),
         "hkd_email":   contact.get("email", ""),
         "suffix":      _ward_suffix(ward),
         "hkd_ward":    ward,

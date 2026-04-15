@@ -3,7 +3,8 @@ import axios from 'axios';
 const TOKEN_KEY = 'cenvi_access_token';
 const REFRESH_KEY = 'cenvi_refresh_token';
 const AUTH_BASE = 'https://api.cenvi.vn/api/v1/admin/auth';
-const GOV_BASE = 'http://localhost:8000/api/v1'; // đổi thành URL thật của GOV system
+const GOV_BASE = 'http://api.cenviplatform.com/api/v1'; 
+// const GOV_BASE = 'http://localhost:8000/api/v1'
 
 const api = axios.create({
   baseURL: '/api/v1',
