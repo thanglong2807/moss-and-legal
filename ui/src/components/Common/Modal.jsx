@@ -13,13 +13,13 @@ const Modal = ({ isOpen, onClose, title, children, footer }) => {
       />
       
       {/* Modal Content */}
-      <div className="bg-white rounded-[32px] w-full max-w-lg shadow-2xl relative z-10 animate-in zoom-in-95 duration-200 overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
+      <div className="bg-surface rounded-[32px] w-full max-w-lg shadow-2xl relative z-10 animate-in zoom-in-95 duration-200 overflow-hidden border border-faint flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="px-8 py-6 border-b border-slate-50 flex justify-between items-center bg-white sticky top-0">
-          <h2 className="text-xl font-black text-slate-800 tracking-tight uppercase italic">{title}</h2>
+        <div className="px-8 py-6 border-b border-faint flex justify-between items-center bg-surface sticky top-0">
+          <h2 className="text-xl font-black text-strong tracking-tight uppercase italic">{title}</h2>
           <button 
             onClick={onClose}
-            className="p-2 hover:bg-slate-100 rounded-2xl text-slate-400 transition-colors"
+            className="p-2 hover:bg-input rounded-2xl text-weak transition-colors"
           >
             <X size={20} />
           </button>
@@ -32,7 +32,7 @@ const Modal = ({ isOpen, onClose, title, children, footer }) => {
 
         {/* Footer */}
         {footer && (
-          <div className="px-8 py-6 border-t border-slate-50 bg-slate-50/50 flex justify-end gap-3 sticky bottom-0">
+          <div className="px-8 py-6 border-t border-faint bg-page/50 flex justify-end gap-3 sticky bottom-0">
             {footer}
           </div>
         )}

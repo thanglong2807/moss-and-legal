@@ -57,7 +57,7 @@ const QuickCustomerModal = ({ isOpen, onClose, onCreated, sources, staff }) => {
     }
   };
 
-  const inp = 'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:bg-white focus:ring-2 focus:ring-orange-500 transition-all text-sm font-bold outline-none';
+  const inp = 'w-full px-4 py-3 bg-page border border-base rounded-2xl focus:bg-surface focus:ring-2 focus:ring-orange-500 transition-all text-sm font-bold outline-none';
 
   return (
     <Modal
@@ -66,7 +66,7 @@ const QuickCustomerModal = ({ isOpen, onClose, onCreated, sources, staff }) => {
       title="Tạo khách hàng mới"
       footer={
         <div className="flex gap-3">
-          <button onClick={onClose} className="px-6 py-2.5 text-slate-400 font-bold text-sm">HỦY</button>
+          <button onClick={onClose} className="px-6 py-2.5 text-weak font-bold text-sm">HỦY</button>
           <button disabled={saving} onClick={handleSave} className="flex items-center gap-2 px-8 py-2.5 bg-orange-600 text-white rounded-2xl hover:bg-orange-700 shadow-xl shadow-orange-100 font-black text-sm transition-all">
             <Save size={15} />{saving ? 'ĐANG LƯU...' : 'TẠO KHÁCH HÀNG'}
           </button>
@@ -76,48 +76,48 @@ const QuickCustomerModal = ({ isOpen, onClose, onCreated, sources, staff }) => {
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5 block px-1">Tên khách hàng *</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">Tên khách hàng *</label>
             <input className={inp} placeholder="Họ và tên..." value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} autoFocus />
           </div>
           <div>
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5 block px-1">Số điện thoại *</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">Số điện thoại *</label>
             <input className={inp} placeholder="09xx..." value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} />
           </div>
           <div>
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5 block px-1">CCCD / CMND</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">CCCD / CMND</label>
             <input className={inp} placeholder="0xxxxxxxxx..." value={formData.id_card} onChange={(e) => setFormData({ ...formData, id_card: e.target.value })} />
           </div>
           <div>
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5 block px-1">Giới tính</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">Giới tính</label>
             <div className="flex gap-2">
               {[{ v: 0, label: 'Nam' }, { v: 1, label: 'Nữ' }].map(g => (
                 <button key={g.v} type="button" onClick={() => setFormData({ ...formData, gender: g.v })}
-                  className={`flex-1 py-3 rounded-2xl text-sm font-black transition-all border ${formData.gender === g.v ? 'bg-orange-600 text-white border-orange-600' : 'bg-slate-50 text-slate-400 border-slate-100 hover:border-orange-300'}`}>
+                  className={`flex-1 py-3 rounded-2xl text-sm font-black transition-all border ${formData.gender === g.v ? 'bg-orange-600 text-white border-orange-600' : 'bg-page text-weak border-faint hover:border-orange-300'}`}>
                   {g.label}
                 </button>
               ))}
             </div>
           </div>
           <div>
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5 block px-1">Ngày sinh</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">Ngày sinh</label>
             <input type="date" className={inp} value={formData.birth_date} onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })} />
           </div>
           <div>
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5 block px-1">Nguồn khách *</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">Nguồn khách *</label>
             <select className={inp + ' appearance-none'} value={formData.source_id} onChange={(e) => setFormData({ ...formData, source_id: e.target.value })}>
               <option value="">-- Chọn nguồn --</option>
               {sources.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5 block px-1">NV phụ trách</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">NV phụ trách</label>
             <select className={inp + ' appearance-none'} value={formData.staff_id} onChange={(e) => setFormData({ ...formData, staff_id: e.target.value })}>
               <option value="">-- Chọn NV --</option>
               {staff.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5 block px-1">Chi nhánh</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">Chi nhánh</label>
             <select className={inp + ' appearance-none'} value={formData.branch_name} onChange={(e) => setFormData({ ...formData, branch_name: e.target.value })}>
               <option value="">-- Chọn chi nhánh --</option>
               {BRANCHES.map(b => <option key={b.id} value={b.name}>{b.name}</option>)}
@@ -125,11 +125,11 @@ const QuickCustomerModal = ({ isOpen, onClose, onCreated, sources, staff }) => {
           </div>
         </div>
 
-        <div className="pt-3 border-t border-slate-50">
-          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 block px-1">Địa chỉ</label>
+        <div className="pt-3 border-t border-faint">
+          <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-2 block px-1">Địa chỉ</label>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[9px] font-black uppercase text-slate-400 mb-1 block px-1">Tỉnh / Thành phố</label>
+              <label className="text-[9px] font-black uppercase text-weak mb-1 block px-1">Tỉnh / Thành phố</label>
               <SearchableSelect
                 value={formData.province_id ? parseInt(formData.province_id) : ''}
                 onChange={(id) => { setFormData({ ...formData, province_id: id, ward_id: '' }); loadWards(id); }}
@@ -138,7 +138,7 @@ const QuickCustomerModal = ({ isOpen, onClose, onCreated, sources, staff }) => {
               />
             </div>
             <div>
-              <label className="text-[9px] font-black uppercase text-slate-400 mb-1 block px-1">Phường / Xã</label>
+              <label className="text-[9px] font-black uppercase text-weak mb-1 block px-1">Phường / Xã</label>
               <SearchableSelect
                 value={formData.ward_id ? parseInt(formData.ward_id) : ''}
                 onChange={(id) => setFormData({ ...formData, ward_id: id })}
@@ -148,7 +148,7 @@ const QuickCustomerModal = ({ isOpen, onClose, onCreated, sources, staff }) => {
               />
             </div>
             <div className="col-span-2">
-              <label className="text-[9px] font-black uppercase text-slate-400 mb-1 block px-1">Số nhà, tên đường</label>
+              <label className="text-[9px] font-black uppercase text-weak mb-1 block px-1">Số nhà, tên đường</label>
               <input className={inp + ' text-xs'} placeholder="22 Nguyễn Trãi..." value={formData.street} onChange={(e) => setFormData({ ...formData, street: e.target.value })} />
             </div>
           </div>

@@ -114,11 +114,11 @@ const UploadModal = ({ isOpen, onClose, hkdId, folderId, onFolderCreated }) => {
       footer={
         !folderId ? null : (
           <div className="flex items-center justify-between w-full">
-            <span className="text-[11px] font-bold text-slate-400">
+            <span className="text-[11px] font-bold text-weak">
               {pendingCount > 0 ? `${pendingCount} file đã chọn` : 'Chọn file để upload'}
             </span>
             <div className="flex gap-3">
-              <button onClick={onClose} className="px-6 py-2.5 text-slate-400 font-bold text-sm">Đóng</button>
+              <button onClick={onClose} className="px-6 py-2.5 text-weak font-bold text-sm">Đóng</button>
               <button
                 onClick={handleConfirmUpload}
                 disabled={!pendingCount || uploading}
@@ -141,8 +141,8 @@ const UploadModal = ({ isOpen, onClose, hkdId, folderId, onFolderCreated }) => {
             <FolderPlus size={32} />
           </div>
           <div className="text-center">
-            <p className="text-sm font-black text-slate-800 mb-1">Chưa có folder Drive</p>
-            <p className="text-xs font-bold text-slate-400">Tạo folder để bắt đầu lưu trữ hồ sơ</p>
+            <p className="text-sm font-black text-strong mb-1">Chưa có folder Drive</p>
+            <p className="text-xs font-bold text-weak">Tạo folder để bắt đầu lưu trữ hồ sơ</p>
           </div>
           <button
             onClick={handleCreateFolder}
@@ -162,7 +162,7 @@ const UploadModal = ({ isOpen, onClose, hkdId, folderId, onFolderCreated }) => {
             const pendingFile = pending[id];
             return (
               <div key={id} className={`flex items-center gap-4 p-4 rounded-2xl border transition-all ${
-                pendingFile ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-slate-100 hover:border-slate-200'
+                pendingFile ? 'bg-blue-50 border-blue-200' : 'bg-page border-faint hover:border-base'
               }`}>
                 {/* Hidden file input */}
                 <input
@@ -179,14 +179,14 @@ const UploadModal = ({ isOpen, onClose, hkdId, folderId, onFolderCreated }) => {
                     ? <CheckCircle2 size={18} className="text-blue-500" />
                     : existing
                       ? <CheckCircle2 size={18} className="text-emerald-400" />
-                      : <div className="w-[18px] h-[18px] rounded-full border-2 border-slate-200" />
+                      : <div className="w-[18px] h-[18px] rounded-full border-2 border-base" />
                   }
                 </div>
 
                 {/* Label + existing link or pending filename */}
                 <div className="flex-1 min-w-0">
                   <div className="text-[10px] font-black text-orange-600 uppercase tracking-widest mb-0.5">{id}</div>
-                  <div className="text-sm font-black text-slate-800">{name}</div>
+                  <div className="text-sm font-black text-strong">{name}</div>
                   {pendingFile && (
                     <div className="text-[11px] font-bold text-blue-600 mt-0.5 truncate">→ {pendingFile.name}</div>
                   )}
@@ -202,19 +202,19 @@ const UploadModal = ({ isOpen, onClose, hkdId, folderId, onFolderCreated }) => {
                 <div className="flex items-center gap-1 flex-shrink-0">
                   {pendingFile ? (
                     <button onClick={() => handleRemovePending(id)}
-                      className="p-2 text-slate-400 hover:text-red-500 transition-colors">
+                      className="p-2 text-weak hover:text-red-500 transition-colors">
                       <Trash2 size={14} />
                     </button>
                   ) : existing ? (
                     <button onClick={() => handleDelete(existing)} disabled={deleting === existing.id}
-                      className="p-2 text-slate-300 hover:text-red-500 transition-colors disabled:opacity-40">
+                      className="p-2 text-weak hover:text-red-500 transition-colors disabled:opacity-40">
                       {deleting === existing.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
                     </button>
                   ) : null}
                   <button
                     onClick={() => handlePickFile(id)}
                     disabled={uploading}
-                    className="flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-200 text-slate-600 rounded-xl hover:border-blue-400 hover:text-blue-600 font-black text-xs transition disabled:opacity-40"
+                    className="flex items-center gap-1.5 px-3 py-2 bg-surface border border-base text-body rounded-xl hover:border-blue-400 hover:text-blue-600 font-black text-xs transition disabled:opacity-40"
                   >
                     <Upload size={12} /> {existing || pendingFile ? 'Thay' : 'Chọn'}
                   </button>

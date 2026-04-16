@@ -4,7 +4,7 @@ import { govApi, govJobStorage } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 
 const STATUS_CONFIG = {
-  pending:     { label: 'Đang chờ xử lý', color: 'text-slate-500',  icon: Clock,         spin: false },
+  pending:     { label: 'Đang chờ xử lý', color: 'text-body',  icon: Clock,         spin: false },
   in_progress: { label: 'Đang thực hiện', color: 'text-blue-600',   icon: RefreshCw,     spin: true  },
   completed:   { label: 'Hoàn thành',      color: 'text-emerald-600', icon: CheckCircle2,  spin: false },
   failed:      { label: 'Thất bại',         color: 'text-red-600',    icon: XCircle,       spin: false },
@@ -90,14 +90,14 @@ const GovProgressModal = ({ isOpen, onClose, jobId, hkdId }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-3xl mx-4 overflow-hidden flex flex-col">
+      <div className="bg-surface rounded-3xl shadow-2xl w-full max-w-3xl mx-4 overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-faint">
           <div>
-            <h2 className="text-sm font-black uppercase tracking-widest text-slate-800">Tiến độ chuyển GOV</h2>
-            <div className="text-[10px] font-bold text-slate-400 mt-0.5">Job ID: {jobId}</div>
+            <h2 className="text-sm font-black uppercase tracking-widest text-strong">Tiến độ chuyển GOV</h2>
+            <div className="text-[10px] font-bold text-weak mt-0.5">Job ID: {jobId}</div>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-slate-50 rounded-2xl text-slate-400 transition">
+          <button onClick={onClose} className="p-2 hover:bg-page rounded-2xl text-weak transition">
             <X size={18} />
           </button>
         </div>
@@ -112,7 +112,7 @@ const GovProgressModal = ({ isOpen, onClose, jobId, hkdId }) => {
               style={{ maxHeight: 500 }}
             />
           ) : (
-            <div className="flex flex-col items-center gap-3 text-slate-600">
+            <div className="flex flex-col items-center gap-3 text-body">
               <RefreshCw size={28} className="animate-spin opacity-40" />
               <span className="text-xs font-bold opacity-40">Đang tải màn hình...</span>
             </div>
@@ -120,7 +120,7 @@ const GovProgressModal = ({ isOpen, onClose, jobId, hkdId }) => {
         </div>
 
         {/* Status bar */}
-        <div className="px-6 py-4 flex items-center gap-3 border-t border-slate-100">
+        <div className="px-6 py-4 flex items-center gap-3 border-t border-faint">
           <StatusIcon
             size={18}
             className={`${cfg.color} ${cfg.spin ? 'animate-spin' : ''} flex-shrink-0`}
@@ -130,14 +130,14 @@ const GovProgressModal = ({ isOpen, onClose, jobId, hkdId }) => {
             {error && <p className="text-xs font-bold text-red-500 mt-0.5">{error}</p>}
           </div>
           {!isDone && (
-            <span className="text-[10px] font-bold text-slate-400">
+            <span className="text-[10px] font-bold text-weak">
               Tự động cập nhật mỗi {POLL_SCREENSHOT_MS / 1000}s
             </span>
           )}
           {isDone && (
             <button
               onClick={onClose}
-              className="px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-black text-xs transition"
+              className="px-5 py-2 bg-input hover:bg-input text-body rounded-xl font-black text-xs transition"
             >
               Đóng
             </button>

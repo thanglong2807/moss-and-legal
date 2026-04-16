@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Search, Users, Phone, ExternalLink, Edit2, Link, RefreshCw, ArrowLeft, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Search, Users, Phone, ExternalLink, Edit2, Link, RefreshCw, ArrowLeft, Trash2 } from 'lucide-react';
 import { customerApi, configApi } from '../services/api';
 import QuickCustomerModal from '../components/Customer/QuickCustomerModal';
 import CustomerDetailModal from '../components/Customer/CustomerDetailModal';
-
-const PAGE_SIZE_OPTIONS = [50, 100, 200, 500];
+import Pagination from '../components/Common/Pagination';
 
 const CustomerCard = ({ customer, isSelected, onClick }) => (
   <div
@@ -13,17 +12,17 @@ const CustomerCard = ({ customer, isSelected, onClick }) => (
     className={`px-4 py-3 rounded-2xl cursor-pointer transition-all border ${
       isSelected
         ? 'bg-orange-50 border-orange-300'
-        : 'border-slate-100 bg-white hover:bg-orange-50/40 hover:border-orange-200'
+        : 'border-faint bg-surface hover:bg-orange-50/40 hover:border-orange-200'
     }`}
   >
     <div className="flex items-center gap-2 mb-0.5">
       <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${customer.crm_link ? 'bg-emerald-500' : 'bg-slate-300'}`} />
-      <span className={`text-sm font-black truncate ${isSelected ? 'text-orange-800' : 'text-slate-800'}`}>{customer.name}</span>
+      <span className={`text-sm font-black truncate ${isSelected ? 'text-orange-800' : 'text-strong'}`}>{customer.name}</span>
       {customer.crm_link && <Link size={10} className="text-emerald-500 shrink-0" />}
     </div>
     <div className="flex items-center gap-1.5 pl-3.5">
-      <Phone size={10} className="text-slate-300 shrink-0" />
-      <span className="text-xs font-bold text-slate-400">{customer.phone}</span>
+      <Phone size={10} className="text-weak shrink-0" />
+      <span className="text-xs font-bold text-weak">{customer.phone}</span>
     </div>
   </div>
 );
@@ -94,19 +93,19 @@ const CustomerManagement = ({ onShowHKDs }) => {
 
       {/* LEFT */}
       {showPanel ? (
-        <div className="w-72 shrink-0 border-r border-slate-300 flex flex-col bg-white overflow-hidden">
-          <div className="p-4 border-b border-slate-200 flex flex-col gap-2">
+        <div className="w-72 shrink-0 border-r border-base flex flex-col bg-surface overflow-hidden">
+          <div className="p-4 border-b border-base flex flex-col gap-2">
             <div className="flex justify-between items-center">
-              <span className="text-xs font-black text-slate-600 uppercase tracking-widest">Khách hàng</span>
+              <span className="text-xs font-black text-body uppercase tracking-widest">Khách hàng</span>
               <button onClick={() => setShowCreate(true)} className="bg-orange-600 text-white p-1.5 rounded-lg hover:bg-orange-700 transition shadow-md shadow-orange-100">
                 <Plus size={14} />
               </button>
             </div>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={12} />
-              <input type="text" placeholder="Tìm kiếm..." className="w-full pl-8 pr-3 py-2 bg-slate-100/60 rounded-xl text-xs font-bold outline-none" value={searchQuery} onChange={(e) => handleSearchChange(e.target.value)} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-weak" size={12} />
+              <input type="text" placeholder="Tìm kiếm..." className="w-full pl-8 pr-3 py-2 bg-input/60 rounded-xl text-xs font-bold outline-none" value={searchQuery} onChange={(e) => handleSearchChange(e.target.value)} />
             </div>
-            <select className="w-full px-3 py-2 bg-slate-100/60 rounded-xl text-xs font-bold outline-none appearance-none" value={staffFilter} onChange={(e) => handleStaffFilterChange(e.target.value)}>
+            <select className="w-full px-3 py-2 bg-input/60 rounded-xl text-xs font-bold outline-none appearance-none" value={staffFilter} onChange={(e) => handleStaffFilterChange(e.target.value)}>
               <option value="">-- Tất cả nhân viên --</option>
               {staff.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
@@ -118,12 +117,12 @@ const CustomerManagement = ({ onShowHKDs }) => {
           </div>
         </div>
       ) : (
-        <div className="flex-1 flex flex-col bg-white overflow-hidden">
-          <div className="p-5 border-b border-slate-200 flex flex-col gap-3">
+        <div className="flex-1 flex flex-col bg-surface overflow-hidden">
+          <div className="p-5 border-b border-base flex flex-col gap-3">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-xl font-black tracking-tight text-slate-800 italic uppercase">Khách hàng</h1>
-                <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-0.5">{filtered.length} / {customers.length} khách</p>
+                <h1 className="text-xl font-black tracking-tight text-strong italic uppercase">Khách hàng</h1>
+                <p className="text-weak text-[11px] font-black uppercase tracking-widest mt-0.5">{filtered.length} / {customers.length} khách</p>
               </div>
               <button onClick={() => setShowCreate(true)} className="bg-orange-600 text-white px-4 py-2 rounded-2xl hover:bg-orange-700 transition shadow-lg shadow-orange-100 font-black text-xs uppercase flex items-center gap-2">
                 <Plus size={16} /> Thêm
@@ -132,10 +131,10 @@ const CustomerManagement = ({ onShowHKDs }) => {
             {/* Filters */}
             <div className="flex gap-2">
               <div className="relative flex-1 max-w-sm">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
-                <input type="text" placeholder="Tìm tên hoặc số điện thoại..." className="w-full pl-9 pr-3 py-2 bg-slate-100/60 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-orange-400" value={searchQuery} onChange={(e) => handleSearchChange(e.target.value)} />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-weak" size={14} />
+                <input type="text" placeholder="Tìm tên hoặc số điện thoại..." className="w-full pl-9 pr-3 py-2 bg-input/60 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-orange-400" value={searchQuery} onChange={(e) => handleSearchChange(e.target.value)} />
               </div>
-              <select className="px-3 py-2 bg-slate-100/60 rounded-xl text-xs font-bold outline-none appearance-none" value={staffFilter} onChange={(e) => handleStaffFilterChange(e.target.value)}>
+              <select className="px-3 py-2 bg-input/60 rounded-xl text-xs font-bold outline-none appearance-none" value={staffFilter} onChange={(e) => handleStaffFilterChange(e.target.value)}>
                 <option value="">-- Tất cả NV --</option>
                 {staff.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
               </select>
@@ -144,29 +143,29 @@ const CustomerManagement = ({ onShowHKDs }) => {
 
           <div className="flex-1 overflow-y-auto">
             {filtered.length === 0 ? (
-              <div className="flex flex-col items-center justify-center p-20 text-slate-300"><Users size={40} className="mb-3 opacity-10" /><p className="text-sm font-bold italic">Không tìm thấy khách hàng nào</p></div>
+              <div className="flex flex-col items-center justify-center p-20 text-weak"><Users size={40} className="mb-3 opacity-10" /><p className="text-sm font-bold italic">Không tìm thấy khách hàng nào</p></div>
             ) : (
               <table className="w-full text-left border-collapse text-xs">
-                <thead className="sticky top-0 bg-slate-50 z-10">
+                <thead className="sticky top-0 bg-page z-10">
                   <tr>
                     {['ID CRM', 'Tên khách hàng', 'Số điện thoại', 'Nguồn', 'Chi nhánh', 'CRM'].map(col => (
-                      <th key={col} className="px-4 py-2.5 font-black text-slate-600 uppercase tracking-widest text-[9px] border-b border-slate-200 whitespace-nowrap">{col}</th>
+                      <th key={col} className="px-4 py-2.5 font-black text-body uppercase tracking-widest text-[9px] border-b border-base whitespace-nowrap">{col}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {paginated.map(c => (
-                    <tr key={c.id} onClick={() => setSelectedCustomer(c)} className={`cursor-pointer transition-all border-b border-slate-200 hover:bg-orange-50/40 ${c.crm_link ? 'border-l-2 border-l-emerald-400' : ''}`}>
-                      <td className="px-3 py-2.5 text-slate-500 font-bold text-[10px]">{c.id_crm || '—'}</td>
-                      <td className="px-3 py-2.5 font-black text-slate-800">
+                    <tr key={c.id} onClick={() => setSelectedCustomer(c)} className={`cursor-pointer transition-all border-b border-base hover:bg-orange-50/40 dark:hover:bg-orange-900/10 ${c.crm_link ? 'border-l-2 border-l-emerald-400' : ''}`}>
+                      <td className="px-3 py-2.5 text-body font-bold text-[10px]">{c.id_crm || '—'}</td>
+                      <td className="px-3 py-2.5 font-black text-strong">
                         <div className="flex items-center gap-2">
                           {c.crm_link && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 shadow-[0_0_4px_rgba(16,185,129,0.5)]" />}
                           {c.name}
                         </div>
                       </td>
-                      <td className="px-3 py-2.5 text-slate-700 font-bold">{c.phone}</td>
-                      <td className="px-3 py-2.5"><span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-lg font-black text-[9px] uppercase">{c.source?.name || '—'}</span></td>
-                      <td className="px-3 py-2.5 text-slate-700 font-bold">{c.branch_name || '—'}</td>
+                      <td className="px-3 py-2.5 text-body font-bold">{c.phone}</td>
+                      <td className="px-3 py-2.5"><span className="bg-input text-body px-2 py-0.5 rounded-lg font-black text-[9px] uppercase">{c.source?.name || '—'}</span></td>
+                      <td className="px-3 py-2.5 text-body font-bold">{c.branch_name || '—'}</td>
                       <td className="px-3 py-2.5">
                         {c.crm_link
                           ? <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-lg text-[9px] font-black uppercase border border-emerald-100">● CRM</span>
@@ -179,55 +178,39 @@ const CustomerManagement = ({ onShowHKDs }) => {
             )}
           </div>
 
-          {/* Pagination */}
-          {filtered.length > 0 && (
-            <div className="border-t border-slate-200 px-5 py-3 flex items-center justify-between bg-white">
-              <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
-                <span>Hiển thị</span>
-                <select className="px-2 py-1 bg-slate-100 rounded-lg font-black outline-none appearance-none" value={pageSize} onChange={(e) => { setPageSize(parseInt(e.target.value)); setPage(1); }}>
-                  {PAGE_SIZE_OPTIONS.map(n => <option key={n} value={n}>{n}</option>)}
-                </select>
-                <span>/ trang — {filtered.length} kết quả</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <button disabled={safePage <= 1} onClick={() => setPage(p => p - 1)} className="p-1.5 rounded-lg hover:bg-slate-100 disabled:opacity-30 transition"><ChevronLeft size={14} /></button>
-                <span className="text-xs font-black text-slate-600 px-2">{safePage} / {totalPages}</span>
-                <button disabled={safePage >= totalPages} onClick={() => setPage(p => p + 1)} className="p-1.5 rounded-lg hover:bg-slate-100 disabled:opacity-30 transition"><ChevronRight size={14} /></button>
-              </div>
-            </div>
-          )}
+          <Pagination page={safePage} pageSize={pageSize} total={filtered.length} onPageChange={setPage} onPageSizeChange={setPageSize} />
         </div>
       )}
 
       {/* RIGHT detail panel */}
       {selectedCustomer && (
-        <div className="flex-1 flex flex-col bg-[#F9FAFB] overflow-hidden">
-          <div className="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center">
+        <div className="flex-1 flex flex-col bg-page overflow-hidden">
+          <div className="bg-surface border-b border-base px-6 py-4 flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <button onClick={() => setSelectedCustomer(null)} className="p-2 hover:bg-slate-50 rounded-2xl text-slate-400 transition">
+              <button onClick={() => setSelectedCustomer(null)} className="p-2 hover:bg-page rounded-2xl text-weak transition">
                 <ArrowLeft size={18} />
               </button>
               <div className="w-10 h-10 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600 border border-orange-100">
                 <Users size={18} />
               </div>
               <div>
-                <h2 className="text-base font-black text-slate-800">{selectedCustomer.name}</h2>
+                <h2 className="text-base font-black text-strong">{selectedCustomer.name}</h2>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <Phone size={10} className="text-slate-300" />
-                  <span className="text-xs font-bold text-slate-500">{selectedCustomer.phone}</span>
+                  <Phone size={10} className="text-weak" />
+                  <span className="text-xs font-bold text-body">{selectedCustomer.phone}</span>
                   {selectedCustomer.crm_link && <Link size={10} className="text-emerald-500" />}
                 </div>
               </div>
             </div>
             <div className="flex gap-2">
-              <button onClick={handleSyncCRM} disabled={syncing} className={`flex items-center gap-1.5 px-4 py-2 rounded-2xl font-black text-xs border transition ${selectedCustomer.crm_link ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-white border-slate-200 text-slate-500 hover:border-emerald-400 hover:text-emerald-600'}`}>
+              <button onClick={handleSyncCRM} disabled={syncing} className={`flex items-center gap-1.5 px-4 py-2 rounded-2xl font-black text-xs border transition ${selectedCustomer.crm_link ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-surface border-base text-body hover:border-emerald-400 hover:text-emerald-600'}`}>
                 <RefreshCw size={13} className={syncing ? 'animate-spin' : ''} />
                 {selectedCustomer.crm_link ? 'Cập nhật CRM' : 'Đồng bộ CRM'}
               </button>
-              <button onClick={() => setShowEdit(true)} className="flex items-center gap-1.5 px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-2xl font-black text-xs hover:border-orange-400 hover:text-orange-600 transition">
+              <button onClick={() => setShowEdit(true)} className="flex items-center gap-1.5 px-4 py-2 bg-surface border border-base text-body rounded-2xl font-black text-xs hover:border-orange-400 hover:text-orange-600 transition">
                 <Edit2 size={13} /> Chỉnh sửa
               </button>
-              <button onClick={handleDelete} className="flex items-center gap-1.5 px-4 py-2 bg-white border border-red-200 text-red-500 rounded-2xl font-black text-xs hover:bg-red-50 hover:border-red-400 transition">
+              <button onClick={handleDelete} className="flex items-center gap-1.5 px-4 py-2 bg-surface border border-red-200 text-red-500 rounded-2xl font-black text-xs hover:bg-red-50 hover:border-red-400 transition">
                 <Trash2 size={13} /> Xóa
               </button>
               <button onClick={() => handleShowHKDs(selectedCustomer.id)} className="flex items-center gap-1.5 px-4 py-2 bg-orange-600 text-white rounded-2xl font-black text-xs hover:bg-orange-700 shadow-lg shadow-orange-100 transition">
@@ -237,7 +220,7 @@ const CustomerManagement = ({ onShowHKDs }) => {
           </div>
 
           <div className="p-6 overflow-y-auto">
-            <div className="bg-white rounded-[24px] border border-slate-100 shadow-sm p-6 grid grid-cols-2 gap-5 max-w-2xl">
+            <div className="bg-surface rounded-[24px] border border-faint shadow-sm p-6 grid grid-cols-2 gap-5 max-w-2xl">
               {[
                 ['ID CRM', selectedCustomer.id_crm || '—'],
                 ['ID Hệ thống', `#${selectedCustomer.id}`],
@@ -249,13 +232,13 @@ const CustomerManagement = ({ onShowHKDs }) => {
                 ['Địa chỉ', [selectedCustomer.street, selectedCustomer.ward?.name, selectedCustomer.province?.name].filter(Boolean).join(', ') || '—'],
               ].map(([label, value]) => (
                 <div key={label}>
-                  <div className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">{label}</div>
-                  <div className="text-sm font-black text-slate-800">{value}</div>
+                  <div className="text-[9px] font-black uppercase tracking-widest text-weak mb-1">{label}</div>
+                  <div className="text-sm font-black text-strong">{value}</div>
                 </div>
               ))}
-              <div className="col-span-2 pt-3 border-t border-slate-50 flex items-center gap-2">
+              <div className="col-span-2 pt-3 border-t border-faint flex items-center gap-2">
                 <div className={`w-2.5 h-2.5 rounded-full ${selectedCustomer.crm_link ? 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.4)]' : 'bg-slate-200'}`} />
-                <span className="text-xs font-black text-slate-600">{selectedCustomer.crm_link ? 'Đã đồng bộ CRM' : 'Chưa đồng bộ CRM'}</span>
+                <span className="text-xs font-black text-body">{selectedCustomer.crm_link ? 'Đã đồng bộ CRM' : 'Chưa đồng bộ CRM'}</span>
                 {selectedCustomer.crm_link && (
                   <a href={selectedCustomer.crm_link} target="_blank" rel="noreferrer" className="ml-auto text-emerald-600 flex items-center gap-1 text-[10px] font-black hover:underline">
                     <ExternalLink size={10} /> Mở CRM

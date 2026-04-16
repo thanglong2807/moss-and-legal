@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import Sidebar from './components/Sidebar/Sidebar';
 import HKDDashboard from './pages/HKDDashboard';
 import CustomerManagement from './pages/CustomerManagement';
@@ -13,7 +14,7 @@ const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-[#F9FAFB]">
+      <div className="flex-1 flex items-center justify-center bg-page">
         <div className="w-8 h-8 border-2 border-orange-200 border-t-orange-600 rounded-full animate-spin" />
       </div>
     );
@@ -27,14 +28,14 @@ const AppLayout = () => {
   const { can } = useAuth();
 
   return (
-    <div className="flex h-screen bg-white text-slate-900 font-sans overflow-hidden">
+    <div className="flex h-screen bg-surface text-strong font-sans overflow-hidden">
       <Sidebar />
       <main className="flex-1 flex overflow-hidden">
         <Routes>
           <Route path="/" element={<Navigate to="/hkd" replace />} />
 
           <Route path="/home" element={
-            <div className="flex-1 flex flex-col items-center justify-center p-12 bg-[#F9FAFB] text-slate-300 italic">
+            <div className="flex-1 flex flex-col items-center justify-center p-12 bg-page text-weak italic">
               <h2 className="text-xl font-black italic uppercase tracking-widest text-orange-600/20">CENVI CRM DASHBOARD</h2>
             </div>
           } />
@@ -64,8 +65,8 @@ const AppLayout = () => {
           <Route path="/config" element={
             can('config')
               ? <ConfigPage />
-              : <div className="flex-1 flex items-center justify-center bg-[#F9FAFB]">
-                  <p className="text-slate-400 font-bold text-sm">Bạn không có quyền truy cập trang này.</p>
+              : <div className="flex-1 flex items-center justify-center bg-page">
+                  <p className="text-weak font-bold text-sm">Bạn không có quyền truy cập trang này.</p>
                 </div>
           } />
 
@@ -79,6 +80,7 @@ const AppLayout = () => {
 const App = () => {
   return (
     <BrowserRouter>
+      <ThemeProvider>
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginPageWrapper />} />
@@ -89,6 +91,7 @@ const App = () => {
           } />
         </Routes>
       </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 };

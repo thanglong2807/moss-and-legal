@@ -25,6 +25,7 @@ import { useAuth } from '../../context/AuthContext';
 import SearchableSelect from '../Common/SearchableSelect';
 import UploadModal from './UploadModal';
 import GovProgressModal from './GovProgressModal';
+import CustomerDetailModal from '../Customer/CustomerDetailModal';
 
 
 const IndustrySelect = ({ industries, onSelect, onClose }) => {
@@ -36,31 +37,46 @@ const IndustrySelect = ({ industries, onSelect, onClose }) => {
   );
 
   return (
-    <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden animate-in zoom-in-95 duration-200">
-      <div className="px-3 pt-3 pb-2 border-b border-slate-50 flex items-center gap-2">
+    <div className="absolute top-full left-0 right-0 mt-2 bg-surface rounded-2xl shadow-2xl border border-faint z-50 overflow-hidden animate-in zoom-in-95 duration-200">
+      <div className="px-3 pt-3 pb-2 border-b border-faint flex items-center gap-2">
         <div className="relative flex-1">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input autoFocus className="w-full pl-9 pr-3 py-2 bg-slate-50 border-none rounded-xl text-xs font-bold outline-none" placeholder="Tìm mã hoặc tên ngành..." value={query} onChange={(e) => setQuery(e.target.value)} />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-weak" />
+          <input autoFocus className="w-full pl-9 pr-3 py-2 bg-page border-none rounded-xl text-xs font-bold outline-none" placeholder="Tìm mã hoặc tên ngành..." value={query} onChange={(e) => setQuery(e.target.value)} />
         </div>
-        <button onClick={onClose} className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition shrink-0"><X size={14} /></button>
+        <button onClick={onClose} className="p-1.5 rounded-xl hover:bg-input text-weak hover:text-body transition shrink-0"><X size={14} /></button>
       </div>
       <div className="max-h-64 overflow-y-auto">
         {filtered.map(i => (
           <div
             key={i.code}
             onClick={() => onSelect(i)}
-            className="px-4 py-3 hover:bg-orange-50 cursor-pointer transition-all border-b border-slate-50 last:border-none"
+            className="px-4 py-3 hover:bg-orange-50 cursor-pointer transition-all border-b border-faint last:border-none"
           >
             <div className="text-[10px] font-black text-orange-600 uppercase mb-0.5">{i.code}</div>
-            <div className="text-[11px] font-black text-slate-700">{i.name}</div>
+            <div className="text-[11px] font-black text-body">{i.name}</div>
           </div>
         ))}
         {filtered.length === 0 && (
-          <div className="p-8 text-center text-slate-300 italic text-xs font-bold">Không tìm thấy kết quả</div>
+          <div className="p-8 text-center text-weak italic text-xs font-bold">Không tìm thấy kết quả</div>
         )}
       </div>
     </div>
   );
+};
+
+// ── Inline field validators ────────────────────────────────────────────────────
+const validatePhone = (phone) => {
+  if (!phone) return null; // optional field — skip if empty
+  const digits = phone.replace(/\D/g, '');
+  if (!digits.startsWith('0')) return 'error'; // must start with 0
+  if (digits.length < 10 || digits.length > 11) return 'error';
+  if (digits.length === 11) return 'warn'; // valid but unusual
+  return null;
+};
+
+const validateEmail = (email) => {
+  if (!email) return null;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? null : 'error';
 };
 
 const validateGov = (formData) => {
@@ -89,7 +105,22 @@ const validateGov = (formData) => {
   if (!oa.street) missing.push('Số nhà, đường (chủ sở hữu)');
   if (!oc.phone) missing.push('SĐT chủ sở hữu');
   if (!fd.industries || fd.industries.length === 0 || !fd.industries.some(i => i.code)) missing.push('Ít nhất 1 ngành nghề');
+  if (!fd.industries?.some(i => i.is_main)) missing.push('Chưa chọn ngành nghề chính');
+  if (validatePhone(contact.phone) === 'error') missing.push('SĐT HKD không đúng định dạng');
+  if (validatePhone(oc.phone) === 'error') missing.push('SĐT chủ sở hữu không đúng định dạng');
+  if (validateEmail(contact.email) === 'error') missing.push('Email HKD không đúng định dạng');
+  if (validateEmail(oc.email) === 'error') missing.push('Email chủ sở hữu không đúng định dạng');
   return missing;
+};
+
+// Validate chỉ kiểm tra NN chính + format — dùng cho xuất hồ sơ & upload Drive
+const validateMainIndustry = (formData) => {
+  const errs = [];
+  const contact = formData.company_info?.contact || {};
+  if (!formData.industries?.some(i => i.is_main)) errs.push('Chưa chọn ngành nghề chính');
+  if (validatePhone(contact.phone) === 'error') errs.push('SĐT HKD không đúng định dạng');
+  if (validateEmail(contact.email) === 'error') errs.push('Email HKD không đúng định dạng');
+  return errs;
 };
 
 const EXPORT_TEMPLATES = [
@@ -109,7 +140,7 @@ const ExportModal = ({ isOpen, onClose, formData }) => {
   const toggle = (id) => { const s = new Set(selected); s.has(id) ? s.delete(id) : s.add(id); setSelected(s); };
 
   const handleExport = async () => {
-    const errs = validateGov(formData);
+    const errs = validateMainIndustry(formData);
     if (errs.length > 0) { setExportErrors(errs); return; }
     setExportErrors([]);
     setLoading(true);
@@ -139,10 +170,10 @@ const ExportModal = ({ isOpen, onClose, formData }) => {
   };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-      <div className="bg-white rounded-[28px] shadow-2xl w-[480px] p-8">
+      <div className="bg-surface rounded-[28px] shadow-2xl w-[480px] p-8">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-base font-black text-slate-800 uppercase tracking-tight">Xuất hồ sơ</h3>
-          <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-xl text-slate-400"><X size={16} /></button>
+          <h3 className="text-base font-black text-strong uppercase tracking-tight">Xuất hồ sơ</h3>
+          <button onClick={onClose} className="p-2 hover:bg-input rounded-xl text-weak"><X size={16} /></button>
         </div>
         {exportErrors.length > 0 && (
           <div className="bg-red-50 border border-red-200 rounded-2xl px-5 py-4 mb-5">
@@ -152,17 +183,17 @@ const ExportModal = ({ isOpen, onClose, formData }) => {
             </ul>
           </div>
         )}
-        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4">Chọn các biểu mẫu cần tạo</p>
+        <p className="text-[11px] font-bold text-weak uppercase tracking-widest mb-4">Chọn các biểu mẫu cần tạo</p>
         <div className="space-y-2 mb-6">
           {EXPORT_TEMPLATES.map(t => (
-            <div key={t.id} onClick={() => toggle(t.id)} className={`flex items-center gap-3 px-4 py-3 rounded-2xl cursor-pointer transition-all border ${selected.has(t.id) ? 'bg-orange-50 border-orange-200' : 'border-slate-100 hover:border-slate-200'}`}>
-              {selected.has(t.id) ? <CheckSquare size={16} className="text-orange-600 shrink-0" /> : <Square size={16} className="text-slate-300 shrink-0" />}
-              <span className={`text-sm font-bold ${selected.has(t.id) ? 'text-orange-800' : 'text-slate-600'}`}>{t.name}</span>
+            <div key={t.id} onClick={() => toggle(t.id)} className={`flex items-center gap-3 px-4 py-3 rounded-2xl cursor-pointer transition-all border ${selected.has(t.id) ? 'bg-orange-50 border-orange-200' : 'border-faint hover:border-base'}`}>
+              {selected.has(t.id) ? <CheckSquare size={16} className="text-orange-600 shrink-0" /> : <Square size={16} className="text-weak shrink-0" />}
+              <span className={`text-sm font-bold ${selected.has(t.id) ? 'text-orange-800' : 'text-body'}`}>{t.name}</span>
             </div>
           ))}
         </div>
         <div className="flex gap-3 justify-end">
-          <button onClick={onClose} className="px-6 py-2.5 text-slate-400 font-bold text-sm">Hủy</button>
+          <button onClick={onClose} className="px-6 py-2.5 text-weak font-bold text-sm">Hủy</button>
           <button
             disabled={selected.size === 0 || loading}
             onClick={handleExport}
@@ -235,39 +266,39 @@ const GovTransferModal = ({ isOpen, onClose, formData, provinces, wardOptions, o
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-      <div className="bg-white rounded-[28px] shadow-2xl w-[560px] max-h-[85vh] flex flex-col">
-        <div className="flex justify-between items-center px-8 py-6 border-b border-slate-100">
+      <div className="bg-surface rounded-[28px] shadow-2xl w-[560px] max-h-[85vh] flex flex-col">
+        <div className="flex justify-between items-center px-8 py-6 border-b border-faint">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-indigo-50 rounded-xl flex items-center justify-center"><Building2 size={18} className="text-indigo-600" /></div>
             <div>
-              <h3 className="text-base font-black text-slate-800 uppercase tracking-tight">Xác nhận chuyển GOV</h3>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Kiểm tra thông tin trước khi gửi</p>
+              <h3 className="text-base font-black text-strong uppercase tracking-tight">Xác nhận chuyển GOV</h3>
+              <p className="text-[10px] font-bold text-weak uppercase tracking-widest mt-0.5">Kiểm tra thông tin trước khi gửi</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-xl text-slate-400"><X size={16} /></button>
+          <button onClick={onClose} className="p-2 hover:bg-input rounded-xl text-weak"><X size={16} /></button>
         </div>
         <div className="flex-1 overflow-y-auto px-8 py-6 space-y-4 text-xs">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Thông tin HKD</p>
-            <div className="bg-slate-50 rounded-2xl p-4 space-y-1.5 font-bold text-slate-700">
-              <div><span className="text-slate-400">Tên:</span> {ci.name.full}</div>
-              <div><span className="text-slate-400">Địa chỉ:</span> {ci.address.street}, {ci.address.ward}, {ci.address.province}</div>
-              <div><span className="text-slate-400">SĐT:</span> {ci.contact.phone}</div>
-              <div><span className="text-slate-400">Vốn:</span> {ci.charter_capital.toLocaleString('vi-VN')} VND</div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-weak mb-2">Thông tin HKD</p>
+            <div className="bg-page rounded-2xl p-4 space-y-1.5 font-bold text-body">
+              <div><span className="text-weak">Tên:</span> {ci.name.full}</div>
+              <div><span className="text-weak">Địa chỉ:</span> {ci.address.street}, {ci.address.ward}, {ci.address.province}</div>
+              <div><span className="text-weak">SĐT:</span> {ci.contact.phone}</div>
+              <div><span className="text-weak">Vốn:</span> {ci.charter_capital.toLocaleString('vi-VN')} VND</div>
             </div>
           </div>
           <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Chủ sở hữu</p>
-            <div className="bg-slate-50 rounded-2xl p-4 space-y-1.5 font-bold text-slate-700">
-              <div><span className="text-slate-400">Họ tên:</span> {ow.personal_info.full_name}</div>
-              <div><span className="text-slate-400">CCCD:</span> {ow.personal_info.id_number}</div>
-              <div><span className="text-slate-400">Ngày sinh:</span> {ow.personal_info.birth_date}</div>
-              <div><span className="text-slate-400">Địa chỉ:</span> {ow.contact_address.street}, {ow.contact_address.ward}, {ow.contact_address.province}</div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-weak mb-2">Chủ sở hữu</p>
+            <div className="bg-page rounded-2xl p-4 space-y-1.5 font-bold text-body">
+              <div><span className="text-weak">Họ tên:</span> {ow.personal_info.full_name}</div>
+              <div><span className="text-weak">CCCD:</span> {ow.personal_info.id_number}</div>
+              <div><span className="text-weak">Ngày sinh:</span> {ow.personal_info.birth_date}</div>
+              <div><span className="text-weak">Địa chỉ:</span> {ow.contact_address.street}, {ow.contact_address.ward}, {ow.contact_address.province}</div>
             </div>
           </div>
           <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Ngành nghề ({payload.industries.length})</p>
-            <div className="bg-slate-50 rounded-2xl p-4 space-y-1 font-bold text-slate-700">
+            <p className="text-[10px] font-black uppercase tracking-widest text-weak mb-2">Ngành nghề ({payload.industries.length})</p>
+            <div className="bg-page rounded-2xl p-4 space-y-1 font-bold text-body">
               {payload.industries.map((ind, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <span className="text-orange-600">{ind.code}</span>
@@ -277,10 +308,10 @@ const GovTransferModal = ({ isOpen, onClose, formData, provinces, wardOptions, o
             </div>
           </div>
         </div>
-        <div className="px-8 py-5 border-t border-slate-100 flex justify-between items-center">
-          <span className="text-[11px] font-bold">{submitError ? <span className="text-red-500">{submitError}</span> : <span className="text-slate-400">Dữ liệu sẽ được gửi tự động lên GOV</span>}</span>
+        <div className="px-8 py-5 border-t border-faint flex justify-between items-center">
+          <span className="text-[11px] font-bold">{submitError ? <span className="text-red-500">{submitError}</span> : <span className="text-weak">Dữ liệu sẽ được gửi tự động lên GOV</span>}</span>
           <div className="flex gap-3">
-            <button onClick={onClose} className="px-6 py-2.5 text-slate-400 font-bold text-sm">Hủy</button>
+            <button onClick={onClose} className="px-6 py-2.5 text-weak font-bold text-sm">Hủy</button>
             <button
               disabled={submitting}
               onClick={async () => {
@@ -333,6 +364,7 @@ const HKDEditor = ({
   const [syncing, setSyncing] = useState(false);
   const [activeIndustryIdx, setActiveIndustryIdx] = useState(null);
   const [showExtra, setShowExtra] = useState(false);
+  const [showCustomerDetail, setShowCustomerDetail] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [showGov, setShowGov] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
@@ -368,15 +400,15 @@ const HKDEditor = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-[#F9FAFB] animate-in fade-in slide-in-from-bottom-2 duration-300 border-l border-slate-200">
+    <div className="flex-1 flex flex-col bg-page animate-in fade-in slide-in-from-bottom-2 duration-300 border-l border-base">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center z-20 sticky top-0">
+      <div className="bg-surface border-b border-base px-6 py-4 flex justify-between items-center z-20 sticky top-0">
         <div className="flex items-center gap-4">
-          <button onClick={onClose} className="p-2 hover:bg-slate-50 rounded-2xl text-slate-400 transition"><ArrowLeft size={20} /></button>
-          <div className="px-3 border-l border-slate-100">
-            <h2 className="text-base font-black text-slate-800 tracking-tight uppercase italic">{formData.id ? `Sửa hồ sơ: ${formData.code}` : 'Soạn hồ sơ mới'}</h2>
+          <button onClick={onClose} className="p-2 hover:bg-page rounded-2xl text-weak transition"><ArrowLeft size={20} /></button>
+          <div className="px-3 border-l border-faint">
+            <h2 className="text-base font-black text-strong tracking-tight uppercase italic">{formData.id ? `Sửa hồ sơ: ${formData.code}` : 'Soạn hồ sơ mới'}</h2>
             <div className="flex items-center gap-3 mt-0.5">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{formData.customer?.name || 'Vãng lai'}</span>
+              <span className="text-[10px] font-black text-weak uppercase tracking-widest">{formData.customer?.name || 'Vãng lai'}</span>
               {formData.crm_link && (
                 <a href={formData.crm_link} target="_blank" rel="noreferrer" className="text-[10px] font-black text-emerald-600 flex items-center gap-1 hover:underline">
                   <ExternalLink size={10} /> LINK CRM
@@ -394,7 +426,7 @@ const HKDEditor = ({
           {formData.id && onDelete && (
             <button
               onClick={onDelete}
-              className="flex items-center gap-2 px-4 py-2 rounded-2xl font-black text-[11px] transition-all border bg-white border-red-200 text-red-400 hover:bg-red-50 hover:border-red-400 hover:text-red-600"
+              className="flex items-center gap-2 px-4 py-2 rounded-2xl font-black text-[11px] transition-all border bg-surface border-red-200 text-red-400 hover:bg-red-50 hover:border-red-400 hover:text-red-600"
             >
               <Trash2 size={14} /> Xóa hồ sơ
             </button>
@@ -403,7 +435,7 @@ const HKDEditor = ({
             <button
               onClick={handleSyncCRM}
               disabled={syncing}
-              className={`flex items-center gap-2 px-4 py-2 rounded-2xl font-black text-[11px] transition-all border ${formData.crm_link ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-white border-slate-200 text-slate-500 hover:border-emerald-500 hover:text-emerald-600'
+              className={`flex items-center gap-2 px-4 py-2 rounded-2xl font-black text-[11px] transition-all border ${formData.crm_link ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-surface border-base text-body hover:border-emerald-500 hover:text-emerald-600'
                 }`}
             >
               {syncing ? <RefreshCw size={14} className="animate-spin" /> : <RefreshCw size={14} />}
@@ -416,26 +448,26 @@ const HKDEditor = ({
         </div>
       </div>
 
-      <div className="flex-1 flex gap-8 overflow-hidden px-8 py-8">
+      <div className="flex-1 flex gap-8 overflow-hidden px-8 py-8 min-w-0">
         {/* Main Content */}
-        <div className="flex-1 overflow-y-auto space-y-8 pb-32">
+        <div className="flex-1 overflow-y-auto space-y-8 pb-32 min-w-0">
           {/* Action buttons */}
           {formData.id && (
             <div className="flex gap-3">
-              <button onClick={() => { setShowExport(true); }} className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-2xl font-black text-xs hover:border-orange-400 hover:text-orange-600 shadow-sm transition">
+              <button onClick={() => { setShowExport(true); }} className="flex items-center gap-2 px-5 py-2.5 bg-surface border border-base text-body rounded-2xl font-black text-xs hover:border-orange-400 hover:text-orange-600 shadow-sm transition">
                 <Download size={14} /> Xuất hồ sơ
               </button>
-              <button onClick={() => setShowUpload(true)} className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-2xl font-black text-xs hover:border-blue-400 hover:text-blue-600 shadow-sm transition">
+              <button onClick={() => { const errs = validateMainIndustry(formData); if (errs.length > 0) { setGovErrors(errs); return; } setGovErrors([]); setShowUpload(true); }} className="flex items-center gap-2 px-5 py-2.5 bg-surface border border-base text-body rounded-2xl font-black text-xs hover:border-blue-400 hover:text-blue-600 shadow-sm transition">
                 <Upload size={14} /> Upload Drive
               </button>
               <button onClick={() => {
                 const errs = validateGov(formData);
                 if (errs.length > 0) { setGovErrors(errs); } else { setGovErrors([]); setShowGov(true); }
-              }} className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-2xl font-black text-xs hover:border-indigo-400 hover:text-indigo-600 shadow-sm transition">
+              }} className="flex items-center gap-2 px-5 py-2.5 bg-surface border border-base text-body rounded-2xl font-black text-xs hover:border-indigo-400 hover:text-indigo-600 shadow-sm transition">
                 <Building2 size={14} /> Chuyển GOV
               </button>
               {govJob && (
-                <button onClick={() => setShowGovProgress(true)} className={`flex items-center gap-2 px-5 py-2.5 bg-white border rounded-2xl font-black text-xs shadow-sm transition ${govJob.status === 'completed' ? 'border-emerald-300 text-emerald-600 hover:bg-emerald-50' : govJob.status === 'failed' ? 'border-red-300 text-red-600 hover:bg-red-50' : 'border-blue-300 text-blue-600 hover:bg-blue-50'}`}>
+                <button onClick={() => setShowGovProgress(true)} className={`flex items-center gap-2 px-5 py-2.5 bg-surface border rounded-2xl font-black text-xs shadow-sm transition ${govJob.status === 'completed' ? 'border-emerald-300 text-emerald-600 hover:bg-emerald-50' : govJob.status === 'failed' ? 'border-red-300 text-red-600 hover:bg-red-50' : 'border-blue-300 text-blue-600 hover:bg-blue-50'}`}>
                   <RefreshCw size={14} />
                   {govJob.status === 'completed' ? 'GOV: Hoàn thành' : govJob.status === 'failed' ? `GOV: Thất bại` : 'Xem tiến độ GOV'}
                 </button>
@@ -456,11 +488,11 @@ const HKDEditor = ({
           )}
 
           {/* 1. HKD INFO */}
-          <div className="bg-white rounded-[24px] p-5 border border-slate-200/60 shadow-sm relative overflow-hidden">
+          <div className="bg-surface rounded-[24px] p-5 border border-base/60 shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600 shadow-sm border border-orange-100"><FileText size={16} /></div>
-                <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">Hộ kinh doanh</h3>
+                <h3 className="text-xs font-black text-strong uppercase tracking-widest">Hộ kinh doanh</h3>
               </div>
               {formData.customer && (
                 <button
@@ -484,19 +516,19 @@ const HKDEditor = ({
 
             <div className="grid grid-cols-6 gap-3">
               <div className="col-span-4">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Tên Hộ kinh doanh</label>
-                <div className="flex items-stretch rounded-xl overflow-hidden border border-slate-200 bg-slate-50 focus-within:border-orange-500 focus-within:bg-white transition-all">
-                  <span className="flex items-center px-3 text-[10px] font-black text-slate-500 bg-slate-100 border-r border-slate-200 whitespace-nowrap select-none">HKD</span>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Tên Hộ kinh doanh</label>
+                <div className="flex items-stretch rounded-xl overflow-hidden border border-base bg-page focus-within:border-orange-500 focus-within:bg-surface transition-all">
+                  <span className="flex items-center px-3 text-[10px] font-black text-body bg-input border-r border-base whitespace-nowrap select-none">HKD</span>
                   <input className="flex-1 px-3 py-2.5 bg-transparent outline-none font-black text-sm uppercase" value={formData.company_full_name || ''} onChange={(e) => updateFormData('company_full_name', e.target.value.toUpperCase())} placeholder="NGUYỄN VĂN A..." />
                 </div>
               </div>
               <div className="col-span-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Vốn điều lệ (VNĐ)</label>
-                <input type="text" className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-orange-500 transition-all outline-none font-black text-sm" value={fmtNum(formData.company_info?.charter_capital)} onChange={(e) => updateFormData('company_info.charter_capital', parseNum(e.target.value))} />
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Vốn điều lệ (VNĐ)</label>
+                <input type="text" className="w-full px-3 py-2.5 bg-page border border-base rounded-xl focus:bg-surface focus:border-orange-500 transition-all outline-none font-black text-sm" value={fmtNum(formData.company_info?.charter_capital)} onChange={(e) => updateFormData('company_info.charter_capital', parseNum(e.target.value))} />
               </div>
 
               <div className="col-span-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Tỉnh/Thành phố</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Tỉnh/Thành phố</label>
                 <SearchableSelect
                   value={formData.company_info?.address?.province_id || ''}
                   onChange={(id) => { updateFormData('company_info.address.province_id', id); loadWards('hkd', id); }}
@@ -505,7 +537,7 @@ const HKDEditor = ({
                 />
               </div>
               <div className="col-span-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Phường/Xã</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Phường/Xã</label>
                 <SearchableSelect
                   value={formData.company_info?.address?.ward_id || ''}
                   onChange={(id) => updateFormData('company_info.address.ward_id', id)}
@@ -514,22 +546,33 @@ const HKDEditor = ({
                 />
               </div>
               <div className="col-span-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Số nhà, tên đường</label>
-                <input className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-black text-sm outline-none" value={formData.company_info?.address?.street || ''} onChange={(e) => updateFormData('company_info.address.street', e.target.value)} />
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Số nhà, tên đường</label>
+                <input className="w-full px-3 py-2.5 bg-page border border-base rounded-xl font-black text-sm outline-none" value={formData.company_info?.address?.street || ''} onChange={(e) => updateFormData('company_info.address.street', e.target.value)} />
               </div>
 
               <div className="col-span-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">SĐT liên hệ</label>
-                <input className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-black text-sm outline-none" value={formData.company_info?.contact?.phone || ''} onChange={(e) => updateFormData('company_info.contact.phone', e.target.value)} />
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">SĐT liên hệ</label>
+                {(() => { const s = validatePhone(formData.company_info?.contact?.phone); return (
+                  <div className="relative">
+                    <input className={`w-full px-3 py-2.5 bg-page border rounded-xl font-black text-sm outline-none ${s === 'error' ? 'border-red-400' : s === 'warn' ? 'border-yellow-400' : 'border-base'}`} value={formData.company_info?.contact?.phone || ''} onChange={(e) => updateFormData('company_info.contact.phone', e.target.value)} />
+                    {s === 'error' && <p className="text-[10px] font-bold text-red-500 mt-0.5 px-1">SĐT</p>}
+                    {s === 'warn' && <p className="text-[10px] font-bold text-yellow-600 mt-0.5 px-1">⚠ Chắc là 11 số không?</p>}
+                  </div>
+                ); })()}
               </div>
               <div className="col-span-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Email HKD</label>
-                <input className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-black text-sm outline-none" value={formData.company_info?.contact?.email || ''} onChange={(e) => updateFormData('company_info.contact.email', e.target.value)} placeholder="email@..." />
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Email HKD</label>
+                {(() => { const s = validateEmail(formData.company_info?.contact?.email); return (
+                  <div>
+                    <input className={`w-full px-3 py-2.5 bg-page border rounded-xl font-black text-sm outline-none ${s === 'error' ? 'border-red-400' : 'border-base'}`} value={formData.company_info?.contact?.email || ''} onChange={(e) => updateFormData('company_info.contact.email', e.target.value)} placeholder="email@..." />
+                    {s === 'error' && <p className="text-[10px] font-bold text-red-500 mt-0.5 px-1">Email không đúng định dạng</p>}
+                  </div>
+                ); })()}
               </div>
 
               {/* Collapsible extra info */}
               <div className="col-span-6">
-                <button onClick={() => setShowExtra(!showExtra)} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-orange-600 transition">
+                <button onClick={() => setShowExtra(!showExtra)} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-body hover:text-orange-600 transition">
                   <ChevronDown size={12} className={`transition-transform ${showExtra ? 'rotate-180' : ''}`} />
                   Tên tiếng Anh, viết tắt, Fax &amp; website
                 </button>
@@ -542,8 +585,8 @@ const HKDEditor = ({
                       ['Website', 'company_info.contact.website', 'https://...'],
                     ].map(([lbl, path, ph]) => (
                       <div key={path}>
-                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">{lbl}</label>
-                        <input className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-bold text-sm outline-none focus:bg-white focus:border-orange-400" value={path.split('.').reduce((o, k) => o?.[k], formData) || ''} onChange={(e) => updateFormData(path, e.target.value)} placeholder={ph} />
+                        <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">{lbl}</label>
+                        <input className="w-full px-3 py-2 bg-page border border-base rounded-xl font-bold text-sm outline-none focus:bg-surface focus:border-orange-400" value={path.split('.').reduce((o, k) => o?.[k], formData) || ''} onChange={(e) => updateFormData(path, e.target.value)} placeholder={ph} />
                       </div>
                     ))}
                   </div>
@@ -553,11 +596,11 @@ const HKDEditor = ({
           </div>
 
           {/* 2. OWNER INFO */}
-          <div className="bg-white rounded-[24px] p-5 border border-slate-200/60 shadow-sm">
+          <div className="bg-surface rounded-[24px] p-5 border border-base/60 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 shadow-sm border border-indigo-100"><Users size={16} /></div>
-                <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">Chủ sở hữu</h3>
+                <h3 className="text-xs font-black text-strong uppercase tracking-widest">Chủ sở hữu</h3>
               </div>
               {formData.customer && (
                 <button
@@ -584,35 +627,35 @@ const HKDEditor = ({
             </div>
             <div className="grid grid-cols-6 gap-3">
               <div className="col-span-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Họ và tên chủ sở hữu</label>
-                <input className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-black text-sm outline-none uppercase" value={formData.owner_info?.personal_info?.full_name || ''} onChange={(e) => updateFormData('owner_info.personal_info.full_name', e.target.value.toUpperCase())} />
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Họ và tên chủ sở hữu</label>
+                <input className="w-full px-3 py-2.5 bg-page border border-base rounded-xl font-black text-sm outline-none uppercase" value={formData.owner_info?.personal_info?.full_name || ''} onChange={(e) => updateFormData('owner_info.personal_info.full_name', e.target.value.toUpperCase())} />
               </div>
               <div className="col-span-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Số CCCD/Định danh</label>
-                <input className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-black text-sm outline-none" value={formData.owner_info?.personal_info?.id_number || ''} onChange={(e) => updateFormData('owner_info.personal_info.id_number', e.target.value)} />
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Số CCCD/Định danh</label>
+                <input className="w-full px-3 py-2.5 bg-page border border-base rounded-xl font-black text-sm outline-none" value={formData.owner_info?.personal_info?.id_number || ''} onChange={(e) => updateFormData('owner_info.personal_info.id_number', e.target.value)} />
               </div>
               <div className="col-span-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Ngày sinh</label>
-                <input type="date" className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-black text-sm outline-none"
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Ngày sinh</label>
+                <input type="date" className="w-full px-3 py-2.5 bg-page border border-base rounded-xl font-black text-sm outline-none"
                   value={(() => { const bd = formData.owner_info?.personal_info?.birth_date; if (!bd) return ''; const p = bd.split('/'); return p.length === 3 ? `${p[2]}-${p[1]}-${p[0]}` : bd; })()}
                   onChange={(e) => { const v = e.target.value; if (!v) { updateFormData('owner_info.personal_info.birth_date', ''); return; } const [y,m,d] = v.split('-'); updateFormData('owner_info.personal_info.birth_date', `${d}/${m}/${y}`); }} />
               </div>
               <div className="col-span-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Giới tính</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Giới tính</label>
                 <div className="flex gap-2">
                   {[{ v: 0, label: 'Nam' }, { v: 1, label: 'Nữ' }].map(g => (
                     <button key={g.v} onClick={() => updateFormData('owner_info.personal_info.gender', g.v)}
-                      className={`flex-1 py-2.5 rounded-xl text-xs font-black transition-all border ${formData.owner_info?.personal_info?.gender === g.v ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-500 border-slate-200 hover:border-indigo-300'}`}>
+                      className={`flex-1 py-2.5 rounded-xl text-xs font-black transition-all border ${formData.owner_info?.personal_info?.gender === g.v ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-page text-body border-base hover:border-indigo-300'}`}>
                       {g.label}
                     </button>
                   ))}
                 </div>
               </div>
               <div className="col-span-2 flex items-end">
-                <button onClick={() => setSyncAddress(!syncAddress)} className={`w-full px-3 py-2.5 rounded-xl text-[10px] font-black transition-all border ${syncAddress ? 'bg-orange-600 text-white border-orange-600' : 'bg-white text-slate-500 border-slate-200 hover:border-orange-500 hover:text-orange-600 uppercase tracking-widest'}`}>GIỐNG ĐỊA CHỈ HKD</button>
+                <button onClick={() => setSyncAddress(!syncAddress)} className={`w-full px-3 py-2.5 rounded-xl text-[10px] font-black transition-all border ${syncAddress ? 'bg-orange-600 text-white border-orange-600' : 'bg-surface text-body border-base hover:border-orange-500 hover:text-orange-600 uppercase tracking-widest'}`}>GIỐNG ĐỊA CHỈ HKD</button>
               </div>
-              <div className="col-span-6 bg-slate-50/50 p-4 rounded-2xl border border-dashed border-slate-200">
-                <h4 className="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-3">Địa chỉ thường trú</h4>
+              <div className="col-span-6 bg-page/50 p-4 rounded-2xl border border-dashed border-base">
+                <h4 className="text-[10px] font-black text-body uppercase tracking-widest mb-3">Địa chỉ thường trú</h4>
                 <div className="grid grid-cols-3 gap-3">
                   <SearchableSelect
                     value={formData.owner_info?.contact_address?.province_id || ''}
@@ -628,26 +671,37 @@ const HKDEditor = ({
                     placeholder="Phường/Xã"
                     disabled={syncAddress}
                   />
-                  <input disabled={syncAddress} className="px-3 py-2.5 rounded-xl bg-white border border-slate-200 font-bold text-xs outline-none" placeholder="Số nhà, đường..." value={formData.owner_info?.contact_address?.street || ''} onChange={(e) => updateFormData('owner_info.contact_address.street', e.target.value)} />
+                  <input disabled={syncAddress} className="px-3 py-2.5 rounded-xl bg-surface border border-base font-bold text-xs outline-none" placeholder="Số nhà, đường..." value={formData.owner_info?.contact_address?.street || ''} onChange={(e) => updateFormData('owner_info.contact_address.street', e.target.value)} />
                 </div>
               </div>
               <div className="col-span-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Số điện thoại</label>
-                <input className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-black text-sm outline-none" value={formData.owner_info?.contact_info?.phone || ''} onChange={(e) => updateFormData('owner_info.contact_info.phone', e.target.value)} placeholder="09xx..." />
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Số điện thoại</label>
+                {(() => { const s = validatePhone(formData.owner_info?.contact_info?.phone); return (
+                  <div>
+                    <input className={`w-full px-3 py-2.5 bg-page border rounded-xl font-black text-sm outline-none ${s === 'error' ? 'border-red-400' : s === 'warn' ? 'border-yellow-400' : 'border-base'}`} value={formData.owner_info?.contact_info?.phone || ''} onChange={(e) => updateFormData('owner_info.contact_info.phone', e.target.value)} placeholder="09xx..." />
+                    {s === 'error' && <p className="text-[10px] font-bold text-red-500 mt-0.5 px-1">SĐT phải bắt đầu bằng 0 và có 10 số</p>}
+                    {s === 'warn' && <p className="text-[10px] font-bold text-yellow-600 mt-0.5 px-1">⚠ Bạn có chắc là 11 số không?</p>}
+                  </div>
+                ); })()}
               </div>
               <div className="col-span-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1 block px-1">Email</label>
-                <input className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-black text-sm outline-none" value={formData.owner_info?.contact_info?.email || ''} onChange={(e) => updateFormData('owner_info.contact_info.email', e.target.value)} placeholder="email@..." />
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Email</label>
+                {(() => { const s = validateEmail(formData.owner_info?.contact_info?.email); return (
+                  <div>
+                    <input className={`w-full px-3 py-2.5 bg-page border rounded-xl font-black text-sm outline-none ${s === 'error' ? 'border-red-400' : 'border-base'}`} value={formData.owner_info?.contact_info?.email || ''} onChange={(e) => updateFormData('owner_info.contact_info.email', e.target.value)} placeholder="email@..." />
+                    {s === 'error' && <p className="text-[10px] font-bold text-red-500 mt-0.5 px-1">Email không đúng định dạng</p>}
+                  </div>
+                ); })()}
               </div>
             </div>
           </div>
 
           {/* 3. INDUSTRIES */}
-          <div className="bg-white rounded-[24px] p-5 border border-slate-200/60 shadow-sm relative z-30">
+          <div className="bg-surface rounded-[24px] p-5 border border-base/60 shadow-sm relative z-30 overflow-hidden">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-100"><LayoutGrid size={16} /></div>
-                <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">Ngành nghề</h3>
+                <h3 className="text-xs font-black text-strong uppercase tracking-widest">Ngành nghề</h3>
               </div>
               <button onClick={addIndustryRow} className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-600 text-white rounded-xl font-black text-[10px] shadow-md shadow-orange-100 uppercase hover:bg-orange-700 transition">
                 <Plus size={12} /> Thêm
@@ -655,22 +709,22 @@ const HKDEditor = ({
             </div>
 
             {formData.industries?.length > 0 ? (
-              <table className="w-full border-collapse text-xs">
+              <table className="w-full table-fixed border-collapse text-xs">
                 <thead>
-                  <tr className="border-b-2 border-slate-200">
-                    <th className="text-left py-2 px-2 text-[9px] font-black uppercase tracking-widest text-slate-600 w-[40%]">Mã — Tên ngành nghề</th>
-                    <th className="text-left py-2 px-2 text-[9px] font-black uppercase tracking-widest text-slate-600">Ghi chú</th>
-                    <th className="text-center py-2 px-2 text-[9px] font-black uppercase tracking-widest text-slate-600 w-16">NN Chính</th>
+                  <tr className="border-b-2 border-base">
+                    <th className="text-left py-2 px-2 text-[9px] font-black uppercase tracking-widest text-body w-[45%]">Mã — Tên ngành nghề</th>
+                    <th className="text-left py-2 px-2 text-[9px] font-black uppercase tracking-widest text-body">Ghi chú</th>
+                    <th className="text-center py-2 px-2 text-[9px] font-black uppercase tracking-widest text-body w-[72px]">NN Chính</th>
                     <th className="w-8" />
                   </tr>
                 </thead>
                 <tbody>
                   {formData.industries.map((ind, idx) => (
-                    <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/60 transition-all group">
+                    <tr key={idx} className="border-b border-faint hover:bg-page/60 transition-all group">
                       <td className="py-1.5 px-2 relative">
                         <div onClick={() => setActiveIndustryIdx(activeIndustryIdx === idx ? null : idx)}
-                          className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl font-bold text-[11px] cursor-pointer hover:border-orange-400 transition truncate text-slate-800">
-                          {ind.code ? <><span className="text-orange-600 font-black">{ind.code}</span> — {ind.name}</> : <span className="text-slate-400 italic">Bấm để chọn ngành...</span>}
+                          className="w-full px-3 py-2 bg-surface border border-base rounded-xl font-bold text-[11px] cursor-pointer hover:border-orange-400 transition truncate text-strong">
+                          {ind.code ? <><span className="text-orange-600 font-black">{ind.code}</span> — {ind.name}</> : <span className="text-weak italic">Bấm để chọn ngành...</span>}
                         </div>
                         {activeIndustryIdx === idx && (
                           <IndustrySelect industries={allIndustries}
@@ -679,17 +733,17 @@ const HKDEditor = ({
                         )}
                       </td>
                       <td className="py-1.5 px-2">
-                        <textarea rows={1} className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl font-bold text-[11px] outline-none focus:border-orange-400 resize-none text-slate-800"
+                        <textarea rows={1} className="w-full px-3 py-2 bg-surface border border-base rounded-xl font-bold text-[11px] outline-none focus:border-orange-400 resize-none text-strong"
                           value={ind.note || ''} onChange={(e) => { const next = [...formData.industries]; next[idx].note = e.target.value; updateFormData('industries', next); }} placeholder="..." />
                       </td>
                       <td className="py-1.5 px-2 text-center">
                         <button onClick={() => { const next = [...formData.industries]; next.forEach((it, i) => it.is_main = (i === idx)); updateFormData('industries', next); }}
-                          className={`px-2.5 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all ${ind.is_main ? 'bg-orange-600 text-white shadow-sm shadow-orange-100' : 'bg-slate-100 text-slate-500 hover:bg-orange-100 hover:text-orange-600'}`}>
+                          className={`px-2.5 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all ${ind.is_main ? 'bg-orange-600 text-white shadow-sm shadow-orange-100' : 'bg-input text-body hover:bg-orange-100 hover:text-orange-600'}`}>
                           CHÍNH
                         </button>
                       </td>
                       <td className="py-1.5 px-1 text-center">
-                        <button onClick={() => removeIndustryRow(idx)} className="p-1.5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100">
+                        <button onClick={() => removeIndustryRow(idx)} className="p-1.5 text-weak hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100">
                           <X size={14} />
                         </button>
                       </td>
@@ -698,26 +752,26 @@ const HKDEditor = ({
                 </tbody>
               </table>
             ) : (
-              <div className="py-8 text-center text-slate-300 italic text-xs font-bold border border-dashed border-slate-200 rounded-xl">Chưa có ngành nghề nào. Bấm "+ Thêm" để thêm.</div>
+              <div className="py-8 text-center text-weak italic text-xs font-bold border border-dashed border-base rounded-xl">Chưa có ngành nghề nào. Bấm "+ Thêm" để thêm.</div>
             )}
           </div>
 
         </div>
 
         <div className="w-80 shrink-0 overflow-y-auto pb-32 space-y-8">
-          <div className="bg-white rounded-[32px] p-8 border border-slate-200/60 shadow-sm">
-            <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-8 flex items-center gap-2">
+          <div className="bg-surface rounded-[32px] p-8 border border-base/60 shadow-sm">
+            <h4 className="text-[11px] font-black text-weak uppercase tracking-widest mb-8 flex items-center gap-2">
               <Info size={14} className="text-orange-500" /> Hồ sơ & Phân quyền
             </h4>
             <div className="space-y-6">
               <div>
-                <label className="text-[10px] font-black uppercase text-slate-400 block mb-2 px-1">Tình trạng hồ sơ</label>
+                <label className="text-[10px] font-black uppercase text-weak block mb-2 px-1">Tình trạng hồ sơ</label>
                 <select value={formData.status_id || ''} onChange={(e) => updateFormData('status_id', parseInt(e.target.value))} className="w-full bg-orange-600 text-white rounded-2xl px-5 py-3.5 text-xs font-black border-none shadow-xl shadow-orange-100 appearance-none uppercase tracking-widest">
                   {statuses.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                 </select>
               </div>
-              <div className="pt-4 border-t border-slate-50">
-                <label className="text-[10px] font-black uppercase text-slate-400 block mb-2 px-1">Số tiền đã thanh toán (VNĐ)</label>
+              <div className="pt-4 border-t border-faint">
+                <label className="text-[10px] font-black uppercase text-weak block mb-2 px-1">Số tiền đã thanh toán (VNĐ)</label>
                 <input
                   type="text"
                   className="w-full bg-emerald-50 border border-emerald-100 rounded-2xl px-5 py-3 text-sm font-black text-emerald-700 outline-none focus:ring-2 focus:ring-emerald-400 transition"
@@ -726,40 +780,47 @@ const HKDEditor = ({
                   onChange={(e) => updateFormData('paid_amount', parseNum(e.target.value))}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-50">
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-faint">
                 <div>
-                  <label className="text-[10px] font-black uppercase text-slate-400 block mb-2 px-1">NV Xử lý chính</label>
-                  <select value={formData.handling_staff_id || ''} onChange={(e) => updateFormData('handling_staff_id', parseInt(e.target.value))} className="w-full bg-slate-50 rounded-xl px-4 py-3 text-[11px] font-bold border-none appearance-none outline-none">
+                  <label className="text-[10px] font-black uppercase text-weak block mb-2 px-1">NV Xử lý chính</label>
+                  <select value={formData.handling_staff_id || ''} onChange={(e) => updateFormData('handling_staff_id', parseInt(e.target.value))} className="w-full bg-page rounded-xl px-4 py-3 text-[11px] font-bold border-none appearance-none outline-none">
                     <option value="">--</option>{staff.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="text-[10px] font-black uppercase text-slate-400 block mb-2 px-1">NV Hỗ trợ</label>
-                  <select value={formData.supporting_staff_id || ''} onChange={(e) => updateFormData('supporting_staff_id', parseInt(e.target.value))} className="w-full bg-slate-50 rounded-xl px-4 py-3 text-[11px] font-bold border-none appearance-none outline-none">
+                  <label className="text-[10px] font-black uppercase text-weak block mb-2 px-1">NV Hỗ trợ</label>
+                  <select value={formData.supporting_staff_id || ''} onChange={(e) => updateFormData('supporting_staff_id', parseInt(e.target.value))} className="w-full bg-page rounded-xl px-4 py-3 text-[11px] font-bold border-none appearance-none outline-none">
                     <option value="">--</option>{staff.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                   </select>
                 </div>
               </div>
-              <div className="pt-4 border-t border-slate-50">
-                <label className="text-[10px] font-black uppercase text-slate-400 block mb-2 px-1">Chủ hồ sơ (KH)</label>
-                <div className="flex items-center gap-2 p-3.5 bg-slate-50 rounded-2xl border border-transparent shadow-inner">
-                  <Users size={16} className="text-orange-500" />
-                  <span className="text-xs font-black text-slate-800">{formData.customer?.name || 'Chưa chọn'}</span>
-                </div>
+              <div className="pt-4 border-t border-faint">
+                <label className="text-[10px] font-black uppercase text-weak block mb-2 px-1">Chủ hồ sơ (KH)</label>
+                <button
+                  onClick={() => formData.customer && setShowCustomerDetail(true)}
+                  className={`w-full flex items-center gap-2 p-3.5 rounded-2xl border shadow-inner transition-all text-left ${formData.customer ? 'bg-page border-transparent hover:border-orange-200 hover:bg-orange-50/50 cursor-pointer' : 'bg-page border-transparent cursor-default'}`}
+                >
+                  <Users size={16} className="text-orange-500 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="text-xs font-black text-strong truncate">{formData.customer?.name || 'Chưa chọn'}</div>
+                    {formData.customer?.phone && <div className="text-[10px] font-bold text-weak">{formData.customer.phone}</div>}
+                  </div>
+                  {formData.customer && <Info size={12} className="text-weak shrink-0 ml-auto" />}
+                </button>
               </div>
-              <div className="pt-4 border-t border-slate-50">
+              <div className="pt-4 border-t border-faint">
                 <label className="text-[10px] font-black uppercase text-orange-600 block mb-2 px-1">Ghi chú</label>
-                <textarea value={formData.note || ''} onChange={(e) => updateFormData('note', e.target.value)} className="w-full bg-orange-50/30 rounded-[24px] px-5 py-5 text-xs font-bold border-none min-h-[140px] outline-none shadow-inner" placeholder="Nhập lưu ý nội bộ cho hồ sơ này..." />
+                <textarea value={formData.note || ''} onChange={(e) => updateFormData('note', e.target.value)} className="w-full bg-orange-50/30 rounded-[24px] px-5 py-5 text-xs font-bold border-none min-h-[140px] outline-none shadow-inner" placeholder="Ghi chú..." />
               </div>
             </div>
 
             {/* Suggestions */}
-            <div className="mt-8 pt-8 border-t border-slate-100">
+            <div className="mt-8 pt-8 border-t border-faint">
               <div className="flex justify-between items-center mb-4">
-                <h4 className="text-[10px] font-black text-slate-800 uppercase tracking-widest italic">Lĩnh vực mẫu</h4>
+                <h4 className="text-[10px] font-black text-strong uppercase tracking-widest italic">Lĩnh vực mẫu</h4>
                 <button onClick={copyAllIndustries} className="text-[9px] font-black text-orange-600 bg-orange-50 px-2 py-1 rounded-lg uppercase">COPY ALL</button>
               </div>
-              <select value={selectedFieldId} onChange={(e) => setSelectedFieldId(e.target.value)} className="w-full bg-slate-100/50 rounded-xl px-3 py-2 text-[10px] font-bold border-none mb-4 outline-none">
+              <select value={selectedFieldId} onChange={(e) => setSelectedFieldId(e.target.value)} className="w-full bg-input/50 rounded-xl px-3 py-2 text-[10px] font-bold border-none mb-4 outline-none">
                 <option value="">-- Chọn lọc lĩnh vực --</option>{fields.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
               </select>
               <div className="space-y-2 max-h-[250px] overflow-y-auto pr-1">
@@ -767,15 +828,15 @@ const HKDEditor = ({
                   <div key={idx} onClick={() => {
                     const next = [...(formData.industries || []), { code: li.industry.code, name: li.industry.name, is_main: !formData.industries?.length, note: li.note }];
                     updateFormData('industries', next);
-                  }} className="p-2.5 bg-white border border-slate-100 rounded-xl hover:border-orange-300 cursor-pointer transition-all flex items-center justify-between">
+                  }} className="p-2.5 bg-surface border border-faint rounded-xl hover:border-orange-300 cursor-pointer transition-all flex items-center justify-between">
                     <div className="flex-1 overflow-hidden pr-2">
                       <div className="text-[10px] font-black text-orange-600">{li.industry?.code}</div>
-                      <div className="text-[10px] font-bold text-slate-500 truncate">{li.industry?.name}</div>
+                      <div className="text-[10px] font-bold text-body truncate">{li.industry?.name}</div>
                     </div>
-                    <Plus size={12} className="text-slate-300" />
+                    <Plus size={12} className="text-weak" />
                   </div>
                 )) || (
-                    <div className="py-8 text-center text-slate-300 italic text-[10px] font-bold">Hãy chọn lĩnh vực để xem gợi ý</div>
+                    <div className="py-8 text-center text-weak italic text-[10px] font-bold">Hãy chọn lĩnh vực để xem gợi ý</div>
                   )}
               </div>
             </div>
@@ -785,6 +846,13 @@ const HKDEditor = ({
       <ExportModal isOpen={showExport} onClose={() => setShowExport(false)} formData={formData} />
       <GovTransferModal isOpen={showGov} onClose={() => setShowGov(false)} formData={formData} provinces={provinces} wardOptions={wardOptions} onJobStarted={(jobId) => { govJobStorage.save(formData.id, jobId); }} />
       <GovProgressModal isOpen={showGovProgress} onClose={() => setShowGovProgress(false)} jobId={govJob?.jobId} hkdId={formData.id} />
+      <CustomerDetailModal
+        customer={showCustomerDetail ? formData.customer : null}
+        onClose={() => setShowCustomerDetail(false)}
+        onUpdated={(updated) => { updateFormData('customer', updated); setShowCustomerDetail(false); }}
+        sources={sources}
+        staff={staff}
+      />
       <UploadModal
         isOpen={showUpload}
         onClose={() => setShowUpload(false)}

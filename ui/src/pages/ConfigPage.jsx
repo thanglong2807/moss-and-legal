@@ -23,7 +23,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, item, type }) => {
       title={item ? `Sửa ${type}` : `Thêm ${type}`}
       footer={
         <div className="flex gap-3">
-          <button onClick={onClose} className="px-6 py-2.5 text-slate-400 font-bold text-sm uppercase">Hủy</button>
+          <button onClick={onClose} className="px-6 py-2.5 text-weak font-bold text-sm uppercase">Hủy</button>
           <button onClick={handleSave} className="flex items-center gap-2 px-8 py-2.5 bg-orange-600 text-white rounded-2xl hover:bg-orange-700 shadow-xl shadow-orange-100 font-black text-sm transition-all uppercase tracking-tight">
             <Save size={18} /> Lưu thông tin
           </button>
@@ -32,18 +32,18 @@ const ConfigModal = ({ isOpen, onClose, onSave, item, type }) => {
     >
       <div className="space-y-6">
         <div>
-          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5 block px-1">ID CRM</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">ID CRM</label>
           <input 
-            className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:ring-2 focus:ring-orange-500 transition-all text-sm font-bold outline-none"
+            className="w-full px-5 py-3.5 bg-page border border-faint rounded-2xl focus:bg-surface focus:ring-2 focus:ring-orange-500 transition-all text-sm font-bold outline-none"
             placeholder="VD: staff_01..."
             value={formData.crm_id}
             onChange={(e) => setFormData({...formData, crm_id: e.target.value})}
           />
         </div>
         <div>
-          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5 block px-1">Tên hiển thị</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">Tên hiển thị</label>
           <input 
-            className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:ring-2 focus:ring-orange-500 transition-all text-sm font-bold outline-none"
+            className="w-full px-5 py-3.5 bg-page border border-faint rounded-2xl focus:bg-surface focus:ring-2 focus:ring-orange-500 transition-all text-sm font-bold outline-none"
             placeholder="VD: Nguyễn Văn A..."
             value={formData.name}
             onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -55,13 +55,13 @@ const ConfigModal = ({ isOpen, onClose, onSave, item, type }) => {
 };
 
 const ConfigSection = ({ title, icon: Icon, data, onAdd, onEdit, onDelete, type }) => (
-  <div className="bg-white rounded-[32px] p-8 border border-slate-100 shadow-sm flex flex-col h-full hover:shadow-lg hover:shadow-orange-100/20 transition-all">
+  <div className="bg-surface rounded-[32px] p-8 border border-faint shadow-sm flex flex-col h-full hover:shadow-lg hover:shadow-orange-100/20 transition-all">
     <div className="flex justify-between items-center mb-6">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600">
           <Icon size={20} />
         </div>
-        <h3 className="font-black text-slate-800 uppercase tracking-tight text-sm">{title}</h3>
+        <h3 className="font-black text-strong uppercase tracking-tight text-sm">{title}</h3>
       </div>
       <button 
         onClick={() => onAdd(type)}
@@ -72,21 +72,21 @@ const ConfigSection = ({ title, icon: Icon, data, onAdd, onEdit, onDelete, type 
     </div>
     <div className="flex-1 overflow-y-auto space-y-3 pr-2 scrollbar-thin">
       {data.map(item => (
-        <div key={item.id} className="flex justify-between items-center p-4 bg-slate-50/50 rounded-2xl group border border-transparent hover:border-orange-100 hover:bg-white transition-all">
+        <div key={item.id} className="flex justify-between items-center p-4 bg-page/50 rounded-2xl group border border-transparent hover:border-orange-100 hover:bg-surface transition-all">
           <div>
-            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">ID CRM: {item.crm_id}</div>
-            <div className="text-sm font-black text-slate-700">{item.name}</div>
+            <div className="text-[10px] font-black text-weak uppercase tracking-widest mb-0.5">ID CRM: {item.crm_id}</div>
+            <div className="text-sm font-black text-body">{item.name}</div>
           </div>
           <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
             <button 
               onClick={() => onEdit(type, item)}
-              className="p-2 text-slate-300 hover:text-orange-500 transition-all"
+              className="p-2 text-weak hover:text-orange-500 transition-all"
             >
               <Edit2 size={16} />
             </button>
             <button 
               onClick={() => onDelete(type, item.id)}
-              className="p-2 text-slate-300 hover:text-red-500 transition-all"
+              className="p-2 text-weak hover:text-red-500 transition-all"
             >
               <Trash2 size={16} />
             </button>
@@ -94,7 +94,7 @@ const ConfigSection = ({ title, icon: Icon, data, onAdd, onEdit, onDelete, type 
         </div>
       ))}
       {data.length === 0 && (
-         <div className="py-10 text-center text-slate-300 italic text-xs font-bold">Chưa có dữ liệu</div>
+         <div className="py-10 text-center text-weak italic text-xs font-bold">Chưa có dữ liệu</div>
       )}
     </div>
   </div>
@@ -155,10 +155,10 @@ const ConfigPage = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-[#F9FAFB] p-10 overflow-hidden">
+    <div className="flex-1 flex flex-col bg-page p-10 overflow-hidden">
       <div className="mb-10">
-        <h1 className="text-3xl font-black tracking-tight text-slate-800 italic uppercase">Cấu hình hệ thống</h1>
-        <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-1">Quản lý danh mục nhân viên, nguồn khách và trạng thái hồ sơ</p>
+        <h1 className="text-3xl font-black tracking-tight text-strong italic uppercase">Cấu hình hệ thống</h1>
+        <p className="text-weak text-[11px] font-black uppercase tracking-widest mt-1">Quản lý danh mục nhân viên, nguồn khách và trạng thái hồ sơ</p>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 flex-1 overflow-hidden pb-10">

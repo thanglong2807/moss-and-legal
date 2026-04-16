@@ -4,28 +4,43 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Semantic color tokens ────────────────────────────────────────────────────
+   Use these in Tailwind as: bg-surface, bg-page, bg-input,
+   border-base, border-faint, text-strong, text-body, text-weak
+   Dark mode is handled automatically — no need for dark: prefix.
+──────────────────────────────────────────────────────────────────────────── */
+:root {
+  --surface:      255 255 255;    /* bg-surface  — panels, cards, sidebars */
+  --page:         249 250 251;    /* bg-page     — page bg, detail areas (#F9FAFB) */
+  --input:        241 245 249;    /* bg-input    — inputs, badges, chips (slate-100) */
+  --border-base:  226 232 240;    /* border-base — dividers, card borders (slate-200) */
+  --border-faint: 248 250 252;    /* border-faint— very subtle separators (slate-50) */
+  --text-strong:  30  41  59;     /* text-strong — headings, labels (slate-800) */
+  --text-body:    71  85  105;    /* text-body   — regular text (slate-600) */
+  --text-weak:    148 163 184;    /* text-weak   — placeholders, meta (slate-400) */
+}
+
+.dark {
+  --surface:      15  23  42;     /* slate-900 */
+  --page:         30  41  59;     /* slate-800 */
+  --input:        51  65  85;     /* slate-700 */
+  --border-base:  51  65  85;     /* slate-700 */
+  --border-faint: 30  41  59;     /* slate-800 */
+  --text-strong:  241 245 249;    /* slate-100 */
+  --text-body:    203 213 225;    /* slate-300 */
+  --text-weak:    100 116 139;    /* slate-500 */
+}
+
 @layer base {
   body {
-    @apply font-sans antialiased bg-white text-slate-900;
+    @apply font-sans antialiased bg-page text-strong;
   }
 
-  /* Custom Scrollbar for modern look */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    @apply bg-transparent;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
-  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-[rgb(var(--border-base))] rounded-full; }
 }
 
 @layer utilities {
-  .text-shadow-sm {
-    text-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  }
+  .text-shadow-sm { text-shadow: 0 1px 2px rgba(0,0,0,0.05); }
 }

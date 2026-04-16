@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Plus, Search, XCircle, FileText } from 'lucide-react';
+import Pagination from '../components/Common/Pagination';
 import { hkdApi, customerApi, configApi, adminUnitsApi, fieldsApi, industryApi } from '../services/api';
 import HKDCard from '../components/HKD/HKDCard';
 import HKDEditor from '../components/HKD/HKDEditor';
@@ -31,6 +32,8 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
   const [selectedFieldId, setSelectedFieldId] = useState('');
   const [showSelector, setShowSelector] = useState(false);
   const [showQuickCreate, setShowQuickCreate] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(50);
 
   useEffect(() => { fetchInitialData(); }, []);
 
@@ -173,6 +176,10 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
     return matchSearch && matchCustomer && matchBranch && matchStaff;
   });
 
+  useEffect(() => { setPage(1); }, [searchQuery, branchFilter, staffFilter, customerFilter]);
+
+  const pagedHkds = filteredHkds.slice((page - 1) * pageSize, page * pageSize);
+
   const activeCustomerName = customerFilter ? customers.find(c => c.id === customerFilter)?.name : null;
   const showEditor = !!(id || formData);
 
@@ -182,15 +189,15 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
       {/* LEFT PANEL: full-width table OR narrow card list */}
       {showEditor ? (
         // COLLAPSED: narrow card sidebar
-        <div className="w-72 shrink-0 border-r border-slate-100 flex flex-col bg-white overflow-hidden">
-          <div className="p-4 border-b border-slate-50 flex flex-col gap-2">
+        <div className="w-72 shrink-0 border-r border-base flex flex-col bg-surface overflow-hidden">
+          <div className="p-4 border-b border-faint flex flex-col gap-2">
             <div className="flex justify-between items-center">
-              <span className="text-xs font-black text-slate-600 uppercase tracking-widest">
+              <span className="text-xs font-black text-body uppercase tracking-widest">
                 {activeCustomerName ? activeCustomerName : 'Hồ sơ HKD'}
               </span>
               <div className="flex gap-1.5">
                 {customerFilter && (
-                  <button onClick={() => setCustomerFilter(null)} className="p-1.5 text-slate-400 hover:text-orange-600 bg-orange-50 rounded-lg transition">
+                  <button onClick={() => setCustomerFilter(null)} className="p-1.5 text-weak hover:text-orange-600 bg-orange-50 rounded-lg transition">
                     <XCircle size={12} />
                   </button>
                 )}
@@ -200,10 +207,10 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
               </div>
             </div>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={12} />
-              <input type="text" placeholder="Tìm kiếm..." className="w-full pl-8 pr-3 py-2 bg-slate-100/60 rounded-xl text-xs font-bold outline-none" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-weak" size={12} />
+              <input type="text" placeholder="Tìm kiếm..." className="w-full pl-8 pr-3 py-2 bg-input text-strong rounded-xl text-xs font-bold outline-none" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             </div>
-            <select className="w-full px-3 py-2 bg-slate-100/60 rounded-xl text-xs font-bold outline-none appearance-none" value={staffFilter} onChange={(e) => setStaffFilter(e.target.value)}>
+            <select className="w-full px-3 py-2 bg-input text-strong rounded-xl text-xs font-bold outline-none appearance-none" value={staffFilter} onChange={(e) => setStaffFilter(e.target.value)}>
               <option value="">-- Tất cả NV --</option>
               {staff.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
@@ -218,20 +225,20 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
               />
             ))}
             {filteredHkds.length === 0 && (
-              <div className="py-12 text-center text-slate-300 text-xs font-bold italic">Không có hồ sơ</div>
+              <div className="py-12 text-center text-weak text-xs font-bold italic">Không có hồ sơ</div>
             )}
           </div>
         </div>
       ) : (
         // EXPANDED: full-width table
-        <div className="flex-1 flex flex-col bg-white overflow-hidden">
-          <div className="p-5 border-b border-slate-50 flex flex-col gap-3">
+        <div className="flex-1 flex flex-col bg-surface overflow-hidden">
+          <div className="p-5 border-b border-faint flex flex-col gap-3">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-xl font-black tracking-tight text-slate-800">
+                <h1 className="text-xl font-black tracking-tight text-strong">
                   {activeCustomerName ? `Hồ sơ: ${activeCustomerName}` : 'Hồ sơ HKD'}
                 </h1>
-                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{filteredHkds.length} hồ sơ</p>
+                <p className="text-[11px] font-bold text-weak uppercase tracking-widest mt-0.5">{filteredHkds.length} hồ sơ</p>
               </div>
               <div className="flex items-center gap-2">
                 {customerFilter && (
@@ -246,14 +253,14 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
             </div>
             <div className="flex gap-2">
               <div className="relative flex-1 max-w-sm">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
-                <input type="text" placeholder="Tìm tên KH, HKD, SĐT..." className="w-full pl-9 pr-3 py-2 bg-slate-100/60 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-orange-400" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-weak" size={14} />
+                <input type="text" placeholder="Tìm tên KH, HKD, SĐT..." className="w-full pl-9 pr-3 py-2 bg-input text-strong rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-orange-400" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
               </div>
-              <select className="px-3 py-2 bg-slate-100/60 rounded-xl text-xs font-bold outline-none appearance-none focus:ring-2 focus:ring-orange-400" value={branchFilter} onChange={(e) => setBranchFilter(e.target.value)}>
+              <select className="px-3 py-2 bg-input text-strong rounded-xl text-xs font-bold outline-none appearance-none focus:ring-2 focus:ring-orange-400" value={branchFilter} onChange={(e) => setBranchFilter(e.target.value)}>
                 <option value="">Tất cả chi nhánh</option>
                 {BRANCHES.map(b => <option key={b.id} value={b.name}>{b.name}</option>)}
               </select>
-              <select className="px-3 py-2 bg-slate-100/60 rounded-xl text-xs font-bold outline-none appearance-none focus:ring-2 focus:ring-orange-400" value={staffFilter} onChange={(e) => setStaffFilter(e.target.value)}>
+              <select className="px-3 py-2 bg-input text-strong rounded-xl text-xs font-bold outline-none appearance-none focus:ring-2 focus:ring-orange-400" value={staffFilter} onChange={(e) => setStaffFilter(e.target.value)}>
                 <option value="">Tất cả NV</option>
                 {staff.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
               </select>
@@ -261,39 +268,41 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
           </div>
           <div className="flex-1 overflow-y-auto">
             {filteredHkds.length === 0 ? (
-              <div className="flex flex-col items-center justify-center p-20 text-slate-300">
+              <div className="flex flex-col items-center justify-center p-20 text-weak">
                 <FileText size={40} className="mb-3 opacity-10" /><p className="text-sm font-bold">Không có hồ sơ nào</p>
               </div>
             ) : (
               <table className="w-full text-left border-collapse text-xs">
-                <thead className="sticky top-0 bg-slate-50 z-10">
+                <thead className="sticky top-0 bg-page z-10">
                   <tr>
-                    {['Khách hàng', 'SĐT', 'Chi nhánh', 'Tên HKD', 'Số tiền TT', 'NV xử lý', 'Ghi chú'].map(col => (
-                      <th key={col} className="px-4 py-2.5 font-black text-slate-400 uppercase tracking-widest text-[9px] whitespace-nowrap border-b border-slate-200">{col}</th>
+                    {['Khách hàng', 'SĐT', 'Chi nhánh', 'Tên HKD', 'Số tiền TT', 'NV xử lý', 'NV hỗ trợ', 'Ghi chú'].map(col => (
+                      <th key={col} className="px-4 py-2.5 font-black text-weak uppercase tracking-widest text-[9px] whitespace-nowrap border-b border-base">{col}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredHkds.map(h => (
-                    <tr key={h.id} onClick={() => navigate(`/hkd/${h.id}`)} className={`cursor-pointer transition-all border-b border-slate-200 hover:bg-orange-50/40 ${h.crm_link ? 'border-l-2 border-l-emerald-400' : ''}`}>
-                      <td className="px-3 py-2 font-black text-slate-800 whitespace-nowrap">
+                  {pagedHkds.map(h => (
+                    <tr key={h.id} onClick={() => navigate(`/hkd/${h.id}`)} className={`cursor-pointer transition-all border-b border-base hover:bg-orange-50/40 dark:hover:bg-orange-900/10 ${h.crm_link ? 'border-l-2 border-l-emerald-400' : ''}`}>
+                      <td className="px-3 py-2 font-black text-strong whitespace-nowrap">
                         <div className="flex items-center gap-2">
                           {h.crm_link && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 shadow-[0_0_4px_rgba(16,185,129,0.5)]" />}
                           {h.customer?.name || 'Vãng lai'}
                         </div>
                       </td>
-                      <td className="px-3 py-2 text-slate-400 font-bold whitespace-nowrap">{h.customer?.phone || '—'}</td>
-                      <td className="px-3 py-2 text-slate-400 font-bold whitespace-nowrap">{h.customer?.branch_name || '—'}</td>
-                      <td className="px-3 py-2 font-bold text-slate-600 max-w-[200px] truncate">{h.company_full_name || '—'}</td>
+                      <td className="px-3 py-2 text-weak font-bold whitespace-nowrap">{h.customer?.phone || '—'}</td>
+                      <td className="px-3 py-2 text-weak font-bold whitespace-nowrap">{h.customer?.branch_name || '—'}</td>
+                      <td className="px-3 py-2 font-bold text-body max-w-[200px] truncate">{h.company_full_name || '—'}</td>
                       <td className="px-3 py-2 font-black text-emerald-600 whitespace-nowrap">{fmtMoney(h.paid_amount)}</td>
-                      <td className="px-3 py-2 text-slate-500 font-bold whitespace-nowrap">{h.handling_staff?.name || '—'}</td>
-                      <td className="px-3 py-2 text-slate-400 max-w-[160px] truncate italic">{h.note || ''}</td>
+                      <td className="px-3 py-2 text-body font-bold whitespace-nowrap">{h.handling_staff?.name || '—'}</td>
+                      <td className="px-3 py-2 text-body font-bold whitespace-nowrap">{h.supporting_staff?.name || '—'}</td>
+                      <td className="px-3 py-2 text-weak max-w-[160px] truncate italic">{h.note || ''}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             )}
           </div>
+          <Pagination page={page} pageSize={pageSize} total={filteredHkds.length} onPageChange={setPage} onPageSizeChange={setPageSize} />
         </div>
       )}
 

@@ -25,7 +25,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-page flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex items-center gap-3 mb-10 justify-center">
@@ -33,30 +33,30 @@ const LoginPage = () => {
             <BarChart3 size={28} />
           </div>
           <div>
-            <h1 className="text-2xl font-black italic tracking-tighter text-slate-800">CENVI</h1>
+            <h1 className="text-2xl font-black italic tracking-tighter text-strong">CENVI</h1>
             <div className="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] leading-none">LAUNCH</div>
           </div>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
-          <h2 className="text-lg font-black uppercase tracking-widest text-slate-800 mb-1">Đăng nhập</h2>
-          <p className="text-xs text-slate-400 font-medium mb-8">Nhập tài khoản để tiếp tục</p>
+        <div className="bg-surface rounded-3xl shadow-sm border border-faint p-8">
+          <h2 className="text-lg font-black uppercase tracking-widest text-strong mb-1">Đăng nhập</h2>
+          <p className="text-xs text-weak font-medium mb-8">Nhập tài khoản để tiếp tục</p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5 block px-1">Email</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">Email</label>
               <input
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="email@cenvi.vn"
                 required
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-page border border-faint rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
               />
             </div>
 
             <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5 block px-1">Mật khẩu</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">Mật khẩu</label>
               <div className="relative">
                 <input
                   type={showPass ? 'text' : 'password'}
@@ -64,12 +64,12 @@ const LoginPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full px-4 py-3 pr-12 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 pr-12 bg-page border border-faint rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPass(!showPass)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-weak hover:text-body transition-colors"
                 >
                   {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
