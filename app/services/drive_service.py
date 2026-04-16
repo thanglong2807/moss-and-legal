@@ -53,7 +53,10 @@ def _create_folder_sync(name: str, parent_id: str) -> str:
         "mimeType": "application/vnd.google-apps.folder",
         "parents": [parent_id],
     }
-    folder = service.files().create(body=meta, fields="id").execute()
+    folder = service.files().create(
+        body=meta, fields="id",
+        supportsAllDrives=True,
+    ).execute()
     return folder["id"]
 
 
@@ -68,14 +71,15 @@ def _upload_file_sync(
     meta = {"name": file_name, "parents": [folder_id]}
     media = MediaIoBaseUpload(BytesIO(file_bytes), mimetype=mime_type, resumable=False)
     f = service.files().create(
-        body=meta, media_body=media, fields="id,webViewLink"
+        body=meta, media_body=media, fields="id,webViewLink",
+        supportsAllDrives=True,
     ).execute()
     return f["id"], f.get("webViewLink", "")
 
 
 def _delete_file_sync(file_id: str) -> None:
     service = _drive_client()
-    service.files().delete(fileId=file_id).execute()
+    service.files().delete(fileId=file_id, supportsAllDrives=True).execute()
 
 
 # ── Async wrappers ────────────────────────────────────────────────────────────
