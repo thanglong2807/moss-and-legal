@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { hkdApi, exportApi, govApi, govJobStorage, driveApi, ocrApi } from '../../services/api';
 import DriveFileLink from '../Common/DriveFileLink';
+import PasteDropZone from '../Common/PasteDropZone';
 import { useAuth } from '../../context/AuthContext';
 import SearchableSelect from '../Common/SearchableSelect';
 import UploadModal from './UploadModal';
@@ -379,6 +380,7 @@ const HKDEditor = ({
   const [cccdDocs, setCccdDocs] = useState({});      // { '005': doc, '006': doc }
   const [cccdUploading, setCccdUploading] = useState({}); // { '005': bool }
   const [ocrRunning, setOcrRunning] = useState(false);
+  const [pasteTarget, setPasteTarget] = useState(null); // label '005'|'006' or null
   const cccdRefs = { '005': useRef(), '006': useRef() };
 
   useEffect(() => {
@@ -700,7 +702,9 @@ const HKDEditor = ({
                   const doc = cccdDocs[label];
                   const uploading = cccdUploading[label];
                   return (
-                    <div key={label} className={`relative flex items-center gap-3 p-3 rounded-xl border transition-all ${doc ? 'bg-indigo-50/50 border-indigo-200 dark:bg-indigo-900/10 dark:border-indigo-800' : 'bg-page border-base'}`}>
+                    <div key={label}
+                      className={`relative flex items-center gap-3 p-3 rounded-xl border transition-all ${doc ? 'bg-indigo-50/50 border-indigo-200 dark:bg-indigo-900/10 dark:border-indigo-800' : 'bg-page border-base'}`}
+                    >
                       <input ref={cccdRefs[label]} type="file" accept=".png,.jpg,.jpeg,.pdf" className="hidden"
                         onChange={e => { const f = e.target.files[0]; if (f) { handleCccdUpload(label, f); e.target.value = ''; } }} />
                       <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center shrink-0">
@@ -719,7 +723,7 @@ const HKDEditor = ({
                             <Trash2 size={12} />
                           </button>
                         )}
-                        <button onClick={() => cccdRefs[label].current?.click()} disabled={uploading || !formData.id}
+                        <button onClick={() => { if (formData.id) setPasteTarget(label); }} disabled={uploading || !formData.id}
                           className="p-1.5 text-weak hover:text-indigo-600 border border-base hover:border-indigo-300 rounded-lg transition-all disabled:opacity-40">
                           {uploading ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
                         </button>
@@ -729,6 +733,16 @@ const HKDEditor = ({
                 })}
               </div>
             </div>
+
+            <PasteDropZone
+              isOpen={!!pasteTarget}
+              onClose={() => setPasteTarget(null)}
+              title={`CCCD — ${pasteTarget === '005' ? 'Mặt trước' : 'Mặt sau'}`}
+              onFile={(file) => {
+                const named = new File([file], `cccd_${pasteTarget}.png`, { type: file.type });
+                handleCccdUpload(pasteTarget, named);
+              }}
+            />
 
             <div className="grid grid-cols-6 gap-3">
               <div className="col-span-3">

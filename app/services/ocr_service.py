@@ -130,31 +130,38 @@ def _lookup_admin_unit(db: Session, name: str, division_type: Optional[str] = No
 
 
 # ── Core extract (sync, runs in thread) ──────────────────────────────────────
-def _extract_sync(image_bytes: bytes, mime_type: str, doc_type: str) -> dict:
+def _extract_sync(image_bytes: bytes, mime_type: str, doc_type: str, _retries: int = 3) -> dict:
+    import time
     from google.genai import types
+    from google.genai.errors import ServerError
 
     prompt = PROMPTS.get(doc_type)
     if not prompt:
         raise ValueError(f"Không có prompt cho doc_type='{doc_type}'")
 
     client = _get_client()
-    response = client.models.generate_content(
-        model=settings.GEMINI_OCR_MODEL,
-        contents=[
-            types.Part.from_bytes(data=image_bytes, mime_type=mime_type),
-            prompt,
-        ],
-        config=types.GenerateContentConfig(
-            temperature=0,
-            response_mime_type="application/json",
-            **(_thinking_off(types) if _supports_thinking(settings.GEMINI_OCR_MODEL) else {}),
-        ),
-    )
-
-    raw = response.text.strip()
-    # Strip markdown fences in case model ignores response_mime_type
-    raw = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw, flags=re.MULTILINE).strip()
-    return json.loads(raw)
+    for attempt in range(_retries):
+        try:
+            response = client.models.generate_content(
+                model=settings.GEMINI_OCR_MODEL,
+                contents=[
+                    types.Part.from_bytes(data=image_bytes, mime_type=mime_type),
+                    prompt,
+                ],
+                config=types.GenerateContentConfig(
+                    temperature=0,
+                    response_mime_type="application/json",
+                    **(_thinking_off(types) if _supports_thinking(settings.GEMINI_OCR_MODEL) else {}),
+                ),
+            )
+            raw = response.text.strip()
+            raw = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw, flags=re.MULTILINE).strip()
+            return json.loads(raw)
+        except ServerError as e:
+            if e.code == 503 and attempt < _retries - 1:
+                time.sleep(2 ** attempt)  # 1s, 2s, 4s
+                continue
+            raise
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
