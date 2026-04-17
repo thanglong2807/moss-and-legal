@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     GOOGLE_TOKEN_BASE64: str = ""
     GOOGLE_DRIVE_HKD: str = ""
 
+    # Gemini OCR
+    GEMINI_API_KEY: str = ""
+    GEMINI_OCR_MODEL: str = "gemini-2.0-flash-lite"
+
     # CRM Webhook
     WEBHOOK_SECRET_KEY: str = ""
     CRM_WORKSPACE: str = ""

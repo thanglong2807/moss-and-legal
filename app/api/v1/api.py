@@ -1,4 +1,4 @@
-from app.api.v1.endpoints import hkd, fields, industries, customers, configs, admin_units, export, drive, webhook
+from app.api.v1.endpoints import hkd, fields, industries, customers, configs, admin_units, export, drive, webhook, ocr
 from fastapi import APIRouter
 
 api_router = APIRouter()
@@ -11,4 +11,5 @@ api_router.include_router(admin_units.router, prefix="/admin-units", tags=["Admi
 api_router.include_router(export.router, prefix="/export", tags=["Export"])
 api_router.include_router(drive.router, prefix="/drive", tags=["Drive"])
 api_router.include_router(webhook.router, prefix="/webhook", tags=["WH"])
+api_router.include_router(ocr.router, prefix="/ocr", tags=["OCR"])
 

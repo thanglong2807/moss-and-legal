@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   FileText,
   Users,
@@ -19,8 +19,11 @@ import {
   CheckSquare,
   Square,
   Building2,
+  CreditCard,
+  Loader2,
 } from 'lucide-react';
-import { hkdApi, exportApi, govApi, govJobStorage } from '../../services/api';
+import { hkdApi, exportApi, govApi, govJobStorage, driveApi, ocrApi } from '../../services/api';
+import DriveFileLink from '../Common/DriveFileLink';
 import { useAuth } from '../../context/AuthContext';
 import SearchableSelect from '../Common/SearchableSelect';
 import UploadModal from './UploadModal';
@@ -37,7 +40,7 @@ const IndustrySelect = ({ industries, onSelect, onClose }) => {
   );
 
   return (
-    <div className="absolute top-full left-0 right-0 mt-2 bg-surface rounded-2xl shadow-2xl border border-faint z-50 overflow-hidden animate-in zoom-in-95 duration-200">
+    <div className="absolute top-full left-0 mt-2 w-[480px] max-w-[90vw] bg-surface rounded-2xl shadow-2xl border border-base z-50 overflow-hidden animate-in zoom-in-95 duration-200">
       <div className="px-3 pt-3 pb-2 border-b border-faint flex items-center gap-2">
         <div className="relative flex-1">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-weak" />
@@ -197,7 +200,7 @@ const ExportModal = ({ isOpen, onClose, formData }) => {
           <button
             disabled={selected.size === 0 || loading}
             onClick={handleExport}
-            className="flex items-center gap-2 px-6 py-2.5 bg-orange-600 text-white rounded-2xl font-black text-sm hover:bg-orange-700 shadow-lg shadow-orange-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            className="flex items-center gap-2 px-6 py-2.5 bg-orange-600 text-white rounded-2xl font-black text-sm hover:bg-orange-700 shadow-md shadow-orange-200/50 dark:shadow-none disabled:opacity-50 disabled:cursor-not-allowed transition"
           >
             <Download size={15} className={loading ? 'animate-bounce' : ''} />
             {loading ? 'Đang tạo...' : `Tải xuống (${selected.size} file)`}
@@ -372,11 +375,66 @@ const HKDEditor = ({
   const [govErrors, setGovErrors] = useState([]);
   const govJob = formData.id ? govJobStorage.get(formData.id) : null;
 
+  // CCCD upload state
+  const [cccdDocs, setCccdDocs] = useState({});      // { '005': doc, '006': doc }
+  const [cccdUploading, setCccdUploading] = useState({}); // { '005': bool }
+  const [ocrRunning, setOcrRunning] = useState(false);
+  const cccdRefs = { '005': useRef(), '006': useRef() };
+
+  useEffect(() => {
+    if (!formData.id) return;
+    driveApi.list(formData.id).then(res => {
+      const map = {};
+      res.data.filter(d => d.label === '005' || d.label === '006').forEach(d => { map[d.label] = d; });
+      setCccdDocs(map);
+    }).catch(() => {});
+  }, [formData.id]);
+
   // Clear gov errors when switching to a different HKD
   useEffect(() => { setGovErrors([]); }, [formData.id]);
 
   const fmtNum = (v) => v ? new Intl.NumberFormat('vi-VN').format(v) : '';
   const parseNum = (s) => parseInt(String(s).replace(/\D/g, '')) || null;
+
+  const handleCccdUpload = async (label, file) => {
+    if (!formData.id) { alert('Vui lòng lưu hồ sơ trước khi upload CCCD.'); return; }
+    setCccdUploading(prev => ({ ...prev, [label]: true }));
+    if (label === '005') setOcrRunning(true);
+    try {
+      if (!formData.folder_id) {
+        const res = await driveApi.createFolder(formData.id);
+        updateFormData('folder_id', res.data.folder_id);
+      }
+
+      const tasks = [driveApi.upload(formData.id, label, file)];
+      if (label === '005') tasks.push(ocrApi.extract('cccd', file).catch(e => { console.warn('OCR thất bại:', e.response?.data?.detail || e.message); return null; }));
+
+      const [uploadRes, ocrRes] = await Promise.all(tasks);
+      setCccdDocs(prev => ({ ...prev, [label]: uploadRes.data }));
+
+      if (ocrRes) {
+        const entries = Object.entries(ocrRes.data?.fields || {});
+        if (entries.length > 0) batchUpdateFormData(entries);
+      }
+    } catch (e) {
+      alert('Lỗi upload: ' + (e.response?.data?.detail || e.message));
+    } finally {
+      setCccdUploading(prev => ({ ...prev, [label]: false }));
+      if (label === '005') setOcrRunning(false);
+    }
+  };
+
+  const handleCccdDelete = async (label) => {
+    const doc = cccdDocs[label];
+    if (!doc) return;
+    if (!window.confirm(`Xóa file "${doc.file_name}"?`)) return;
+    try {
+      await driveApi.deleteDoc(doc.id);
+      setCccdDocs(prev => { const n = { ...prev }; delete n[label]; return n; });
+    } catch (e) {
+      alert('Lỗi xóa: ' + (e.response?.data?.detail || e.message));
+    }
+  };
 
   const handleSyncCRM = async () => {
     if (!formData.id) return;
@@ -442,7 +500,7 @@ const HKDEditor = ({
               {formData.crm_link ? 'CẬP NHẬT CRM' : 'NHẬP LÊN CRM'}
             </button>
           )}
-          <button onClick={onSave} className="flex items-center gap-2 px-8 py-2 bg-orange-600 text-white rounded-2xl hover:bg-orange-700 shadow-xl shadow-orange-100 font-black text-xs transition">
+          <button onClick={onSave} className="flex items-center gap-2 px-8 py-2 bg-orange-600 text-white rounded-2xl hover:bg-orange-700 shadow-lg shadow-orange-200/50 dark:shadow-none font-black text-xs transition">
             <Save size={18} /> LƯU HỒ SƠ
           </button>
         </div>
@@ -625,6 +683,53 @@ const HKDEditor = ({
                 </button>
               )}
             </div>
+            {/* CCCD Upload */}
+            <div className="mb-4">
+              <div className="flex items-center gap-2 mb-2 px-1">
+                <CreditCard size={13} className="text-indigo-500" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-body">Ảnh CCCD - Up mặt trước có AI quét</span>
+                {ocrRunning && (
+                  <span className="flex items-center gap-1 text-[10px] font-bold text-indigo-500">
+                    <Loader2 size={10} className="animate-spin" /> Đang OCR CCCD, đợi xíu...
+                  </span>
+                )}
+                {!formData.id && <span className="text-[10px] font-bold text-weak italic">(Lưu hồ sơ trước)</span>}
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {[{ label: '005', name: 'Mặt trước' }, { label: '006', name: 'Mặt sau' }].map(({ label, name }) => {
+                  const doc = cccdDocs[label];
+                  const uploading = cccdUploading[label];
+                  return (
+                    <div key={label} className={`relative flex items-center gap-3 p-3 rounded-xl border transition-all ${doc ? 'bg-indigo-50/50 border-indigo-200 dark:bg-indigo-900/10 dark:border-indigo-800' : 'bg-page border-base'}`}>
+                      <input ref={cccdRefs[label]} type="file" accept=".png,.jpg,.jpeg,.pdf" className="hidden"
+                        onChange={e => { const f = e.target.files[0]; if (f) { handleCccdUpload(label, f); e.target.value = ''; } }} />
+                      <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center shrink-0">
+                        <CreditCard size={15} className={doc ? 'text-indigo-600' : 'text-weak'} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[10px] font-black text-body uppercase tracking-wide">{name}</div>
+                        {doc
+                          ? <DriveFileLink driveLink={doc.drive_link} fileName={doc.file_name} className="text-[9px] font-bold text-indigo-500 hover:text-indigo-700 max-w-[120px]" />
+                          : <div className="text-[9px] font-bold text-weak italic">Chưa có ảnh</div>
+                        }
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        {doc && (
+                          <button onClick={() => handleCccdDelete(label)} className="p-1 text-weak hover:text-red-500 transition-colors rounded-lg hover:bg-red-50">
+                            <Trash2 size={12} />
+                          </button>
+                        )}
+                        <button onClick={() => cccdRefs[label].current?.click()} disabled={uploading || !formData.id}
+                          className="p-1.5 text-weak hover:text-indigo-600 border border-base hover:border-indigo-300 rounded-lg transition-all disabled:opacity-40">
+                          {uploading ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="grid grid-cols-6 gap-3">
               <div className="col-span-3">
                 <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Họ và tên chủ sở hữu</label>
@@ -693,11 +798,12 @@ const HKDEditor = ({
                   </div>
                 ); })()}
               </div>
+
             </div>
           </div>
 
           {/* 3. INDUSTRIES */}
-          <div className="bg-surface rounded-[24px] p-5 border border-base/60 shadow-sm relative z-30 overflow-hidden">
+          <div className="bg-surface rounded-[24px] p-5 border border-base/60 shadow-sm relative z-30">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-100"><LayoutGrid size={16} /></div>
@@ -766,7 +872,7 @@ const HKDEditor = ({
             <div className="space-y-6">
               <div>
                 <label className="text-[10px] font-black uppercase text-weak block mb-2 px-1">Tình trạng hồ sơ</label>
-                <select value={formData.status_id || ''} onChange={(e) => updateFormData('status_id', parseInt(e.target.value))} className="w-full bg-orange-600 text-white rounded-2xl px-5 py-3.5 text-xs font-black border-none shadow-xl shadow-orange-100 appearance-none uppercase tracking-widest">
+                <select value={formData.status_id || ''} onChange={(e) => updateFormData('status_id', parseInt(e.target.value))} className="w-full bg-orange-600 text-white rounded-2xl px-5 py-3.5 text-xs font-black border-none shadow-lg shadow-orange-200/60 dark:shadow-none appearance-none uppercase tracking-widest">
                   {statuses.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                 </select>
               </div>
@@ -820,11 +926,15 @@ const HKDEditor = ({
                 <h4 className="text-[10px] font-black text-strong uppercase tracking-widest italic">Lĩnh vực mẫu</h4>
                 <button onClick={copyAllIndustries} className="text-[9px] font-black text-orange-600 bg-orange-50 px-2 py-1 rounded-lg uppercase">COPY ALL</button>
               </div>
-              <select value={selectedFieldId} onChange={(e) => setSelectedFieldId(e.target.value)} className="w-full bg-input/50 rounded-xl px-3 py-2 text-[10px] font-bold border-none mb-4 outline-none">
-                <option value="">-- Chọn lọc lĩnh vực --</option>{fields.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
-              </select>
+              <SearchableSelect
+                value={selectedFieldId}
+                onChange={setSelectedFieldId}
+                options={fields}
+                placeholder="Chọn lĩnh vực..."
+                className="mb-4 text-[10px]"
+              />
               <div className="space-y-2 max-h-[250px] overflow-y-auto pr-1">
-                {fields.find(f => f.id === parseInt(selectedFieldId))?.industries?.map((li, idx) => (
+                {fields.find(f => f.id === selectedFieldId || f.id === parseInt(selectedFieldId))?.industries?.map((li, idx) => (
                   <div key={idx} onClick={() => {
                     const next = [...(formData.industries || []), { code: li.industry.code, name: li.industry.name, is_main: !formData.industries?.length, note: li.note }];
                     updateFormData('industries', next);

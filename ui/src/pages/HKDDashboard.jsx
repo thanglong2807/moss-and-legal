@@ -155,9 +155,13 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
 
   const copyAllIndustries = () => {
     const field = fields.find(f => f.id === parseInt(selectedFieldId));
-    if (field) updateFormData('industries', field.industries.map(i => ({
-      code: i.industry.code, name: i.industry.name, is_main: false, note: i.note
-    })));
+    if (!field) return;
+    const existing = formData.industries || [];
+    const existingCodes = new Set(existing.map(i => i.code));
+    const toAdd = field.industries
+      .filter(i => !existingCodes.has(i.industry.code))
+      .map(i => ({ code: i.industry.code, name: i.industry.name, is_main: false, note: i.note }));
+    if (toAdd.length > 0) updateFormData('industries', [...existing, ...toAdd]);
   };
 
   useEffect(() => {

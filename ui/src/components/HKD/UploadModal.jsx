@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Upload, Trash2, ExternalLink, Loader2, FolderPlus, CheckCircle2 } from 'lucide-react';
+import { Upload, Trash2, Loader2, FolderPlus, CheckCircle2 } from 'lucide-react';
 import Modal from '../Common/Modal';
+import DriveFileLink from '../Common/DriveFileLink';
 import { driveApi } from '../../services/api';
 
 const DOCUMENT_LABELS = [
@@ -191,10 +192,7 @@ const UploadModal = ({ isOpen, onClose, hkdId, folderId, onFolderCreated }) => {
                     <div className="text-[11px] font-bold text-blue-600 mt-0.5 truncate">→ {pendingFile.name}</div>
                   )}
                   {!pendingFile && existing && (
-                    <a href={existing.drive_link} target="_blank" rel="noreferrer"
-                      className="flex items-center gap-1 text-[10px] font-bold text-emerald-500 hover:text-emerald-700 mt-0.5">
-                      <ExternalLink size={10} /> {existing.file_name}
-                    </a>
+                    <DriveFileLink driveLink={existing.drive_link} fileName={existing.file_name} className="text-[10px] font-bold text-emerald-500 hover:text-emerald-700 mt-0.5" />
                   )}
                 </div>
 

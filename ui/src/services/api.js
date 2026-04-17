@@ -176,6 +176,16 @@ export const govJobStorage = {
   },
 };
 
+export const ocrApi = {
+  extract: (docType, file) => {
+    const form = new FormData();
+    form.append('file', file);
+    return api.post(`/ocr/${docType}`, form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+};
+
 export const driveApi = {
   list: (hkdId) => api.get(`/drive/hkd/${hkdId}`),
   createFolder: (hkdId) => api.post(`/drive/hkd/${hkdId}/create-folder`),

@@ -14,6 +14,8 @@ DOCUMENT_LABELS = {
     "002": "Hợp đồng dịch vụ",
     "003": "Công chứng 2 mặt CCCD",
     "004": "Giấy giới thiệu nhận & nộp",
+    "005": "CCCD mặt trước",
+    "006": "CCCD mặt sau",
 }
 
 
