@@ -185,6 +185,9 @@ const CompanyDashboard = () => {
     paid_amount: fd.paid_amount,
     accounting_name: fd.accounting_name,
     accounting_phone: fd.accounting_phone,
+    accounting_gender: fd.accounting_gender ?? null,
+    accounting_birth_date: fd.accounting_birth_date || null,
+    accounting_id_number: fd.accounting_id_number || null,
   });
 
   const handleDelete = async () => {

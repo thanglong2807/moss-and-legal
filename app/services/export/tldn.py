@@ -154,6 +154,8 @@ def process_data(raw: dict) -> dict:
         raw = int(round(amount * pct / 100))
         person["capital_contribution"]["capital_amount"] = _fmt_money_dot(raw)
         person["capital_contribution"]["capital_amount_text"] = _so_thanh_chu(raw)
+        shares = int(round(raw / 10000))
+        person["capital_contribution"]["shares"] = f"{shares:,}".replace(",", ".")
 
     # Representatives — fill + process
     reps = [_fill_person(r) for r in (data.get("representatives") or [])]
@@ -184,7 +186,6 @@ def process_data(raw: dict) -> dict:
                 condition_cshhl = True
                 lst_cshhl.append(person)
         data[key] = persons
-
     # Pick first CEO-level rep
     rep_ceo = None
     for rep in reps:
@@ -365,10 +366,14 @@ def get_full_data(db: Session, company_id: int) -> dict:
             }
             for lnk in industry_links
         ],
+
         "tax": {
             "accounting": {
                 "full_name": company.accounting_name or "",
                 "phone": company.accounting_phone or "",
+                "gender": _gender_str(company.accounting_gender),
+                "birth_date": _fmt_date(company.accounting_birth_date),
+                "id_number": company.accounting_id_number or "",
             }
         },
         "taxpayer": {},  # filled by export_company_docs with current_user
@@ -411,9 +416,9 @@ async def export_company_docs(db: Session, company_id: int, template_ids: list[s
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
         for fb, fn in results:
             zf.writestr(fn, fb)
-    _TYPE_PREFIX = {1: "CÔNG TY TNHH", 2: "CÔNG TY TNHH", 3: "CÔNG TY CỔ PHẦN"}
+    _TYPE_PREFIX = {1: "TNHH 1TV", 2: "TNHH 2TV", 3: "CỔ PHẦN"}
     prefix = _TYPE_PREFIX.get(ctype, "CÔNG TY")
     company_name = raw.get("company_info", {}).get("name", {}).get("full", "") or raw.get("code", "")
     ts = int(datetime.now().timestamp())
-    zip_name = f"{prefix} {company_name}.zip" if company_name else f"{raw.get('code', str(ts))}.zip"
+    zip_name = f"{raw.get('code', str(ts))}_{prefix}_{company_name}.zip" if company_name else f"{raw.get('code', str(ts))}.zip"
     return buf.getvalue(), zip_name

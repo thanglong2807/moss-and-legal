@@ -16,7 +16,8 @@ from typing import Optional
 
 from sqlalchemy.orm import Session, joinedload
 
-from app.models.hkd import BusinessHousehold, HouseholdIndustry
+from app.models.hkd import BusinessHousehold, ProfileIndustry
+from sqlalchemy import select
 from app.models.master_data import AdministrativeUnit
 from app.services.export.base import (
     TemplateRegistry,
@@ -41,7 +42,6 @@ def get_full_data(db: Session, hkd_id: int) -> Optional[dict]:
         db.query(BusinessHousehold)
         .options(
             joinedload(BusinessHousehold.owner),
-            joinedload(BusinessHousehold.industry_links).joinedload(HouseholdIndustry.industry),
             joinedload(BusinessHousehold.province),
             joinedload(BusinessHousehold.ward),
         )
@@ -50,6 +50,12 @@ def get_full_data(db: Session, hkd_id: int) -> Optional[dict]:
     )
     if not hkd:
         return None
+
+    industry_links = db.execute(
+        select(ProfileIndustry)
+        .options(joinedload(ProfileIndustry.industry))
+        .where(ProfileIndustry.profile_id == hkd_id, ProfileIndustry.service_type == "hkd")
+    ).scalars().all()
 
     owner = hkd.owner
     o_province: Optional[AdministrativeUnit] = None
@@ -110,7 +116,7 @@ def get_full_data(db: Session, hkd_id: int) -> Optional[dict]:
                 "is_main": link.is_main,
                 "note": link.note or "",
             }
-            for link in hkd.industry_links
+            for link in industry_links
         ],
     }
 
@@ -164,6 +170,7 @@ def _build_gui_kh(data: dict) -> dict:
         "hkd_email":   contact.get("email", ""),
         "suffix":      _ward_suffix(ward),
         "hkd_ward":    ward,
+        "hkd_province": addr.get("province", ""),
         "hkd_name":    name.get("full", "").upper(),
         "hkd_foreign": name.get("foreign", "").upper(),
         "hkd_short":   name.get("short", "").upper(),

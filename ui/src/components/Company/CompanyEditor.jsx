@@ -589,6 +589,25 @@ const CompanyEditor = ({
                   placeholder="Nguyễn Văn A..." value={formData.accounting_name || ''} onChange={e => updateFormData('accounting_name', e.target.value)} />
               </div>
               <div>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Giới tính</label>
+                <select className="w-full px-4 py-2.5 bg-page rounded-xl text-sm font-bold outline-none border border-base appearance-none"
+                  value={formData.accounting_gender ?? ''} onChange={e => updateFormData('accounting_gender', e.target.value === '' ? null : parseInt(e.target.value))}>
+                  <option value="">-- Chọn --</option>
+                  <option value={0}>Nam</option>
+                  <option value={1}>Nữ</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Ngày sinh</label>
+                <input type="date" className="w-full px-4 py-2.5 bg-page rounded-xl text-sm font-bold outline-none border border-base"
+                  value={formData.accounting_birth_date || ''} onChange={e => updateFormData('accounting_birth_date', e.target.value)} />
+              </div>
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Số CCCD</label>
+                <input className="w-full px-4 py-2.5 bg-page rounded-xl text-sm font-bold outline-none border border-base"
+                  placeholder="0123456789..." value={formData.accounting_id_number || ''} onChange={e => updateFormData('accounting_id_number', e.target.value)} />
+              </div>
+              <div>
                 <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">SĐT kế toán</label>
                 <input className="w-full px-4 py-2.5 bg-page rounded-xl text-sm font-bold outline-none border border-base"
                   placeholder="09xx..." value={formData.accounting_phone || ''} onChange={e => updateFormData('accounting_phone', e.target.value)} />

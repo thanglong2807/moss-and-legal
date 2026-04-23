@@ -48,6 +48,9 @@ class Company(Base):
 
     accounting_name = Column(String(255))
     accounting_phone = Column(String(20))
+    accounting_gender = Column(Integer, nullable=True)
+    accounting_birth_date = Column(Date, nullable=True)
+    accounting_id_number = Column(String(20), nullable=True)
 
     # Relationships
     customer = relationship("Customer")
