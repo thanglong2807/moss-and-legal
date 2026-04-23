@@ -14,9 +14,12 @@ from app.core.config import settings
 from app.models.base import Base
 # Import all models here to register them with Base.metadata
 from app.models.master_data import AdministrativeUnit, Field, Industry, FieldIndustry
-from app.models.hkd import BusinessHousehold, BusinessOwner, HouseholdIndustry
+from app.models.hkd import BusinessHousehold, BusinessOwner, ProfileIndustry
+from app.models.company import Company, CompanyPerson, CompanyPosition
 from app.models.customer import Customer, StaffConfig, SourceConfig, StatusConfig
 from app.models.document import Document
+from app.models.ocr_log import OcrLog
+from app.auth.models import User, Role, RolePermission
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

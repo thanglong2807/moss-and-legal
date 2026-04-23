@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.services.hkd_export_service import export_templates, get_full_data, registry
+from app.auth.dependencies import require_permission
 
 router = APIRouter()
 
@@ -22,12 +23,12 @@ class ExportRequest(BaseModel):
         return v
 
 
-@router.get("/templates", summary="List available template IDs")
+@router.get("/templates", summary="List available template IDs", dependencies=[Depends(require_permission("hkd", "view"))])
 def list_templates():
     return {"template_ids": registry.registered_ids}
 
 
-@router.post("/hkd/{hkd_id}", summary="Export HKD documents by template IDs")
+@router.post("/hkd/{hkd_id}", summary="Export HKD documents by template IDs", dependencies=[Depends(require_permission("hkd", "view"))])
 async def export_hkd(
     hkd_id: int,
     body: ExportRequest,

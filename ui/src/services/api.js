@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const TOKEN_KEY = 'cenvi_access_token';
 const REFRESH_KEY = 'cenvi_refresh_token';
-const AUTH_BASE = 'https://api.cenvi.vn/api/v1/admin/auth';
+const AUTH_BASE = '/api/v1/auth';
 const GOV_BASE = 'https://api.cenviplatform.com';
 // const GOV_BASE = 'http://localhost:8000/api/v1'
 
@@ -110,6 +110,46 @@ export const industryApi = {
   delete: (id) => api.delete(`/industries/${id}`),
 };
 
+export const companyApi = {
+  list: (params) => api.get('/company/', { params }),
+  get: (id) => api.get(`/company/${id}`),
+  create: (data) => api.post('/company/', data),
+  update: (id, data) => api.put(`/company/${id}`, data),
+  delete: (id) => api.delete(`/company/${id}`),
+};
+
+export const companyTranslateApi = {
+  translateName: (name, company_type) => api.post('/company/translate-name', { name, company_type }),
+};
+
+export const positionsApi = {
+  list: (companyType) => api.get('/company/positions', { params: companyType ? { company_type: companyType } : {} }),
+};
+
+export const companyExportApi = {
+  export: (companyId, templateIds) =>
+    api.post(`/company/${companyId}/export`, { template_ids: templateIds }, { responseType: 'blob' }),
+};
+
+export const companyDriveApi = {
+  createFolder: (companyId) => api.post(`/company/${companyId}/create-folder`),
+  getLabels: (companyType) => api.get(`/company/labels/${companyType}`),
+  listDocs: (companyId) => api.get(`/company/${companyId}/documents`),
+  upload: (companyId, label, file) => {
+    const form = new FormData();
+    form.append('label', label);
+    form.append('file', file);
+    return api.post(`/company/${companyId}/upload`, form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+  deleteDoc: (docId) => api.delete(`/company/documents/${docId}`),
+};
+
+export const companyGovApi = {
+  submit: (companyId) => api.post(`/company/${companyId}/gov`),
+};
+
 export const exportApi = {
   exportHkd: (hkdId, templateIds) =>
     api.post(`/export/hkd/${hkdId}`, { template_ids: templateIds }, { responseType: 'blob' }),
@@ -176,10 +216,27 @@ export const govJobStorage = {
   },
 };
 
+export const adminApi = {
+  // Users
+  getUsers: () => api.get('/auth/users'),
+  createUser: (data) => api.post('/auth/users', data),
+  updateUser: (id, data) => api.put(`/auth/users/${id}`, data),
+  deleteUser: (id) => api.delete(`/auth/users/${id}`),
+  // Roles
+  getRoles: () => api.get('/auth/roles'),
+  createRole: (data) => api.post('/auth/roles', data),
+  updateRole: (id, data) => api.put(`/auth/roles/${id}`, data),
+  deleteRole: (id) => api.delete(`/auth/roles/${id}`),
+  setPermissions: (roleId, permissions) => api.put(`/auth/roles/${roleId}/permissions`, permissions),
+};
+
 export const ocrApi = {
-  extract: (docType, file) => {
+  extract: (docType, file, { serviceType, driveFileId, driveLink } = {}) => {
     const form = new FormData();
     form.append('file', file);
+    if (serviceType) form.append('service_type', serviceType);
+    if (driveFileId) form.append('drive_file_id', driveFileId);
+    if (driveLink) form.append('drive_link', driveLink);
     return api.post(`/ocr/${docType}`, form, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });

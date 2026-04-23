@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BarChart3, Eye, EyeOff, LogIn } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import bgImage from '../assets/bg.jpg';
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -25,7 +26,11 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-page flex items-center justify-center p-4">
+    // <div className="min-h-screen bg-page flex items-center justify-center p-4">
+    <div
+  className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
+  style={{ backgroundImage: `url(${bgImage})` }}
+>
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex items-center gap-3 mb-10 justify-center">
@@ -49,7 +54,7 @@ const LoginPage = () => {
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="email@cenvi.vn"
+                placeholder="email@gmail.com"
                 required
                 className="w-full px-4 py-3 bg-page border border-faint rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
               />

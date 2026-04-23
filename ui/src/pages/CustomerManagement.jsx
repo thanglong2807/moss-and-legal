@@ -5,6 +5,7 @@ import { customerApi, configApi } from '../services/api';
 import QuickCustomerModal from '../components/Customer/QuickCustomerModal';
 import CustomerDetailModal from '../components/Customer/CustomerDetailModal';
 import Pagination from '../components/Common/Pagination';
+import { useAuth } from '../context/AuthContext';
 
 const CustomerCard = ({ customer, isSelected, onClick }) => (
   <div
@@ -29,6 +30,7 @@ const CustomerCard = ({ customer, isSelected, onClick }) => (
 
 const CustomerManagement = ({ onShowHKDs }) => {
   const navigate = useNavigate();
+  const { can } = useAuth();
   const [customers, setCustomers] = useState([]);
   const [sources, setSources] = useState([]);
   const [staff, setStaff] = useState([]);
@@ -40,15 +42,37 @@ const CustomerManagement = ({ onShowHKDs }) => {
   const [syncing, setSyncing] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(50);
+  const [total, setTotal] = useState(0);
+  const [debouncedSearch, setDebouncedSearch] = useState('');
 
-  useEffect(() => { fetchAll(); }, []);
+  useEffect(() => {
+    Promise.all([configApi.getSources(), configApi.getStaff()]).then(([src, s]) => {
+      setSources(src.data); setStaff(s.data);
+    });
+  }, []);
 
-  const fetchAll = async () => {
-    const [c, src, s] = await Promise.all([customerApi.list(), configApi.getSources(), configApi.getStaff()]);
-    setCustomers(c.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
-    setSources(src.data);
-    setStaff(s.data);
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(searchQuery), 350);
+    return () => clearTimeout(t);
+  }, [searchQuery]);
+
+  useEffect(() => { setPage(1); }, [debouncedSearch, staffFilter]);
+
+  useEffect(() => { fetchCustomers(); }, [page, pageSize, debouncedSearch, staffFilter]);
+
+  const fetchCustomers = async () => {
+    try {
+      const res = await customerApi.list({
+        skip: (page - 1) * pageSize, limit: pageSize,
+        ...(debouncedSearch && { search: debouncedSearch }),
+        ...(staffFilter && { staff_id: staffFilter }),
+      });
+      setCustomers(res.data.items);
+      setTotal(res.data.total);
+    } catch { setCustomers([]); setTotal(0); }
   };
+
+  const fetchAll = fetchCustomers;
 
   const handleShowHKDs = (id) => { onShowHKDs(id); navigate('/hkd'); };
 
@@ -72,19 +96,11 @@ const CustomerManagement = ({ onShowHKDs }) => {
     finally { setSyncing(false); }
   };
 
-  const filtered = customers.filter(c => {
-    const q = searchQuery.toLowerCase();
-    const matchSearch = c.name?.toLowerCase().includes(q) || c.phone?.includes(q);
-    const matchStaff = !staffFilter || c.staff_id === parseInt(staffFilter);
-    return matchSearch && matchStaff;
-  });
+  const paginated = customers;
+  const safePage = page;
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
-  const safePage = Math.min(page, totalPages);
-  const paginated = filtered.slice((safePage - 1) * pageSize, safePage * pageSize);
-
-  const handleSearchChange = (v) => { setSearchQuery(v); setPage(1); };
-  const handleStaffFilterChange = (v) => { setStaffFilter(v); setPage(1); };
+  const handleSearchChange = (v) => { setSearchQuery(v); };
+  const handleStaffFilterChange = (v) => { setStaffFilter(v); };
 
   const showPanel = !!selectedCustomer;
 
@@ -97,9 +113,11 @@ const CustomerManagement = ({ onShowHKDs }) => {
           <div className="p-4 border-b border-base flex flex-col gap-2">
             <div className="flex justify-between items-center">
               <span className="text-xs font-black text-body uppercase tracking-widest">Khách hàng</span>
-              <button onClick={() => setShowCreate(true)} className="bg-orange-600 text-white p-1.5 rounded-lg hover:bg-orange-700 transition shadow-md shadow-orange-100">
-                <Plus size={14} />
-              </button>
+              {can('customers', 'create') && (
+                <button onClick={() => setShowCreate(true)} className="bg-orange-600 text-white p-1.5 rounded-lg hover:bg-orange-700 transition shadow-md shadow-orange-100">
+                  <Plus size={14} />
+                </button>
+              )}
             </div>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-weak" size={12} />
@@ -111,7 +129,7 @@ const CustomerManagement = ({ onShowHKDs }) => {
             </select>
           </div>
           <div className="flex-1 overflow-y-auto p-3 space-y-1.5">
-            {filtered.map(c => (
+            {customers.map(c => (
               <CustomerCard key={c.id} customer={c} isSelected={selectedCustomer?.id === c.id} onClick={() => setSelectedCustomer(c)} />
             ))}
           </div>
@@ -122,11 +140,13 @@ const CustomerManagement = ({ onShowHKDs }) => {
             <div className="flex justify-between items-center">
               <div>
                 <h1 className="text-xl font-black tracking-tight text-strong italic uppercase">Khách hàng</h1>
-                <p className="text-weak text-[11px] font-black uppercase tracking-widest mt-0.5">{filtered.length} / {customers.length} khách</p>
+                <p className="text-weak text-[11px] font-black uppercase tracking-widest mt-0.5">{total} khách</p>
               </div>
-              <button onClick={() => setShowCreate(true)} className="bg-orange-600 text-white px-4 py-2 rounded-2xl hover:bg-orange-700 transition shadow-lg shadow-orange-100 font-black text-xs uppercase flex items-center gap-2">
-                <Plus size={16} /> Thêm
-              </button>
+              {can('customers', 'create') && (
+                <button onClick={() => setShowCreate(true)} className="bg-orange-600 text-white px-4 py-2 rounded-2xl hover:bg-orange-700 transition shadow-lg shadow-orange-100 font-black text-xs uppercase flex items-center gap-2">
+                  <Plus size={16} /> Thêm
+                </button>
+              )}
             </div>
             {/* Filters */}
             <div className="flex gap-2">
@@ -142,7 +162,7 @@ const CustomerManagement = ({ onShowHKDs }) => {
           </div>
 
           <div className="flex-1 overflow-y-auto">
-            {filtered.length === 0 ? (
+            {total === 0 ? (
               <div className="flex flex-col items-center justify-center p-20 text-weak"><Users size={40} className="mb-3 opacity-10" /><p className="text-sm font-bold italic">Không tìm thấy khách hàng nào</p></div>
             ) : (
               <table className="w-full text-left border-collapse text-xs">
@@ -178,7 +198,7 @@ const CustomerManagement = ({ onShowHKDs }) => {
             )}
           </div>
 
-          <Pagination page={safePage} pageSize={pageSize} total={filtered.length} onPageChange={setPage} onPageSizeChange={setPageSize} />
+          <Pagination page={safePage} pageSize={pageSize} total={total} onPageChange={setPage} onPageSizeChange={setPageSize} />
         </div>
       )}
 
@@ -207,12 +227,16 @@ const CustomerManagement = ({ onShowHKDs }) => {
                 <RefreshCw size={13} className={syncing ? 'animate-spin' : ''} />
                 {selectedCustomer.crm_link ? 'Cập nhật CRM' : 'Đồng bộ CRM'}
               </button>
-              <button onClick={() => setShowEdit(true)} className="flex items-center gap-1.5 px-4 py-2 bg-surface border border-base text-body rounded-2xl font-black text-xs hover:border-orange-400 hover:text-orange-600 transition">
-                <Edit2 size={13} /> Chỉnh sửa
-              </button>
-              <button onClick={handleDelete} className="flex items-center gap-1.5 px-4 py-2 bg-surface border border-red-200 text-red-500 rounded-2xl font-black text-xs hover:bg-red-50 hover:border-red-400 transition">
-                <Trash2 size={13} /> Xóa
-              </button>
+              {can('customers', 'update') && (
+                <button onClick={() => setShowEdit(true)} className="flex items-center gap-1.5 px-4 py-2 bg-surface border border-base text-body rounded-2xl font-black text-xs hover:border-orange-400 hover:text-orange-600 transition">
+                  <Edit2 size={13} /> Chỉnh sửa
+                </button>
+              )}
+              {can('customers', 'delete') && (
+                <button onClick={handleDelete} className="flex items-center gap-1.5 px-4 py-2 bg-surface border border-red-200 text-red-500 rounded-2xl font-black text-xs hover:bg-red-50 hover:border-red-400 transition">
+                  <Trash2 size={13} /> Xóa
+                </button>
+              )}
               <button onClick={() => handleShowHKDs(selectedCustomer.id)} className="flex items-center gap-1.5 px-4 py-2 bg-orange-600 text-white rounded-2xl font-black text-xs hover:bg-orange-700 shadow-lg shadow-orange-100 transition">
                 Xem hồ sơ <ExternalLink size={12} />
               </button>

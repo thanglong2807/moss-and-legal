@@ -44,7 +44,7 @@ const ConfigModal = ({ isOpen, onClose, onSave, item, type }) => {
           <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">Tên hiển thị</label>
           <input 
             className="w-full px-5 py-3.5 bg-page border border-faint rounded-2xl focus:bg-surface focus:ring-2 focus:ring-orange-500 transition-all text-sm font-bold outline-none"
-            placeholder="VD: Nguyễn Văn A..."
+            placeholder="VD: Nguyễn Đức A..."
             value={formData.name}
             onChange={(e) => setFormData({...formData, name: e.target.value})}
           />

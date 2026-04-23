@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   BarChart3, Users, Settings, ChevronLeft, ChevronRight,
-  FileText, Home, LayoutGrid, LogOut, Sun, Moon,
+  FileText, Home, LayoutGrid, LogOut, Sun, Moon, ShieldCheck, Building2,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -51,12 +51,14 @@ const Sidebar = () => {
   };
 
   const menuItems = [
-    { icon: Home,       label: 'Tổng quan',  key: 'home' },
-    { icon: Users,      label: 'Khách hàng', key: 'customers' },
-    { icon: FileText,   label: 'Hồ sơ HKD',  key: 'hkd' },
-    { icon: LayoutGrid, label: 'Lĩnh vực',   key: 'fields' },
-    ...(can('config') ? [{ icon: Settings, label: 'Cấu hình', key: 'config' }] : []),
-  ];
+    { icon: Home,       label: 'Tổng quan',  key: 'home',      always: true },
+    { icon: Users,      label: 'Khách hàng', key: 'customers', module: 'customers' },
+    { icon: FileText,   label: 'Hồ sơ HKD',  key: 'hkd',       module: 'hkd' },
+    { icon: LayoutGrid, label: 'Lĩnh vực',   key: 'fields',    module: 'fields' },
+    { icon: Settings,   label: 'Cấu hình',   key: 'config',    module: 'config' },
+    { icon: Building2,  label: 'Doanh nghiệp', key: 'company',  module: 'company' },
+    { icon: ShieldCheck,label: 'Nhân viên',  key: 'admin',     module: 'users' },
+  ].filter(item => item.always || can(item.module));
 
   const displayName = user?.display_name || user?.displayname || user?.full_name || user?.name || user?.email || '';
   const initials = displayName

@@ -6,6 +6,7 @@ from typing import Optional
 class GoogleSettings(BaseModel):
     TOKEN_BASE64: str = ""
     DRIVE_HKD: str = ""   # root folder id for HKD service on Drive
+    DRIVE_TLDN: str = ""  # root folder id for TLDN (company) service on Drive
 
 
 class Settings(BaseSettings):
@@ -24,6 +25,7 @@ class Settings(BaseSettings):
     # Google
     GOOGLE_TOKEN_BASE64: str = ""
     GOOGLE_DRIVE_HKD: str = ""
+    GOOGLE_DRIVE_TLDN: str = ""
 
     # Gemini OCR
     GEMINI_API_KEY: str = ""
@@ -33,6 +35,13 @@ class Settings(BaseSettings):
     WEBHOOK_SECRET_KEY: str = ""
     CRM_WORKSPACE: str = ""
     CRM_TABLE_HKD: str = ""
+    CRM_TABLE_TLDN: str = ""
+
+    # JWT Auth
+    JWT_SECRET_KEY: str = "change-me-in-production"
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 30
 
     @property
     def DATABASE_URL(self) -> str:
@@ -43,6 +52,7 @@ class Settings(BaseSettings):
         return GoogleSettings(
             TOKEN_BASE64=self.GOOGLE_TOKEN_BASE64,
             DRIVE_HKD=self.GOOGLE_DRIVE_HKD,
+            DRIVE_TLDN=self.GOOGLE_DRIVE_TLDN,
         )
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)

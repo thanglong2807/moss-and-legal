@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-const AUTH_BASE = 'https://api.cenvi.vn/api/v1/admin/auth';
+const AUTH_BASE = '/api/v1/auth';
 const TOKEN_KEY = 'cenvi_access_token';
 const REFRESH_KEY = 'cenvi_refresh_token';
 
@@ -33,34 +33,15 @@ export const AuthProvider = ({ children }) => {
 
   const isAdmin = user?.roles?.includes('ADMIN') ?? false;
 
-  // ── Permission config ────────────────────────────────────────────────────────
-  // module → action → roles[]
-  //   []           = mọi role đã đăng nhập đều có quyền
-  //   ['ADMIN']    = chỉ ADMIN
-  //   không khai báo module/action → mặc định có quyền
-  const PERMISSIONS = {
-    config: {
-      view: ['ADMIN'],
-    },
-    fields: {
-      view: [],                      // mọi role xem được
-      create: ['ADMIN'],
-      update: ['ADMIN'],
-      delete: ['ADMIN'],
-    },
-  };
-
-  // can('fields')           → kiểm tra view (mặc định)
-  // can('fields', 'delete') → kiểm tra action cụ thể
+  // can('hkd')            → kiểm tra can_view (mặc định)
+  // can('hkd', 'delete')  → kiểm tra can_delete
   const can = useCallback((module, action = 'view') => {
     if (!user) return false;
-    const mod = PERMISSIONS[module];
-    if (!mod) return true;                   // module ko khai báo → có quyền hết
-    const allowed = mod[action];
-    if (allowed === undefined) return true;  // action ko khai báo → có quyền hết
-    if (allowed.length === 0) return true;   // [] → mọi role đã đăng nhập
-    return user.roles?.some(r => allowed.includes(r)) ?? false;
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+    const perm = user.permissions?.[module];
+    if (!perm) return false;  // module không khai báo → không có quyền
+    const key = { view: 'can_view', create: 'can_create', update: 'can_update', delete: 'can_delete' }[action];
+    return perm[key] ?? false;
+  }, [user]);
 
   const fetchMe = useCallback(async (accessToken) => {
     try {

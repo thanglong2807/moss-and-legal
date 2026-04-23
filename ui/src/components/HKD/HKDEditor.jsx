@@ -30,6 +30,7 @@ import SearchableSelect from '../Common/SearchableSelect';
 import UploadModal from './UploadModal';
 import GovProgressModal from './GovProgressModal';
 import CustomerDetailModal from '../Customer/CustomerDetailModal';
+import { validatePhone, validateEmail, sortIndustriesByCode, compressImage } from '../../utils/validators';
 
 
 const IndustrySelect = ({ industries, onSelect, onClose }) => {
@@ -68,20 +69,7 @@ const IndustrySelect = ({ industries, onSelect, onClose }) => {
   );
 };
 
-// ── Inline field validators ────────────────────────────────────────────────────
-const validatePhone = (phone) => {
-  if (!phone) return null; // optional field — skip if empty
-  const digits = phone.replace(/\D/g, '');
-  if (!digits.startsWith('0')) return 'error'; // must start with 0
-  if (digits.length < 10 || digits.length > 11) return 'error';
-  if (digits.length === 11) return 'warn'; // valid but unusual
-  return null;
-};
-
-const validateEmail = (email) => {
-  if (!email) return null;
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? null : 'error';
-};
+// validatePhone and validateEmail imported from utils/validators
 
 const validateGov = (formData) => {
   const missing = [];
@@ -365,6 +353,7 @@ const HKDEditor = ({
   selectedFieldId,
   setSelectedFieldId
 }) => {
+  const { can } = useAuth();
   const [syncing, setSyncing] = useState(false);
   const [activeIndustryIdx, setActiveIndustryIdx] = useState(null);
   const [showExtra, setShowExtra] = useState(false);
@@ -408,11 +397,15 @@ const HKDEditor = ({
         updateFormData('folder_id', res.data.folder_id);
       }
 
-      const tasks = [driveApi.upload(formData.id, label, file)];
-      if (label === '005') tasks.push(ocrApi.extract('cccd', file).catch(e => { console.warn('OCR thất bại:', e.response?.data?.detail || e.message); return null; }));
+      const compressed = await compressImage(file);
+      const uploadTask = driveApi.upload(formData.id, label, compressed).then(r => r.data);
+      const ocrTask = label === '005'
+        ? ocrApi.extract('cccd', compressed, { serviceType: 'hkd' })
+            .catch(e => { console.warn('OCR thất bại:', e.response?.data?.detail || e.message); return null; })
+        : Promise.resolve(null);
 
-      const [uploadRes, ocrRes] = await Promise.all(tasks);
-      setCccdDocs(prev => ({ ...prev, [label]: uploadRes.data }));
+      const [uploadDoc, ocrRes] = await Promise.all([uploadTask, ocrTask]);
+      setCccdDocs(prev => ({ ...prev, [label]: uploadDoc }));
 
       if (ocrRes) {
         const entries = Object.entries(ocrRes.data?.fields || {});
@@ -452,7 +445,7 @@ const HKDEditor = ({
 
   const addIndustryRow = () => {
     const newRow = { code: '', name: '', is_main: !(formData.industries?.length), note: '' };
-    updateFormData('industries', [newRow, ...(formData.industries || [])]);
+    updateFormData('industries', sortIndustriesByCode([newRow, ...(formData.industries || [])]));
   };
 
   const removeIndustryRow = (idx) => {
@@ -483,7 +476,7 @@ const HKDEditor = ({
           </div>
         </div>
         <div className="flex items-center gap-3">
-          {formData.id && onDelete && (
+          {formData.id && onDelete && can('hkd', 'delete') && (
             <button
               onClick={onDelete}
               className="flex items-center gap-2 px-4 py-2 rounded-2xl font-black text-[11px] transition-all border bg-surface border-red-200 text-red-400 hover:bg-red-50 hover:border-red-400 hover:text-red-600"
@@ -502,9 +495,11 @@ const HKDEditor = ({
               {formData.crm_link ? 'CẬP NHẬT CRM' : 'NHẬP LÊN CRM'}
             </button>
           )}
-          <button onClick={onSave} className="flex items-center gap-2 px-8 py-2 bg-orange-600 text-white rounded-2xl hover:bg-orange-700 shadow-lg shadow-orange-200/50 dark:shadow-none font-black text-xs transition">
-            <Save size={18} /> LƯU HỒ SƠ
-          </button>
+          {can('hkd', formData.id ? 'update' : 'create') && (
+            <button onClick={onSave} className="flex items-center gap-2 px-8 py-2 bg-orange-600 text-white rounded-2xl hover:bg-orange-700 shadow-lg shadow-orange-200/50 dark:shadow-none font-black text-xs transition">
+              <Save size={18} /> LƯU HỒ SƠ
+            </button>
+          )}
         </div>
       </div>
 
@@ -848,7 +843,7 @@ const HKDEditor = ({
                         </div>
                         {activeIndustryIdx === idx && (
                           <IndustrySelect industries={allIndustries}
-                            onSelect={(i) => { const next = [...formData.industries]; next[idx] = { ...next[idx], code: i.code, name: i.name }; updateFormData('industries', next); setActiveIndustryIdx(null); }}
+                            onSelect={(i) => { const next = [...formData.industries]; next[idx] = { ...next[idx], code: i.code, name: i.name }; updateFormData('industries', sortIndustriesByCode(next)); setActiveIndustryIdx(null); }}
                             onClose={() => setActiveIndustryIdx(null)} />
                         )}
                       </td>
@@ -951,7 +946,7 @@ const HKDEditor = ({
                 {fields.find(f => f.id === selectedFieldId || f.id === parseInt(selectedFieldId))?.industries?.map((li, idx) => (
                   <div key={idx} onClick={() => {
                     const next = [...(formData.industries || []), { code: li.industry.code, name: li.industry.name, is_main: !formData.industries?.length, note: li.note }];
-                    updateFormData('industries', next);
+                    updateFormData('industries', sortIndustriesByCode(next));
                   }} className="p-2.5 bg-surface border border-faint rounded-xl hover:border-orange-300 cursor-pointer transition-all flex items-center justify-between">
                     <div className="flex-1 overflow-hidden pr-2">
                       <div className="text-[10px] font-black text-orange-600">{li.industry?.code}</div>

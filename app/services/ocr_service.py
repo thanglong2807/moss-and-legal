@@ -19,6 +19,22 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
+# Cache province names loaded from DB (populated on first OCR call)
+_province_names_cache: list[str] = []
+
+
+def _get_province_names(db: Session) -> list[str]:
+    global _province_names_cache
+    if _province_names_cache:
+        return _province_names_cache
+    from app.models.master_data import AdministrativeUnit
+    rows = db.query(AdministrativeUnit.name).filter(
+        AdministrativeUnit.division_type == "PROVINCE",
+        AdministrativeUnit.deleted_at == None,
+    ).order_by(AdministrativeUnit.name).all()
+    _province_names_cache = [r[0] for r in rows]
+    return _province_names_cache
+
 from app.core.config import settings
 
 # ── Thinking support (only Gemini 2.5+ models) ───────────────────────────────
@@ -43,8 +59,7 @@ def _get_client():
 
 
 # ── Prompts per doc type ──────────────────────────────────────────────────────
-PROMPTS: dict[str, str] = {
-    "cccd": """
+_CCCD_PROMPT_BASE = """
 Đọc CCCD/CMND Việt Nam trong ảnh. Trả về JSON hợp lệ, không thêm text nào khác:
 {
   "id_number": "",
@@ -54,7 +69,6 @@ PROMPTS: dict[str, str] = {
   "nationality": "",
   "place_of_origin": "",
   "province_name": "",
-  "district_name": "",
   "ward_name": "",
   "street": "",
   "expiry_date": "",
@@ -65,10 +79,20 @@ Quy tắc:
 - gender: "Nam" hoặc "Nữ"
 - full_name: IN HOA
 - side: "front" (mặt trước) hoặc "back" (mặt sau)
-- Địa chỉ thường trú: tách thành province_name (tỉnh/thành phố), district_name (huyện/quận), ward_name (xã/phường/thị trấn), street (số nhà, tên đường, thôn/xóm còn lại)
+- Địa chỉ liên hệ: tách thành province_name (tỉnh/thành phố), ward_name (xã/phường/thị trấn), street (số nhà, tên đường, thôn/xóm còn lại)
+- province_name: chọn tên CHÍNH XÁC từ danh sách bên dưới, không thêm tiền tố "Tỉnh"/"Thành phố". Nếu không khớp thì để chuỗi rỗng ""
 - Trường không đọc được hoặc không có: để chuỗi rỗng ""
-""".strip(),
-}
+""".strip()
+
+PROMPTS: dict[str, str] = {"cccd": _CCCD_PROMPT_BASE}
+
+
+def build_prompt(doc_type: str, province_names: list[str]) -> str:
+    base = PROMPTS.get(doc_type, "")
+    if doc_type == "cccd" and province_names:
+        province_list = ", ".join(province_names)
+        return f"{base}\nDanh sách tỉnh/thành phố hợp lệ: {province_list}"
+    return base
 
 
 # ── Field mappings: OCR key → form field path ─────────────────────────────────
@@ -106,9 +130,22 @@ def _transform(field_path: str, value: str) -> str | int | None:
 
 
 # ── Admin unit DB lookup ──────────────────────────────────────────────────────
+# Only strip province-level prefixes. Ward/district names in DB include their prefix (e.g. "Xã Quảng Đức").
+_PROVINCE_PREFIXES = ["thành phố", "tỉnh", "tp."]
+
+def _strip_admin_prefix(name: str) -> str:
+    """Strip province-level prefixes only, e.g. 'Tỉnh Phú Thọ' → 'Phú Thọ'."""
+    lower = name.strip().lower()
+    for prefix in _PROVINCE_PREFIXES:
+        if lower.startswith(prefix + " "):
+            return name.strip()[len(prefix):].strip()
+    return name.strip()
+
+
 def _lookup_admin_unit(db: Session, name: str, division_type: Optional[str] = None) -> Optional[int]:
     """
     Find an administrative unit id by name (case-insensitive, stripped).
+    Tries exact match first, then strips common prefixes (Tỉnh, Thành phố, ...).
     division_type: "PROVINCE", "DISTRICT", or "WARD"
     Returns id or None if not found.
     """
@@ -118,24 +155,27 @@ def _lookup_admin_unit(db: Session, name: str, division_type: Optional[str] = No
     from app.models.master_data import AdministrativeUnit
     from sqlalchemy import select, func
 
-    name_clean = name.strip()
-    stmt = select(AdministrativeUnit.id).where(
-        func.lower(AdministrativeUnit.name) == func.lower(name_clean)
-    )
-    if division_type:
-        stmt = stmt.where(AdministrativeUnit.division_type == division_type)
+    def _query(name_val: str):
+        stmt = select(AdministrativeUnit.id).where(
+            func.lower(AdministrativeUnit.name) == func.lower(name_val)
+        )
+        if division_type:
+            stmt = stmt.where(AdministrativeUnit.division_type == division_type)
+        return db.execute(stmt).scalars().first()
 
-    result = db.execute(stmt).scalars().first()
+    result = _query(name.strip())
+    if result is None:
+        result = _query(_strip_admin_prefix(name))
     return result
 
 
 # ── Core extract (sync, runs in thread) ──────────────────────────────────────
-def _extract_sync(image_bytes: bytes, mime_type: str, doc_type: str, _retries: int = 3) -> dict:
+def _extract_sync(image_bytes: bytes, mime_type: str, doc_type: str, province_names: list[str] = (), _retries: int = 3) -> dict:
     import time
     from google.genai import types
     from google.genai.errors import ServerError
 
-    prompt = PROMPTS.get(doc_type)
+    prompt = build_prompt(doc_type, list(province_names))
     if not prompt:
         raise ValueError(f"Không có prompt cho doc_type='{doc_type}'")
 
@@ -165,12 +205,13 @@ def _extract_sync(image_bytes: bytes, mime_type: str, doc_type: str, _retries: i
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
-async def extract(image_bytes: bytes, mime_type: str, doc_type: str = "cccd") -> dict:
+async def extract(image_bytes: bytes, mime_type: str, doc_type: str = "cccd", db: Optional[Session] = None) -> dict:
     """
     Run OCR on image bytes. Returns raw dict with doc-specific keys.
-    Runs in a thread so it doesn't block the event loop.
+    Pass db to inject province list into prompt for more accurate matching.
     """
-    return await asyncio.to_thread(_extract_sync, image_bytes, mime_type, doc_type)
+    province_names = _get_province_names(db) if db else []
+    return await asyncio.to_thread(_extract_sync, image_bytes, mime_type, doc_type, province_names)
 
 
 def map_to_form(ocr_result: dict, doc_type: str = "cccd", db: Optional[Session] = None) -> dict:
@@ -213,3 +254,29 @@ def map_to_form(ocr_result: dict, doc_type: str = "cccd", db: Optional[Session] 
             out[form_path] = transformed
 
     return out
+
+
+def save_log(
+    db: Session,
+    *,
+    doc_type: str,
+    raw_result: dict,
+    fields_result: dict,
+    user_id: Optional[int] = None,
+    service_type: Optional[str] = None,
+    drive_file_id: Optional[str] = None,
+    drive_link: Optional[str] = None,
+) -> None:
+    from app.models.ocr_log import OcrLog
+    log = OcrLog(
+        user_id=user_id,
+        doc_type=doc_type,
+        model_name=settings.GEMINI_OCR_MODEL,
+        service_type=service_type,
+        drive_file_id=drive_file_id,
+        drive_link=drive_link,
+        raw_result=raw_result,
+        fields_result=fields_result,
+    )
+    db.add(log)
+    db.commit()

@@ -14,3 +14,4 @@ class CRMWebhookPayload(BaseModel):
     amount_paid: Optional[str] = "0"
     status: Optional[str] = ""
     note: Optional[str] = ""
+    comp_type: Optional[str] = None  # "1tv" | "2tv" | "cổ phần" — chỉ dùng cho TLDN

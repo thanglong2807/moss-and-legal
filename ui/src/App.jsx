@@ -7,6 +7,8 @@ import HKDDashboard from './pages/HKDDashboard';
 import CustomerManagement from './pages/CustomerManagement';
 import ConfigPage from './pages/ConfigPage';
 import FieldsPage from './pages/FieldsPage';
+import AdminPage from './pages/AdminPage';
+import CompanyDashboard from './pages/CompanyDashboard';
 import LoginPage from './pages/LoginPage';
 import './index.css';
 
@@ -60,11 +62,22 @@ const AppLayout = () => {
             />
           } />
 
+          <Route path="/company" element={<CompanyDashboard />} />
+          <Route path="/company/:id" element={<CompanyDashboard />} />
+
           <Route path="/fields" element={<FieldsPage />} />
 
           <Route path="/config" element={
             can('config')
               ? <ConfigPage />
+              : <div className="flex-1 flex items-center justify-center bg-page">
+                  <p className="text-weak font-bold text-sm">Bạn không có quyền truy cập trang này.</p>
+                </div>
+          } />
+
+          <Route path="/admin" element={
+            can('users')
+              ? <AdminPage />
               : <div className="flex-1 flex items-center justify-center bg-page">
                   <p className="text-weak font-bold text-sm">Bạn không có quyền truy cập trang này.</p>
                 </div>

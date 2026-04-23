@@ -17,3 +17,8 @@ export const APP_THEME = {
 };
 
 export const DEFAULT_PROVINCE = 1; // Hà Nội as default ID if applicable
+
+export const COMPANY_SEARCH_SITES = [
+  'site:thuvienphapluat.vn',
+  'site:masothue.com',
+];

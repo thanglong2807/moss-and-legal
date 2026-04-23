@@ -1,12 +1,31 @@
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import select, delete
-from app.models.hkd import BusinessHousehold, BusinessOwner, HouseholdIndustry
+from app.models.hkd import BusinessHousehold, BusinessOwner, ProfileIndustry
+from sqlalchemy.orm import joinedload as _jl
+HouseholdIndustry = ProfileIndustry  # compat alias
 from app.models.master_data import Industry
 from app.schemas.hkd import HKDCreate, HKDUpdate
 from app.services.admin_unit_service import admin_unit_service
 import uuid
 from datetime import datetime
 from fastapi import HTTPException
+
+
+def _attach_hkd_industries(db: Session, hkds) -> None:
+    ids = [h.id for h in hkds]
+    if not ids:
+        return
+    from app.models.master_data import Industry
+    links = db.execute(
+        select(ProfileIndustry)
+        .where(ProfileIndustry.profile_id.in_(ids), ProfileIndustry.service_type == "hkd")
+        .options(_jl(ProfileIndustry.industry))
+    ).scalars().unique().all()
+    by_id = {}
+    for lnk in links:
+        by_id.setdefault(lnk.profile_id, []).append(lnk)
+    for h in hkds:
+        h.__dict__['_industry_links'] = by_id.get(h.id, [])
 
 
 def _validate_industries(industries) -> None:
@@ -125,21 +144,56 @@ class HKDService:
                 db.add(industry)
                 db.flush()
             
-            link = HouseholdIndustry(
-                household_id=hkd.id,
+            link = ProfileIndustry(
+                profile_id=hkd.id,
+                service_type="hkd",
                 industry_id=industry.id,
                 is_main=ind_in.is_main,
                 note=ind_in.note
             )
             db.add(link)
-            
+
         db.commit()
         db.refresh(hkd)
+        _attach_hkd_industries(db, [hkd])
         return hkd
 
-    def get_list(self, db: Session, skip: int = 0, limit: int = 100, customer_id: int = None):
+    def get_list(self, db: Session, skip: int = 0, limit: int = 20,
+                 customer_id: int = None, search: str = None,
+                 branch_name: str = None, staff_id: int = None, source_id: int = None):
+        from sqlalchemy import func, or_
+        from app.models.customer import Customer
+
+        base = select(BusinessHousehold).where(BusinessHousehold.deleted_at.is_(None))
+
+        if customer_id:
+            base = base.where(BusinessHousehold.customer_id == customer_id)
+        if source_id:
+            base = base.where(BusinessHousehold.source_id == source_id)
+        if staff_id:
+            base = base.where(
+                or_(BusinessHousehold.handling_staff_id == staff_id,
+                    BusinessHousehold.supporting_staff_id == staff_id)
+            )
+        if search:
+            s = f"%{search}%"
+            base = base.join(Customer, BusinessHousehold.customer_id == Customer.id, isouter=True).where(
+                or_(
+                    BusinessHousehold.company_full_name.ilike(s),
+                    BusinessHousehold.code.ilike(s),
+                    Customer.name.ilike(s),
+                    Customer.phone.ilike(s),
+                )
+            )
+        if branch_name:
+            if not search:  # avoid double join
+                base = base.join(Customer, BusinessHousehold.customer_id == Customer.id, isouter=True)
+            base = base.where(Customer.branch_name == branch_name)
+
+        total = db.execute(select(func.count()).select_from(base.subquery())).scalar()
+
         stmt = (
-            select(BusinessHousehold)
+            base.order_by(BusinessHousehold.created_at.desc())
             .offset(skip)
             .limit(limit)
             .options(
@@ -149,13 +203,12 @@ class HKDService:
                 joinedload(BusinessHousehold.status),
                 joinedload(BusinessHousehold.source),
                 joinedload(BusinessHousehold.owner),
-                joinedload(BusinessHousehold.industry_links).joinedload(HouseholdIndustry.industry)
             )
         )
-        if customer_id:
-            stmt = stmt.where(BusinessHousehold.customer_id == customer_id)
-            
-        return db.execute(stmt).scalars().unique().all()
+
+        hkds = db.execute(stmt).scalars().unique().all()
+        _attach_hkd_industries(db, hkds)
+        return {"items": hkds, "total": total}
 
     def get_by_id(self, db: Session, hkd_id: int):
         stmt = select(BusinessHousehold).where(BusinessHousehold.id == hkd_id).options(
@@ -165,9 +218,11 @@ class HKDService:
             joinedload(BusinessHousehold.status),
             joinedload(BusinessHousehold.source),
             joinedload(BusinessHousehold.owner),
-            joinedload(BusinessHousehold.industry_links).joinedload(HouseholdIndustry.industry)
         )
-        return db.execute(stmt).scalars().first()
+        hkd = db.execute(stmt).scalars().first()
+        if hkd:
+            _attach_hkd_industries(db, [hkd])
+        return hkd
 
     def update(self, db: Session, hkd_id: int, obj_in: HKDUpdate):
         hkd = self.get_by_id(db, hkd_id)
@@ -269,7 +324,7 @@ class HKDService:
         if obj_in.industries is not None:
             _validate_industries(obj_in.industries)
             # Delete old links
-            db.query(HouseholdIndustry).filter(HouseholdIndustry.household_id == hkd.id).delete()
+            db.query(ProfileIndustry).filter(ProfileIndustry.profile_id == hkd.id, ProfileIndustry.service_type == "hkd").delete()
             # Add new ones
             for ind_in in obj_in.industries:
                 stmt = select(Industry).where(Industry.code == ind_in.code)
@@ -279,16 +334,18 @@ class HKDService:
                     db.add(industry)
                     db.flush()
                 
-                link = HouseholdIndustry(
-                    household_id=hkd.id,
+                link = ProfileIndustry(
+                    profile_id=hkd.id,
+                    service_type="hkd",
                     industry_id=industry.id,
                     is_main=ind_in.is_main,
                     note=ind_in.note
                 )
                 db.add(link)
-        
+
         db.commit()
         db.refresh(hkd)
+        _attach_hkd_industries(db, [hkd])
         return hkd
 
     def delete(self, db: Session, hkd_id: int):
@@ -346,7 +403,7 @@ class HKDService:
         else:
             new_hkd = BusinessHousehold(
                 code=f"HKD-{uuid.uuid4().hex[:8].upper()}",
-                company_full_name=payload.name or None,
+                company_full_name=payload.name.upper() or None,
                 customer_id=customer_id,
                 handling_staff_id=handling_staff_id,
                 supporting_staff_id=supporting_staff_id,

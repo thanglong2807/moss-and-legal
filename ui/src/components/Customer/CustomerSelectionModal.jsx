@@ -9,22 +9,26 @@ const CustomerSelectionModal = ({ isOpen, onClose, onSelect, onCreateNew }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isOpen) fetchCustomers();
+    if (!isOpen) { setSearchQuery(''); setCustomers([]); return; }
+    fetchCustomers('');
   }, [isOpen]);
 
-  const fetchCustomers = async () => {
+  useEffect(() => {
+    if (!isOpen) return;
+    const t = setTimeout(() => fetchCustomers(searchQuery), 300);
+    return () => clearTimeout(t);
+  }, [searchQuery]);
+
+  const fetchCustomers = async (search) => {
     setLoading(true);
     try {
-      const res = await customerApi.list();
-      setCustomers(res.data.sort((a,b) => new Date(b.created_at) - new Date(a.created_at)));
+      const res = await customerApi.list({ limit: 50, skip: 0, ...(search && { search }) });
+      setCustomers(res.data.items ?? res.data);
     } catch (e) {}
     setLoading(false);
   };
 
-  const filtered = customers.filter(c => 
-    c.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    c.phone?.includes(searchQuery)
-  );
+  const filtered = customers;
 
   return (
     <Modal 

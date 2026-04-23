@@ -4,7 +4,9 @@ from app.models.customer import Customer
 from app.schemas.customer import CustomerCreate, CustomerUpdate
 
 class CustomerService:
-    def get_list(self, db: Session, source_id: int = None, branch_name: str = None, skip: int = 0, limit: int = 100):
+    def get_list(self, db: Session, source_id: int = None, branch_name: str = None,
+                 search: str = None, skip: int = 0, limit: int = 50):
+        from sqlalchemy import or_
         stmt = select(Customer).options(
             joinedload(Customer.source),
             joinedload(Customer.staff),
@@ -12,13 +14,19 @@ class CustomerService:
             joinedload(Customer.province),
             joinedload(Customer.ward),
         ).order_by(desc(Customer.id))
-        
+
         if source_id:
             stmt = stmt.where(Customer.source_id == source_id)
         if branch_name:
             stmt = stmt.where(Customer.branch_name == branch_name)
-            
-        return db.execute(stmt.offset(skip).limit(limit)).scalars().all()
+        if search:
+            s = f"%{search}%"
+            stmt = stmt.where(or_(Customer.name.ilike(s), Customer.phone.ilike(s)))
+
+        from sqlalchemy import func
+        total = db.execute(select(func.count()).select_from(stmt.subquery())).scalar()
+        items = db.execute(stmt.offset(skip).limit(limit)).scalars().all()
+        return {"items": items, "total": total}
 
     def get_by_id(self, db: Session, customer_id: int):
         stmt = select(Customer).where(Customer.id == customer_id).options(

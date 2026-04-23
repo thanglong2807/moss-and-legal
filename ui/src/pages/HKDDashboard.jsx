@@ -1,8 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Plus, Search, XCircle, FileText } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import Pagination from '../components/Common/Pagination';
 import { hkdApi, customerApi, configApi, adminUnitsApi, fieldsApi, industryApi } from '../services/api';
+import { sortIndustriesByCode } from '../utils/validators';
+
+// Module-level cache cho static data (fields, industries, provinces, configs)
+// Chỉ fetch 1 lần trong suốt session, không re-fetch khi remount
+const _staticCache = { data: null, promise: null };
+const fetchStaticData = () => {
+  if (_staticCache.data) return Promise.resolve(_staticCache.data);
+  if (_staticCache.promise) return _staticCache.promise;
+  _staticCache.promise = Promise.all([
+    configApi.getStaff(), configApi.getSources(), configApi.getStatuses(),
+    adminUnitsApi.getProvinces(), fieldsApi.list(), industryApi.list(),
+  ]).then(([s, src, st, p, f, ind]) => {
+    _staticCache.data = { staff: s.data, sources: src.data, statuses: st.data, provinces: p.data, fields: f.data, industries: ind.data };
+    _staticCache.promise = null;
+    return _staticCache.data;
+  }).catch(err => { _staticCache.promise = null; throw err; });
+  return _staticCache.promise;
+};
 import HKDCard from '../components/HKD/HKDCard';
 import HKDEditor from '../components/HKD/HKDEditor';
 import CustomerSelectionModal from '../components/Customer/CustomerSelectionModal';
@@ -14,8 +33,10 @@ const fmtMoney = (v) => v ? new Intl.NumberFormat('vi-VN').format(v) : '—';
 const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { can } = useAuth();
 
   const [hkds, setHkds] = useState([]);
+  const [total, setTotal] = useState(0);
   const [customers, setCustomers] = useState([]);
   const [staff, setStaff] = useState([]);
   const [sources, setSources] = useState([]);
@@ -35,27 +56,61 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(50);
 
-  useEffect(() => { fetchInitialData(); }, []);
+  useEffect(() => { fetchInitialData(); fetchHkds(); }, []);
+
+  // Debounced search
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(searchQuery), 350);
+    return () => clearTimeout(t);
+  }, [searchQuery]);
+
+  // Fetch list whenever filters/page/pageSize change
+  useEffect(() => {
+    fetchHkds();
+  }, [page, pageSize, debouncedSearch, branchFilter, staffFilter, customerFilter]);
 
   useEffect(() => {
     if (id) handleSelectHkd(id);
     else setFormData(null);
   }, [id]);
 
+  const fetchHkds = async () => {
+    try {
+      const params = {
+        skip: (page - 1) * pageSize,
+        limit: pageSize,
+        ...(debouncedSearch && { search: debouncedSearch }),
+        ...(branchFilter && { branch_name: branchFilter }),
+        ...(staffFilter && { staff_id: staffFilter }),
+        ...(customerFilter && { customer_id: customerFilter }),
+      };
+      const res = await hkdApi.list(params);
+      setHkds(res.data.items);
+      setTotal(res.data.total);
+    } catch {
+      setHkds([]);
+      setTotal(0);
+    }
+  };
+
   const fetchInitialData = async () => {
-    const [h, c, s, src, st, p, f, ind] = await Promise.all([
-      hkdApi.list(), customerApi.list(), configApi.getStaff(),
-      configApi.getSources(), configApi.getStatuses(),
-      adminUnitsApi.getProvinces(), fieldsApi.list(), industryApi.list()
-    ]);
-    setHkds(h.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
-    setCustomers(c.data);
-    setStaff(s.data);
-    setSources(src.data);
-    setStatuses(st.data);
-    setProvinces(p.data);
-    setFields(f.data);
-    setAllIndustries(ind.data);
+    // Static lookup data — cached, shared across remounts
+    fetchStaticData().then(({ staff, sources, statuses, provinces, fields, industries }) => {
+      setStaff(staff);
+      setSources(sources);
+      setStatuses(statuses);
+      setProvinces(provinces);
+      setFields(fields);
+      setAllIndustries(industries);
+    }).catch(() => {});
+
+    try {
+      const c = await customerApi.list({ limit: 200, skip: 0 });
+      setCustomers(c.data.items ?? c.data);
+    } catch {
+      setCustomers([]);
+    }
   };
 
   const handleSelectHkd = async (hkdId) => {
@@ -161,7 +216,7 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
     const toAdd = field.industries
       .filter(i => !existingCodes.has(i.industry.code))
       .map(i => ({ code: i.industry.code, name: i.industry.name, is_main: false, note: i.note }));
-    if (toAdd.length > 0) updateFormData('industries', [...existing, ...toAdd]);
+    if (toAdd.length > 0) updateFormData('industries', sortIndustriesByCode([...existing, ...toAdd]));
   };
 
   useEffect(() => {
@@ -169,20 +224,8 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
       updateFormData('owner_info.contact_address', { ...formData.company_info.address });
   }, [syncAddress, formData?.company_info?.address]);
 
-  const filteredHkds = hkds.filter(h => {
-    const s = searchQuery.toLowerCase();
-    const matchSearch = h.company_full_name?.toLowerCase().includes(s) ||
-      h.code?.toLowerCase().includes(s) || h.customer?.name?.toLowerCase().includes(s) ||
-      h.customer?.phone?.includes(s);
-    const matchCustomer = !customerFilter || h.customer_id === customerFilter;
-    const matchBranch = !branchFilter || h.customer?.branch_name === branchFilter;
-    const matchStaff = !staffFilter || h.handling_staff_id === parseInt(staffFilter) || h.supporting_staff_id === parseInt(staffFilter);
-    return matchSearch && matchCustomer && matchBranch && matchStaff;
-  });
-
-  useEffect(() => { setPage(1); }, [searchQuery, branchFilter, staffFilter, customerFilter]);
-
-  const pagedHkds = filteredHkds.slice((page - 1) * pageSize, page * pageSize);
+  // Reset page khi filter thay đổi
+  useEffect(() => { setPage(1); }, [debouncedSearch, branchFilter, staffFilter, customerFilter]);
 
   const activeCustomerName = customerFilter ? customers.find(c => c.id === customerFilter)?.name : null;
   const showEditor = !!(id || formData);
@@ -205,9 +248,11 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
                     <XCircle size={12} />
                   </button>
                 )}
-                <button onClick={() => setShowSelector(true)} className="bg-orange-600 text-white p-1.5 rounded-lg hover:bg-orange-700 transition shadow-md shadow-orange-100">
-                  <Plus size={14} />
-                </button>
+                {can('hkd', 'create') && (
+                  <button onClick={() => setShowSelector(true)} className="bg-orange-600 text-white p-1.5 rounded-lg hover:bg-orange-700 transition shadow-md shadow-orange-100">
+                    <Plus size={14} />
+                  </button>
+                )}
               </div>
             </div>
             <div className="relative">
@@ -220,7 +265,7 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
             </select>
           </div>
           <div className="flex-1 overflow-y-auto p-3 space-y-2">
-            {filteredHkds.map(h => (
+            {hkds.map(h => (
               <HKDCard
                 key={h.id}
                 hkd={h}
@@ -228,7 +273,7 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
                 onClick={() => navigate(`/hkd/${h.id}`)}
               />
             ))}
-            {filteredHkds.length === 0 && (
+            {hkds.length === 0 && (
               <div className="py-12 text-center text-weak text-xs font-bold italic">Không có hồ sơ</div>
             )}
           </div>
@@ -242,7 +287,7 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
                 <h1 className="text-xl font-black tracking-tight text-strong">
                   {activeCustomerName ? `Hồ sơ: ${activeCustomerName}` : 'Hồ sơ HKD'}
                 </h1>
-                <p className="text-[11px] font-bold text-weak uppercase tracking-widest mt-0.5">{filteredHkds.length} hồ sơ</p>
+                <p className="text-[11px] font-bold text-weak uppercase tracking-widest mt-0.5">{total} hồ sơ</p>
               </div>
               <div className="flex items-center gap-2">
                 {customerFilter && (
@@ -250,9 +295,11 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
                     <XCircle size={12} /> Bỏ lọc
                   </button>
                 )}
-                <button onClick={() => setShowSelector(true)} className="bg-orange-600 text-white px-4 py-2 rounded-2xl hover:bg-orange-700 transition shadow-lg shadow-orange-100 flex items-center gap-2 font-black text-xs">
-                  <Plus size={16} /> MỚI
-                </button>
+                {can('hkd', 'create') && (
+                  <button onClick={() => setShowSelector(true)} className="bg-orange-600 text-white px-4 py-2 rounded-2xl hover:bg-orange-700 transition shadow-lg shadow-orange-100 flex items-center gap-2 font-black text-xs">
+                    <Plus size={16} /> MỚI
+                  </button>
+                )}
               </div>
             </div>
             <div className="flex gap-2">
@@ -271,7 +318,7 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
             </div>
           </div>
           <div className="flex-1 overflow-y-auto">
-            {filteredHkds.length === 0 ? (
+            {hkds.length === 0 ? (
               <div className="flex flex-col items-center justify-center p-20 text-weak">
                 <FileText size={40} className="mb-3 opacity-10" /><p className="text-sm font-bold">Không có hồ sơ nào</p>
               </div>
@@ -285,7 +332,7 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {pagedHkds.map(h => (
+                  {hkds.map(h => (
                     <tr key={h.id} onClick={() => navigate(`/hkd/${h.id}`)} className={`cursor-pointer transition-all border-b border-base hover:bg-orange-50/40 dark:hover:bg-orange-900/10 ${h.crm_link ? 'border-l-2 border-l-emerald-400' : ''}`}>
                       <td className="px-3 py-2 font-black text-strong whitespace-nowrap">
                         <div className="flex items-center gap-2">
@@ -306,7 +353,7 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
               </table>
             )}
           </div>
-          <Pagination page={page} pageSize={pageSize} total={filteredHkds.length} onPageChange={setPage} onPageSizeChange={setPageSize} />
+          <Pagination page={page} pageSize={pageSize} total={total} onPageChange={setPage} onPageSizeChange={setPageSize} />
         </div>
       )}
 

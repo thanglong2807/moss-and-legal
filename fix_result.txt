@@ -1,0 +1,7 @@
+SKIP (no google xml): 000_Hướng dẫn ký.docx
+FIXED: 002_Điều lệ.docx
+FIXED: 003_Danh sách thành viên.docx
+FIXED: 004_Giấy ủy quyền.docx
+FIXED: 005_Danh sách chủ sở hữu hưởng lợi.docx
+FIXED: 00x_Giấy đề nghị.docx
+Done

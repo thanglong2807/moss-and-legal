@@ -1,6 +1,8 @@
 from sqlalchemy import Column, String, Integer, ForeignKey, BigInteger, Date, Boolean, Text
 from sqlalchemy.orm import relationship
 from app.models.base import Base
+from app.models.customer import Customer, StaffConfig, SourceConfig, StatusConfig  # noqa: F401
+from app.models.master_data import AdministrativeUnit, Industry  # noqa: F401
 
 class BusinessHousehold(Base):
     __tablename__ = "business_households"
@@ -38,7 +40,8 @@ class BusinessHousehold(Base):
     status = relationship("StatusConfig")
     source = relationship("SourceConfig")
     owner = relationship("BusinessOwner", back_populates="household", uselist=False, cascade="all, delete-orphan")
-    industry_links = relationship("HouseholdIndustry", back_populates="household", cascade="all, delete-orphan")
+    # industry_links populated by hkd_service via _attach_industries
+
     province = relationship("AdministrativeUnit", foreign_keys=[province_id], lazy="select")
     ward = relationship("AdministrativeUnit", foreign_keys=[ward_id], lazy="select")
 
@@ -87,13 +90,8 @@ class BusinessHousehold(Base):
     @property
     def industries(self):
         return [
-            {
-                "code": link.industry.code,
-                "name": link.industry.name,
-                "is_main": link.is_main,
-                "note": link.note
-            }
-            for link in self.industry_links
+            {"code": lnk.industry.code, "name": lnk.industry.name, "is_main": lnk.is_main, "note": lnk.note}
+            for lnk in self.__dict__.get('_industry_links', [])
         ]
 
 class BusinessOwner(Base):
@@ -117,12 +115,17 @@ class BusinessOwner(Base):
 
     household = relationship("BusinessHousehold", back_populates="owner")
 
-class HouseholdIndustry(Base):
-    __tablename__ = "household_industries"
-    household_id = Column(Integer, ForeignKey("business_households.id", ondelete="CASCADE"), nullable=False)
+class ProfileIndustry(Base):
+    __tablename__ = "profile_industries"
+    profile_id = Column(Integer, nullable=False)
+    service_type = Column(String(20), nullable=False, default="hkd")  # hkd | company
     industry_id = Column(Integer, ForeignKey("industries.id"), nullable=False)
     is_main = Column(Boolean, default=False)
     note = Column(Text)
 
-    household = relationship("BusinessHousehold", back_populates="industry_links")
+    # No back-ref to BusinessHousehold (polymorphic profile_id)
+
     industry = relationship("Industry")
+
+# Backwards-compat alias
+HouseholdIndustry = ProfileIndustry

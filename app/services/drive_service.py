@@ -26,6 +26,7 @@ SCOPES = [
 # Root folder id per service — extend when new services are added
 SERVICE_ROOT_FOLDERS = {
     "hkd": lambda: settings.google.DRIVE_HKD,
+    "tldn": lambda: settings.google.DRIVE_TLDN,
 }
 
 
