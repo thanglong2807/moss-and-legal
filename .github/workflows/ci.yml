@@ -8,11 +8,15 @@ on:
       - 'requirements.txt'
       - 'Dockerfile'
       - '.dockerignore'
+      - 'entrypoint.sh'
       - '**.py'
       - 'ui/src/**'
       - 'ui/public/**'
       - 'ui/package*.json'
       - '.env.example'
+      - 'alembic/**'
+      - 'app/templates/**'
+      - 'data/**'
 
 jobs:
   build:

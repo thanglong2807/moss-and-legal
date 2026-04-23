@@ -35,7 +35,7 @@ COPY data/ ./data/
 COPY --from=ui-builder /ui/dist ./ui/dist
 
 # Non-root user for security
-RUN useradd -m appuser && chown -R appuser /app
+RUN useradd -m appuser && chown -R appuser /app && chmod +x /app/entrypoint.sh
 USER appuser
 
 EXPOSE ${APP_PORT:-8200}

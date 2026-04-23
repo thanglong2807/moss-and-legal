@@ -14,16 +14,42 @@ branch_labels = None
 depends_on = None
 
 
+def _table_exists(conn, table_name):
+    result = conn.execute(sa.text(
+        "SELECT COUNT(*) FROM information_schema.tables "
+        "WHERE table_schema = DATABASE() AND table_name = :t"
+    ), {"t": table_name})
+    return result.scalar() > 0
+
+
+def _column_exists(conn, table_name, column_name):
+    result = conn.execute(sa.text(
+        "SELECT COUNT(*) FROM information_schema.columns "
+        "WHERE table_schema = DATABASE() AND table_name = :t AND column_name = :c"
+    ), {"t": table_name, "c": column_name})
+    return result.scalar() > 0
+
+
 def upgrade() -> None:
-    # 1. profile_industries already exists (renamed outside Alembic).
-    #    Use raw SQL to avoid batch_alter FK name collision on MySQL.
     conn = op.get_bind()
-    # Drop existing FK on household_id so we can freely repurpose the column
-    conn.execute(sa.text("ALTER TABLE profile_industries DROP FOREIGN KEY profile_industries_ibfk_1"))
-    # Rename column household_id → profile_id (MySQL 8.0+)
-    conn.execute(sa.text("ALTER TABLE profile_industries RENAME COLUMN household_id TO profile_id"))
-    # Add service_type column with default 'hkd'
-    conn.execute(sa.text("ALTER TABLE profile_industries ADD COLUMN service_type VARCHAR(20) NOT NULL DEFAULT 'hkd'"))
+
+    # 1. profile_industries — handle both fresh DB and existing DB that was renamed manually
+    if _table_exists(conn, 'household_industries'):
+        # Fresh path: rename table then fix columns
+        conn.execute(sa.text("RENAME TABLE household_industries TO profile_industries"))
+        conn.execute(sa.text("ALTER TABLE profile_industries DROP FOREIGN KEY profile_industries_ibfk_1"))
+        conn.execute(sa.text("ALTER TABLE profile_industries RENAME COLUMN household_id TO profile_id"))
+        conn.execute(sa.text("ALTER TABLE profile_industries ADD COLUMN service_type VARCHAR(20) NOT NULL DEFAULT 'hkd'"))
+    elif _table_exists(conn, 'profile_industries'):
+        # Existing DB: table already renamed, just fix columns if needed
+        try:
+            conn.execute(sa.text("ALTER TABLE profile_industries DROP FOREIGN KEY profile_industries_ibfk_1"))
+        except Exception:
+            pass  # FK may already be dropped
+        if _column_exists(conn, 'profile_industries', 'household_id'):
+            conn.execute(sa.text("ALTER TABLE profile_industries RENAME COLUMN household_id TO profile_id"))
+        if not _column_exists(conn, 'profile_industries', 'service_type'):
+            conn.execute(sa.text("ALTER TABLE profile_industries ADD COLUMN service_type VARCHAR(20) NOT NULL DEFAULT 'hkd'"))
 
     # 2. company_positions
     op.create_table(
