@@ -28,6 +28,8 @@ COPY app/ ./app/
 COPY alembic/ ./alembic/
 COPY alembic.ini .
 COPY main.py .
+COPY entrypoint.sh .
+COPY data/ ./data/
 
 # Copy built UI from previous stage
 COPY --from=ui-builder /ui/dist ./ui/dist
@@ -38,4 +40,4 @@ USER appuser
 
 EXPOSE ${APP_PORT:-8200}
 
-CMD uvicorn main:app --host 0.0.0.0 --port ${APP_PORT:-8200}
+CMD ["sh", "entrypoint.sh"]
