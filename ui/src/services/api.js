@@ -3,7 +3,10 @@ import axios from 'axios';
 const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY || 'cenvi_access_token';
 const REFRESH_KEY = import.meta.env.VITE_REFRESH_KEY || 'cenvi_refresh_token';
 const AUTH_BASE = '/api/v1/auth';
-const GOV_BASE = import.meta.env.VITE_GOV_BASE || 'http://localhost:8000'
+const GOV_BASE = import.meta.env.VITE_GOV_BASE || 'https://api.cenviplatform.com';
+console.log('[api.js] GOV_BASE =', GOV_BASE, '| VITE_GOV_BASE raw =', import.meta.env.VITE_GOV_BASE);
+
+const govHeaders = (token) => ({ Authorization: `Bearer ${token}` });
 
 const api = axios.create({
   baseURL: '/api/v1',
@@ -157,33 +160,20 @@ export const exportApi = {
 export const govApi = {
   // HKD
   submitHkd: (data, token) =>
-    axios.post(`${GOV_BASE}/hbiz_register/`, data, {
-      headers: { Authorization: `Bearer ${token}` },
-    }),
+    axios.post(`${GOV_BASE}/hbiz_register/`, data, { headers: govHeaders(token) }),
   getHkdJobStatus: (jobId, token) =>
-    axios.get(`${GOV_BASE}/hbiz_register/status/${jobId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    }),
-  // TLDN (DN): FE tự build payload từ form rồi gọi thẳng GOV_internal
+    axios.get(`${GOV_BASE}/hbiz_register/status/${jobId}`, { headers: govHeaders(token) }),
+  // TLDN
   submitTLDN: (typePath, payload, token) =>
-    axios.post(`${GOV_BASE}/biz_register/${typePath}`, payload, {
-      headers: { Authorization: `Bearer ${token}` },
-    }),
+    axios.post(`${GOV_BASE}/biz_register/${typePath}`, payload, { headers: govHeaders(token) }),
   getTLDNJobStatus: (jobId, token) =>
-    axios.get(`${GOV_BASE}/biz_register/status/${jobId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    }),
-  // screenshot dùng chung cho cả HKD và DN
+    axios.get(`${GOV_BASE}/biz_register/status/${jobId}`, { headers: govHeaders(token) }),
+  // screenshot dùng chung
   getScreenshot: (jobId, token) =>
-    axios.get(`${GOV_BASE}/screenshot/${jobId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-      responseType: 'blob',
-    }),
-  // alias cũ giữ lại để không break code cũ
+    axios.get(`${GOV_BASE}/screenshot/${jobId}`, { headers: govHeaders(token), responseType: 'blob' }),
+  // alias cũ
   getJobStatus: (jobId, token) =>
-    axios.get(`${GOV_BASE}/hbiz_register/status/${jobId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    }),
+    axios.get(`${GOV_BASE}/hbiz_register/status/${jobId}`, { headers: govHeaders(token) }),
 };
 
 // ── GOV job localStorage helpers ─────────────────────────────────────────────
