@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-const TOKEN_KEY = 'cenvi_access_token';
-const REFRESH_KEY = 'cenvi_refresh_token';
+const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY || 'cenvi_access_token';
+const REFRESH_KEY = import.meta.env.VITE_REFRESH_KEY || 'cenvi_refresh_token';
 const AUTH_BASE = '/api/v1/auth';
-const GOV_BASE = 'https://api.cenviplatform.com';
-// const GOV_BASE = 'http://localhost:8000/api/v1'
+const GOV_BASE = import.meta.env.VITE_GOV_BASE || 'http://localhost:8000'
 
 const api = axios.create({
   baseURL: '/api/v1',
@@ -156,19 +155,34 @@ export const exportApi = {
 };
 
 export const govApi = {
+  // HKD
   submitHkd: (data, token) =>
     axios.post(`${GOV_BASE}/hbiz_register/`, data, {
       headers: { Authorization: `Bearer ${token}` },
     }),
-  getJobStatus: (jobId, token) =>
+  getHkdJobStatus: (jobId, token) =>
     axios.get(`${GOV_BASE}/hbiz_register/status/${jobId}`, {
       headers: { Authorization: `Bearer ${token}` },
     }),
-  // screenshot trả về blob image/jpeg
+  // TLDN (DN): FE tự build payload từ form rồi gọi thẳng GOV_internal
+  submitTLDN: (typePath, payload, token) =>
+    axios.post(`${GOV_BASE}/biz_register/${typePath}`, payload, {
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+  getTLDNJobStatus: (jobId, token) =>
+    axios.get(`${GOV_BASE}/biz_register/status/${jobId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+  // screenshot dùng chung cho cả HKD và DN
   getScreenshot: (jobId, token) =>
     axios.get(`${GOV_BASE}/screenshot/${jobId}`, {
       headers: { Authorization: `Bearer ${token}` },
       responseType: 'blob',
+    }),
+  // alias cũ giữ lại để không break code cũ
+  getJobStatus: (jobId, token) =>
+    axios.get(`${GOV_BASE}/hbiz_register/status/${jobId}`, {
+      headers: { Authorization: `Bearer ${token}` },
     }),
 };
 
@@ -218,7 +232,7 @@ export const govJobStorage = {
 
 export const adminApi = {
   // Users
-  getUsers: () => api.get('/auth/users'),
+  getUsers: (params) => api.get('/auth/users', { params }),
   createUser: (data) => api.post('/auth/users', data),
   updateUser: (id, data) => api.put(`/auth/users/${id}`, data),
   deleteUser: (id) => api.delete(`/auth/users/${id}`),

@@ -19,6 +19,7 @@ from app.models.company import Company, CompanyPerson, CompanyPosition
 from app.models.customer import Customer, StaffConfig, SourceConfig, StatusConfig
 from app.models.document import Document
 from app.models.ocr_log import OcrLog
+from app.models.gov_job import GovJob
 from app.auth.models import User, Role, RolePermission
 
 # this is the Alembic Config object, which provides

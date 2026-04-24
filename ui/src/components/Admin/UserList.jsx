@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Plus, Pencil, Trash2, X, Eye, EyeOff } from 'lucide-react';
 import { adminApi, configApi } from '../../services/api';
+import Pagination, { PAGE_SIZE_OPTIONS } from '../Common/Pagination';
 
 const EMPTY_FORM = {
   email: '', password: '', display_name: '', is_active: true,
@@ -198,60 +199,91 @@ const UserModal = ({ user, roles, staffList, users, onClose, onSaved }) => {
 };
 
 const GENDER_LABEL = { 0: 'Nam', 1: 'Nữ' };
+const PAGE_SIZE = 50;
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
+  const [total, setTotal] = useState(0);
   const [roles, setRoles] = useState([]);
   const [staffList, setStaffList] = useState([]);
   const [editing, setEditing] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(PAGE_SIZE);
 
-  const load = async () => {
+  // Debounce search
+  useEffect(() => {
+    const t = setTimeout(() => { setDebouncedSearch(search); setPage(1); }, 350);
+    return () => clearTimeout(t);
+  }, [search]);
+
+  const fetchUsers = async () => {
     setLoading(true);
     try {
-      const [u, r, s] = await Promise.all([adminApi.getUsers(), adminApi.getRoles(), configApi.getStaff()]);
-      setUsers(u.data);
-      setRoles(r.data);
-      setStaffList(s.data);
-    } finally {
-      setLoading(false);
-    }
+      const res = await adminApi.getUsers({ skip: (page - 1) * pageSize, limit: pageSize, search: debouncedSearch || undefined });
+      setUsers(res.data.items ?? res.data);
+      setTotal(res.data.total ?? 0);
+    } finally { setLoading(false); }
   };
 
-  useEffect(() => { load(); }, []);
+  const loadMeta = async () => {
+    const [r, s] = await Promise.all([adminApi.getRoles(), configApi.getStaff()]);
+    setRoles(r.data);
+    setStaffList(s.data);
+  };
+
+  useEffect(() => { loadMeta(); }, []);
+  useEffect(() => { fetchUsers(); }, [page, pageSize, debouncedSearch]);
 
   const handleDelete = async (user) => {
     if (!window.confirm(`Xoá tài khoản "${user.display_name}"?`)) return;
     await adminApi.deleteUser(user.id);
-    load();
+    fetchUsers();
   };
+
+  const totalPages = Math.ceil(total / pageSize);
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-5">
-        <h3 className="text-sm font-black text-strong uppercase tracking-widest">Danh sách nhân viên</h3>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <h3 className="text-sm text-strong">Danh sách nhân viên</h3>
+          <span className="text-[10px] text-weak bg-input px-2 py-0.5 rounded-full">{total}</span>
+        </div>
         <button onClick={() => setEditing(false)}
-          className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white text-xs font-black rounded-xl hover:bg-orange-700 transition-colors">
+          className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white text-xs rounded-xl hover:bg-orange-700 transition-colors">
           <Plus size={13} /> Thêm
         </button>
+      </div>
+
+      {/* Search */}
+      <div className="mb-4">
+        <input
+          value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="Tìm theo tên, email, SĐT..."
+          className="w-full max-w-xs px-3 py-2 bg-page border border-base rounded-xl text-xs outline-none focus:border-orange-400"
+        />
       </div>
 
       {loading ? (
         <div className="text-center py-12 text-weak text-sm">Đang tải...</div>
       ) : (
+        <>
         <div className="overflow-x-auto rounded-2xl border border-base">
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-page border-b border-base">
                 {['Họ tên', 'SĐT / Email', 'Giới tính', 'CCCD', 'Vai trò', 'Quản lý', 'GOV', 'TT', ''].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-[10px] font-black text-body uppercase tracking-widest whitespace-nowrap">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left text-[10px] text-body uppercase tracking-widest whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {users.map(u => (
                 <tr key={u.id} className="border-b border-faint hover:bg-page/50 transition-colors">
-                  <td className="px-4 py-3 font-bold text-strong whitespace-nowrap">{u.display_name}</td>
+                  <td className="px-4 py-3 text-strong whitespace-nowrap">{u.display_name}</td>
                   <td className="px-4 py-3 text-xs text-body">
                     <div>{u.phone || '—'}</div>
                     <div className="text-weak">{u.email || ''}</div>
@@ -260,7 +292,7 @@ const UserList = () => {
                   <td className="px-4 py-3 text-xs font-mono text-body">{u.id_number || '—'}</td>
                   <td className="px-4 py-3">
                     {u.role_name
-                      ? <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-[10px] font-black rounded-lg whitespace-nowrap">{u.role_name}</span>
+                      ? <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-[10px] rounded-lg whitespace-nowrap">{u.role_name}</span>
                       : <span className="text-weak text-xs">—</span>}
                   </td>
                   <td className="px-4 py-3 text-xs text-body whitespace-nowrap">{u.manager_name || '—'}</td>
@@ -286,6 +318,13 @@ const UserList = () => {
           </table>
           {users.length === 0 && <div className="text-center py-10 text-weak text-sm">Chưa có nhân viên nào</div>}
         </div>
+
+        <Pagination
+          page={page} pageSize={pageSize} total={total}
+          onPageChange={setPage}
+          onPageSizeChange={(s) => { setPageSize(s); setPage(1); }}
+        />
+        </>
       )}
 
       {editing !== null && (
@@ -295,7 +334,7 @@ const UserList = () => {
           staffList={staffList}
           users={users}
           onClose={() => setEditing(null)}
-          onSaved={load}
+          onSaved={fetchUsers}
         />
       )}
     </div>

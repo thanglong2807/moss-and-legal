@@ -543,7 +543,7 @@ const HKDEditor = ({
           )}
 
           {/* 1. HKD INFO */}
-          <div className="bg-surface rounded-[24px] p-5 border border-base/60 shadow-sm relative overflow-hidden">
+          <div className="bg-surface rounded-[24px] p-5 border border-slate-300 dark:border-slate-600 shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600 shadow-sm border border-orange-100"><FileText size={16} /></div>
@@ -651,7 +651,7 @@ const HKDEditor = ({
           </div>
 
           {/* 2. OWNER INFO */}
-          <div className="bg-surface rounded-[24px] p-5 border border-base/60 shadow-sm">
+          <div className="bg-surface rounded-[24px] p-5 border border-slate-300 dark:border-slate-600 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 shadow-sm border border-indigo-100"><Users size={16} /></div>
@@ -812,7 +812,7 @@ const HKDEditor = ({
           </div>
 
           {/* 3. INDUSTRIES */}
-          <div className="bg-surface rounded-[24px] p-5 border border-base/60 shadow-sm relative z-30">
+          <div className="bg-surface rounded-[24px] p-5 border border-slate-300 dark:border-slate-600 shadow-sm relative z-30">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-100"><LayoutGrid size={16} /></div>
@@ -874,7 +874,7 @@ const HKDEditor = ({
         </div>
 
         <div className="w-80 shrink-0 overflow-y-auto pb-32 space-y-8">
-          <div className="bg-surface rounded-[32px] p-8 border border-base/60 shadow-sm">
+          <div className="bg-surface rounded-[32px] p-8 border border-slate-300 dark:border-slate-600 shadow-sm">
             <h4 className="text-[11px] font-black text-weak uppercase tracking-widest mb-8 flex items-center gap-2">
               <Info size={14} className="text-orange-500" /> Hồ sơ & Phân quyền
             </h4>

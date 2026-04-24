@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { UIProvider } from './context/UIContext';
 import Sidebar from './components/Sidebar/Sidebar';
 import HKDDashboard from './pages/HKDDashboard';
 import CustomerManagement from './pages/CustomerManagement';
@@ -94,6 +95,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <ThemeProvider>
+      <UIProvider>
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginPageWrapper />} />
@@ -104,6 +106,7 @@ const App = () => {
           } />
         </Routes>
       </AuthProvider>
+      </UIProvider>
       </ThemeProvider>
     </BrowserRouter>
   );

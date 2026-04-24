@@ -34,6 +34,19 @@ def _resolve_addr(db, addr: dict):
     return province_id, ward_id
 
 
+def _validate_capital(persons, company_type: int):
+    """LLC2 (2) và JSC (3): tổng ownership_percentage phải = 100%."""
+    if company_type not in (2, 3):
+        return
+    types = {"member"} if company_type == 2 else {"founder"}
+    total = sum(float(p.ownership_percentage or 0) for p in persons if p.person_type in types)
+    if persons and abs(total - 100) > 0.1:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Tổng vốn điều lệ phải bằng 100% (hiện tại: {total:.1f}%)"
+        )
+
+
 def _validate_industries(industries):
     empty = [i for i in industries if not (i.code or "").strip()]
     if empty:
@@ -152,6 +165,7 @@ class CompanyService:
             )
             db.add(person)
 
+        _validate_capital(obj_in.persons or [], obj_in.company_type)
         _validate_industries(obj_in.industries or [])
         for ind_in in (obj_in.industries or []):
             ind = _get_or_create_industry(db, ind_in.code)
@@ -254,6 +268,8 @@ class CompanyService:
                     asset_type_ratio=p.asset_type_ratio,
                 ))
 
+        if obj_in.persons is not None:
+            _validate_capital(obj_in.persons, company.company_type)
         if obj_in.industries is not None:
             _validate_industries(obj_in.industries)
             db.query(ProfileIndustry).filter(

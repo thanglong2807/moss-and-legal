@@ -155,7 +155,7 @@ const ConfigPage = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-page p-10 overflow-hidden">
+    <div className="flex-1 flex flex-col bg-page p-10 overflow-y-auto">
       <div className="mb-10">
         <h1 className="text-3xl font-black tracking-tight text-strong italic uppercase">Cấu hình hệ thống</h1>
         <p className="text-weak text-[11px] font-black uppercase tracking-widest mt-1">Quản lý danh mục nhân viên, nguồn khách và trạng thái hồ sơ</p>

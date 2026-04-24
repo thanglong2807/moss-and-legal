@@ -55,7 +55,7 @@ class Settings(BaseSettings):
             DRIVE_TLDN=self.GOOGLE_DRIVE_TLDN,
         )
 
-    model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
+    model_config = SettingsConfigDict(env_file=".env", case_sensitive=True, extra="ignore")
 
 
 settings = Settings()

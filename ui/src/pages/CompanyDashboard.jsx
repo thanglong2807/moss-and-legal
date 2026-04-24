@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Plus, Search } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useUI } from '../context/UIContext';
 import { companyApi, customerApi, configApi, adminUnitsApi, fieldsApi, industryApi, positionsApi } from '../services/api';
 import CompanyCard from '../components/Company/CompanyCard';
 import CompanyEditor from '../components/Company/CompanyEditor';
@@ -62,6 +63,7 @@ const CompanyDashboard = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { can } = useAuth();
+  const { ultraCollapsed } = useUI();
 
   const [companies, setCompanies] = useState([]);
   const [customers, setCustomers] = useState([]);
@@ -231,7 +233,7 @@ const CompanyDashboard = () => {
     <div className="flex-1 flex overflow-hidden">
       {/* ── Left panel (card list or full table) ── */}
       {showEditor ? (
-        <div className="w-72 shrink-0 border-r border-base flex flex-col bg-surface overflow-hidden">
+        <div className={`w-72 shrink-0 border-r border-base flex flex-col bg-surface overflow-hidden transition-all duration-300 ${ultraCollapsed ? 'hidden' : ''}`}>
           <div className="p-4 border-b border-faint flex flex-col gap-2">
             <div className="flex justify-between items-center">
               <span className="text-xs font-black text-body uppercase tracking-widest">Doanh nghiệp</span>

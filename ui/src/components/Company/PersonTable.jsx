@@ -353,6 +353,13 @@ const PersonTable = ({ persons, companyType, positions, provinces, wardOptions, 
 
   const repTypeLabel = nonRepGroups[0]?.label || 'Thành viên';
 
+  // Tính tổng % vốn điều lệ cho LLC2 (member) và JSC (founder)
+  const capitalTypes = ['member', 'founder'];
+  const capitalPersons = list.filter(p => capitalTypes.includes(p.person_type));
+  const totalPct = capitalPersons.reduce((s, p) => s + (parseFloat(p.ownership_percentage) || 0), 0);
+  const showCapitalTotal = companyType === 2 || companyType === 3;
+  const capitalOk = Math.abs(totalPct - 100) < 0.01;
+
   const commonProps = { positions, companyType, provinces, wardOptions, loadWards, onChange: updatePerson, onRemove: removePerson, companyId, onFolderCreated, customer };
 
   return (
@@ -362,8 +369,14 @@ const PersonTable = ({ persons, companyType, positions, provinces, wardOptions, 
         const group = list.map((p, i) => ({ p, i })).filter(({ p }) => p.person_type === type);
         return (
           <div key={type}>
-            <div className="mb-3">
+            <div className="mb-3 flex items-center gap-2">
               <span className="text-[10px] font-black text-weak uppercase tracking-widest">{label}</span>
+              {showOwnership && showCapitalTotal && (
+                <span className={`flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full ${capitalOk ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                  {!capitalOk && <span title="Tổng vốn điều lệ chưa đủ 100%">⚠</span>}
+                  Tổng: {totalPct.toFixed(1)}%
+                </span>
+              )}
             </div>
             <div className="space-y-2">
               {group.map(({ p, i }, groupIdx) => (

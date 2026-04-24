@@ -130,7 +130,97 @@ async def delete_company_document(doc_id: int, db: Session = Depends(get_db)):
     return {"status": "success"}
 
 
-@router.post("/{company_id}/gov", dependencies=[Depends(require_permission("company", "update"))])
-async def submit_gov(company_id: int, db: Session = Depends(get_db)):
-    # TODO: implement GOV submission for company (different GOV API endpoint)
-    raise HTTPException(status_code=501, detail="GOV TLDN chưa triển khai")
+def _build_gov_payload(company) -> dict:
+    """Chuyển Company model → dict payload cho GOV_internal biz_register."""
+
+    def _addr(province_obj, ward_obj, street):
+        return {
+            "country": "Việt Nam",
+            "province": (province_obj.name if province_obj else "").replace("Tỉnh ", "").replace("Thành phố ", "").strip(),
+            "ward": ward_obj.name if ward_obj else "",
+            "street": street or "",
+        }
+
+    def _person_base(p):
+        return {
+            "personal_info": {
+                "full_name": p.full_name or "",
+                "gender": p.gender if p.gender is not None else 0,
+                "birth_date": p.birth_date.strftime("%d/%m/%Y") if p.birth_date else "",
+                "id_number": p.id_number or "",
+            },
+            "contact_address": _addr(p.province, p.ward, p.street),
+            "contact_info": {"phone": p.phone or "", "fax": p.fax or "", "email": p.email or "", "website": ""},
+        }
+
+    def _capital_contribution(p):
+        return {
+            "ownership_percentage": int(p.ownership_percentage or 0),
+            "asset_type_ratio": int(p.asset_type_ratio or 0),
+        }
+
+    comp_info = company.company_info or {}
+    charter_capital = company.charter_capital or 0
+
+    industries = [
+        {"code": ind["code"], "is_main": ind.get("is_main", False), "note": ind.get("note", "")}
+        for ind in (company.industries or [])
+    ]
+
+    company_info_payload = {
+        "name": {
+            "full": company.company_full_name or "",
+            "foreign": company.company_foreign_name or "",
+            "short": company.company_short_name or "",
+        },
+        "address": _addr(company.province, company.ward, company.street),
+        "contact": {
+            "phone": company.phone or "",
+            "fax": company.fax or "",
+            "email": company.email or "",
+            "website": company.website or "",
+        },
+    }
+
+    charter_capital_payload = {"info": {"amount": charter_capital, "text": ""}}
+
+    tax_payload = {
+        "accounting": {
+            "full_name": company.accounting_name or "",
+            "phone": company.accounting_phone or "",
+        }
+    }
+
+    persons = company.persons or []
+    representatives = [
+        {**_person_base(p), "position": {"value": p.position_id or 0, "text": p.position.name if p.position else ""}}
+        for p in persons if p.person_type == "representative"
+    ]
+
+    base = {
+        "company_type": company.company_type,
+        "company_info": company_info_payload,
+        "charter_capital": charter_capital_payload,
+        "tax": tax_payload,
+        "representatives": representatives,
+        "industries": industries,
+    }
+
+    if company.company_type == 1:  # LLC1
+        owners = [p for p in persons if p.person_type == "owner"]
+        owner = owners[0] if owners else None
+        base["owner"] = {
+            **({"type": 1, **_person_base(owner), "capital_contribution": _capital_contribution(owner)} if owner else {}),
+        }
+    elif company.company_type == 2:  # LLC2
+        base["members"] = [
+            {"type": 1, **_person_base(p), "capital_contribution": _capital_contribution(p)}
+            for p in persons if p.person_type == "member"
+        ]
+    elif company.company_type == 3:  # JSC
+        base["founders"] = [
+            {"type": 1, **_person_base(p), "capital_contribution": _capital_contribution(p)}
+            for p in persons if p.person_type == "founder"
+        ]
+
+    return base

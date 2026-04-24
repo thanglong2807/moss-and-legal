@@ -59,6 +59,34 @@ def me(current_user=Depends(get_current_user), db: Session = Depends(get_db)):
     }
 
 
+@router.put("/me/password")
+def change_password(
+    current_password: str = Form(...),
+    new_password: str = Form(...),
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    from app.auth.service import hash_password
+    user = user_service.get_user_by_id(db, current_user.id)
+    if not verify_password(current_password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="Mật khẩu hiện tại không đúng")
+    user.hashed_password = hash_password(new_password)
+    db.commit()
+    return {"message": "Đổi mật khẩu thành công"}
+
+
+@router.put("/me/profile")
+def update_profile(
+    display_name: str = Form(...),
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    user = user_service.get_user_by_id(db, current_user.id)
+    user.display_name = display_name
+    db.commit()
+    return {"message": "Cập nhật thành công", "display_name": user.display_name}
+
+
 @router.post("/logout")
 def logout():
     # Stateless JWT — client clears tokens; nothing to do server-side
@@ -87,8 +115,11 @@ def refresh(
 # ── Users (admin only) ────────────────────────────────────────────────────────
 
 @router.get("/users")
-def list_users(db: Session = Depends(get_db), _=Depends(require_admin)):
-    return user_service.get_users(db)
+def list_users(
+    skip: int = 0, limit: int = 50, search: str = None,
+    db: Session = Depends(get_db), _=Depends(require_admin),
+):
+    return user_service.get_users(db, skip=skip, limit=limit, search=search)
 
 
 @router.post("/users", status_code=201)

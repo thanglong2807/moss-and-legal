@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
-  ArrowLeft, Save, Trash2, Plus, X, Search,
+  ArrowLeft, Save, Trash2, Plus, X, Search, MapPin,
   Download, Upload, Building2, ExternalLink,
   Info, Users, LayoutGrid, FileText, Loader2,
   CheckSquare, Square,
@@ -343,7 +343,7 @@ const CompanyEditor = ({
           )}
 
           {/* ── 1. Company Info ── */}
-          <div className="bg-surface rounded-[24px] p-5 border border-base/60 shadow-sm relative overflow-hidden">
+          <div className="bg-surface rounded-[24px] p-5 border border-slate-300 dark:border-slate-600 shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600 shadow-sm border border-orange-100"><FileText size={16} /></div>
@@ -390,9 +390,15 @@ const CompanyEditor = ({
                       const q = `${prefix} ${name} (${siteFilter})`;
                       window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`, '_blank');
                     }}
-                    className="shrink-0 px-3 text-weak hover:text-blue-600 hover:bg-blue-50 border-l border-base transition"
+                    className="shrink-0 flex items-center gap-1.5 px-3 text-weak hover:text-blue-600 hover:bg-blue-50 border-l border-base transition"
                   >
-                    <Search size={14} />
+                    <svg viewBox="0 0 24 24" width="13" height="13" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    <span className="text-[10px] font-black">Tìm kiếm</span>
                   </button>
                 </div>
               </div>
@@ -451,8 +457,22 @@ const CompanyEditor = ({
               </div>
               <div className="col-span-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Số nhà, tên đường</label>
-                <input className="w-full px-3 py-2.5 bg-page border border-base rounded-xl font-black text-sm outline-none"
-                  value={addr.street || ''} onChange={e => setCI('address.street', e.target.value)} />
+                <div className="flex gap-1.5">
+                  <input className="flex-1 min-w-0 px-3 py-2.5 bg-page border border-base rounded-xl font-black text-sm outline-none"
+                    value={addr.street || ''} onChange={e => setCI('address.street', e.target.value)} />
+                  <button
+                    type="button"
+                    title="Xem trên Google Maps"
+                    onClick={() => {
+                      const parts = [addr.street, wardCompany.find(w => w.id === addr.ward_id)?.name, provinces.find(p => p.id === addr.province_id)?.name].filter(Boolean);
+                      if (!parts.length) return;
+                      window.open(`https://www.google.com/maps/search/${encodeURIComponent(parts.join(', '))}`, '_blank');
+                    }}
+                    className="shrink-0 flex items-center gap-1 px-2.5 bg-page border border-base rounded-xl text-weak hover:text-emerald-600 hover:bg-emerald-50 hover:border-emerald-300 transition"
+                  >
+                    <MapPin size={13} /><span className="text-[10px] font-black">Xem Map</span>
+                  </button>
+                </div>
               </div>
 
               {/* SĐT + Email + Fax + Website (2x2) */}
@@ -491,7 +511,7 @@ const CompanyEditor = ({
           </div>
 
           {/* ── 2. Persons ── */}
-          <div className="bg-surface rounded-[24px] p-5 border border-base/60 shadow-sm">
+          <div className="bg-surface rounded-[24px] p-5 border border-slate-300 dark:border-slate-600 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 shadow-sm border border-indigo-100"><Users size={16} /></div>
               <h3 className="text-xs font-black text-strong uppercase tracking-widest">
@@ -515,7 +535,7 @@ const CompanyEditor = ({
           </div>
 
           {/* ── 3. Industries ── */}
-          <div className="bg-surface rounded-[24px] p-5 border border-base/60 shadow-sm relative z-30">
+          <div className="bg-surface rounded-[24px] p-5 border border-slate-300 dark:border-slate-600 shadow-sm relative z-30">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-100"><LayoutGrid size={16} /></div>
@@ -575,7 +595,7 @@ const CompanyEditor = ({
           </div>
 
           {/* ── 4. Kế toán ── */}
-          <div className="bg-surface rounded-[24px] p-5 border border-base/60 shadow-sm">
+          <div className="bg-surface rounded-[24px] p-5 border border-slate-300 dark:border-slate-600 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600 shadow-sm border border-teal-100">
                 <Users size={16} />
@@ -618,7 +638,7 @@ const CompanyEditor = ({
 
         {/* ── Right Sidebar ── */}
         <div className="w-80 shrink-0 overflow-y-auto pb-32 space-y-8">
-          <div className="bg-surface rounded-[32px] p-8 border border-base/60 shadow-sm">
+          <div className="bg-surface rounded-[32px] p-8 border border-slate-300 dark:border-slate-600 shadow-sm">
             <h4 className="text-[11px] font-black text-weak uppercase tracking-widest mb-8 flex items-center gap-2">
               <Info size={14} className="text-orange-500" /> Hồ sơ & Phân quyền
             </h4>

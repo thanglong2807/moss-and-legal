@@ -43,9 +43,15 @@ def _base_query():
     )
 
 
-def get_users(db: Session) -> list[UserRead]:
-    users = db.execute(_base_query().order_by(User.id)).scalars().unique().all()
-    return [_enrich(u) for u in users]
+def get_users(db: Session, skip: int = 0, limit: int = 50, search: str = None):
+    from sqlalchemy import or_, func
+    q = _base_query()
+    if search:
+        like = f"%{search}%"
+        q = q.where(or_(User.display_name.ilike(like), User.email.ilike(like), User.phone.ilike(like)))
+    total = db.execute(select(func.count()).select_from(q.subquery())).scalar()
+    users = db.execute(q.order_by(User.id).offset(skip).limit(limit)).scalars().unique().all()
+    return {"items": [_enrich(u) for u in users], "total": total}
 
 
 def get_user_by_email(db: Session, email: str) -> Optional[User]:

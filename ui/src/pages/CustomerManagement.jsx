@@ -6,6 +6,7 @@ import QuickCustomerModal from '../components/Customer/QuickCustomerModal';
 import CustomerDetailModal from '../components/Customer/CustomerDetailModal';
 import Pagination from '../components/Common/Pagination';
 import { useAuth } from '../context/AuthContext';
+import { useUI } from '../context/UIContext';
 
 const CustomerCard = ({ customer, isSelected, onClick }) => (
   <div
@@ -31,6 +32,7 @@ const CustomerCard = ({ customer, isSelected, onClick }) => (
 const CustomerManagement = ({ onShowHKDs }) => {
   const navigate = useNavigate();
   const { can } = useAuth();
+  const { ultraCollapsed } = useUI();
   const [customers, setCustomers] = useState([]);
   const [sources, setSources] = useState([]);
   const [staff, setStaff] = useState([]);
@@ -109,7 +111,7 @@ const CustomerManagement = ({ onShowHKDs }) => {
 
       {/* LEFT */}
       {showPanel ? (
-        <div className="w-72 shrink-0 border-r border-base flex flex-col bg-surface overflow-hidden">
+        <div className={`w-72 shrink-0 border-r border-base flex flex-col bg-surface overflow-hidden transition-all duration-300 ${ultraCollapsed ? 'hidden' : ''}`}>
           <div className="p-4 border-b border-base flex flex-col gap-2">
             <div className="flex justify-between items-center">
               <span className="text-xs font-black text-body uppercase tracking-widest">Khách hàng</span>
