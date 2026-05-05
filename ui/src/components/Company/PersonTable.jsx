@@ -5,6 +5,7 @@ import PasteDropZone from '../Common/PasteDropZone';
 import DriveFileLink from '../Common/DriveFileLink';
 import { ocrApi, companyDriveApi } from '../../services/api';
 import { compressImage } from '../../utils/validators';
+import { useToast } from '../Common/Toast';
 
 const ADMIN_PREFIXES = ['thành phố', 'tỉnh', 'tp.', 'quận', 'huyện', 'thị xã', 'phường', 'xã', 'thị trấn'];
 const stripAdminPrefix = (name) => {
@@ -27,6 +28,7 @@ const PersonForm = ({
   companyId, onFolderCreated,
   customer, nonRepPersons, personTypeLabel,
 }) => {
+  const showToast = useToast();
   const [open, setOpen] = useState(true);
   const [ocrRunning, setOcrRunning] = useState(false);
   const [cccdUploading, setCccdUploading] = useState({ front: false, back: false });
@@ -131,7 +133,7 @@ const PersonForm = ({
         onChange(index, updates);
       }
     } catch (e) {
-      alert('Lỗi upload CCCD: ' + (e.response?.data?.detail || e.message));
+      showToast('Lỗi upload CCCD: ' + (e.response?.data?.detail || e.message), 'error');
     } finally {
       setCccdUploading(prev => ({ ...prev, [side]: false }));
       if (side === 'front') setOcrRunning(false);
@@ -214,14 +216,14 @@ const PersonForm = ({
           <div className="grid grid-cols-6 gap-3">
             {/* Name */}
             <div className={showPosition ? 'col-span-4' : 'col-span-6'}>
-              <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Họ và tên</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Họ và tên <span className="text-red-500">*</span></label>
               <input className="w-full px-3 py-2.5 bg-surface border border-base rounded-xl font-black text-sm outline-none focus:border-indigo-400 transition uppercase"
                 value={person.full_name || ''} onChange={e => upd('full_name', e.target.value.toUpperCase())} />
             </div>
 
             {showPosition && (
               <div className="col-span-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Chức danh</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Chức danh <span className="text-red-500">*</span></label>
                 <select className="w-full px-3 py-2.5 bg-surface border border-base rounded-xl text-xs font-bold outline-none appearance-none"
                   value={person.position_id || ''} onChange={e => upd('position_id', e.target.value ? parseInt(e.target.value) : null)}>
                   <option value="">-- Chọn --</option>
@@ -271,7 +273,7 @@ const PersonForm = ({
           {/* Fields grid */}
           <div className="grid grid-cols-6 gap-3">
             <div className="col-span-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Giới tính</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Giới tính <span className="text-red-500">*</span></label>
               <div className="flex gap-2">
                 {[{ v: 0, label: 'Nam' }, { v: 1, label: 'Nữ' }].map(g => (
                   <button key={g.v} onClick={() => upd('gender', g.v)}
@@ -282,19 +284,19 @@ const PersonForm = ({
               </div>
             </div>
             <div className="col-span-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Ngày sinh</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Ngày sinh <span className="text-red-500">*</span></label>
               <input type="date" className="w-full px-3 py-2.5 bg-surface border border-base rounded-xl font-black text-sm outline-none"
                 value={(() => { const bd = person.birth_date; if (!bd) return ''; const p = bd.split('/'); return p.length === 3 ? `${p[2]}-${p[1]}-${p[0]}` : bd; })()}
                 onChange={e => { const v = e.target.value; if (!v) { upd('birth_date', ''); return; } const [y, m, d] = v.split('-'); upd('birth_date', `${d}/${m}/${y}`); }} />
             </div>
             <div className="col-span-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Số CCCD/CMND</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Số CCCD/CMND <span className="text-red-500">*</span></label>
               <input className="w-full px-3 py-2.5 bg-surface border border-base rounded-xl font-black text-sm outline-none"
                 value={person.id_number || ''} onChange={e => upd('id_number', e.target.value)} />
             </div>
 
             <div className="col-span-6 bg-page/50 p-4 rounded-2xl border border-dashed border-base">
-              <h4 className="text-[10px] font-black text-body uppercase tracking-widest mb-3">Địa chỉ liên hệ</h4>
+              <h4 className="text-[10px] font-black text-body uppercase tracking-widest mb-3">Địa chỉ liên hệ <span className="text-red-500">*</span></h4>
               <div className="grid grid-cols-3 gap-3">
                 <SearchableSelect value={person.province_id || ''} onChange={id => { upd('province_id', id); if (id) loadWards(`person_${index}`, id); }} options={provinces} placeholder="Tỉnh/Thành" />
                 <SearchableSelect value={person.ward_id || ''} onChange={id => upd('ward_id', id)} options={wardOptions[`person_${index}`] || []} placeholder="Phường/Xã" />
@@ -316,7 +318,7 @@ const PersonForm = ({
 
             {showOwnership && (
               <div className="col-span-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Tỷ lệ vốn góp (%)</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Tỷ lệ vốn góp (%) <span className="text-red-500">*</span></label>
                 <input type="number" min="0" max="100" step="0.01"
                   className="w-full px-3 py-2.5 bg-surface border border-base rounded-xl font-black text-sm outline-none focus:border-emerald-400"
                   value={person.ownership_percentage ?? ''} onChange={e => upd('ownership_percentage', e.target.value !== '' ? parseFloat(e.target.value) : null)} />

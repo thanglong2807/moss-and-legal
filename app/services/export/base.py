@@ -148,7 +148,7 @@ class TemplateRegistry:
 
 # ── Generic export runner ─────────────────────────────────────────────────────
 
-def make_export_templates(template_dir: Path, reg: TemplateRegistry, code_key: str = "code"):
+def make_export_templates(template_dir: Path, reg: TemplateRegistry, code_key: str = "code", name_key: str | None = None):
     """
     Factory — returns an async export_templates(data, template_ids) function
     bound to the given template directory and registry.
@@ -178,7 +178,9 @@ def make_export_templates(template_dir: Path, reg: TemplateRegistry, code_key: s
             for fb, fn in results:
                 zf.writestr(fn, fb)
         ts = int(datetime.now().timestamp())
-        name = data.get(code_key) or str(ts)
+        code = data.get(code_key) or str(ts)
+        label = data.get(name_key, "") if name_key else ""
+        name = f"{code}_{label}" if label else code
         return buf.getvalue(), f"{name}_{ts}.zip"
 
     return export_templates

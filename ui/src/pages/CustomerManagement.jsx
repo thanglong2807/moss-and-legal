@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Search, Users, Phone, ExternalLink, Edit2, Link, RefreshCw, ArrowLeft, Trash2 } from 'lucide-react';
+import { Plus, Search, Users, Phone, ExternalLink, Edit2, Link, ArrowLeft, Trash2, FileText, Building2 } from 'lucide-react';
 import { customerApi, configApi } from '../services/api';
 import QuickCustomerModal from '../components/Customer/QuickCustomerModal';
 import CustomerDetailModal from '../components/Customer/CustomerDetailModal';
@@ -29,7 +29,7 @@ const CustomerCard = ({ customer, isSelected, onClick }) => (
   </div>
 );
 
-const CustomerManagement = ({ onShowHKDs }) => {
+const CustomerManagement = ({ onShowHKDs, onShowCompanies }) => {
   const navigate = useNavigate();
   const { can } = useAuth();
   const { ultraCollapsed } = useUI();
@@ -77,6 +77,7 @@ const CustomerManagement = ({ onShowHKDs }) => {
   const fetchAll = fetchCustomers;
 
   const handleShowHKDs = (id) => { onShowHKDs(id); navigate('/hkd'); };
+  const handleShowCompanies = (id) => { onShowCompanies?.(id); navigate('/company'); };
 
   const handleDelete = async () => {
     if (!window.confirm(`Xóa khách hàng "${selectedCustomer.name}"? Hành động này không thể hoàn tác.`)) return;
@@ -225,10 +226,6 @@ const CustomerManagement = ({ onShowHKDs }) => {
               </div>
             </div>
             <div className="flex gap-2">
-              <button onClick={handleSyncCRM} disabled={syncing} className={`flex items-center gap-1.5 px-4 py-2 rounded-2xl font-black text-xs border transition ${selectedCustomer.crm_link ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-surface border-base text-body hover:border-emerald-400 hover:text-emerald-600'}`}>
-                <RefreshCw size={13} className={syncing ? 'animate-spin' : ''} />
-                {selectedCustomer.crm_link ? 'Cập nhật CRM' : 'Đồng bộ CRM'}
-              </button>
               {can('customers', 'update') && (
                 <button onClick={() => setShowEdit(true)} className="flex items-center gap-1.5 px-4 py-2 bg-surface border border-base text-body rounded-2xl font-black text-xs hover:border-orange-400 hover:text-orange-600 transition">
                   <Edit2 size={13} /> Chỉnh sửa
@@ -240,7 +237,10 @@ const CustomerManagement = ({ onShowHKDs }) => {
                 </button>
               )}
               <button onClick={() => handleShowHKDs(selectedCustomer.id)} className="flex items-center gap-1.5 px-4 py-2 bg-orange-600 text-white rounded-2xl font-black text-xs hover:bg-orange-700 shadow-lg shadow-orange-100 transition">
-                Xem hồ sơ <ExternalLink size={12} />
+                <FileText size={13} /> Hộ kinh doanh
+              </button>
+              <button onClick={() => handleShowCompanies(selectedCustomer.id)} className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-2xl font-black text-xs hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition">
+                <Building2 size={13} /> Thành lập DN
               </button>
             </div>
           </div>

@@ -13,7 +13,7 @@ const STATUS_CONFIG = {
 const POLL_SCREENSHOT_MS = 3000;
 const POLL_STATUS_MS = 5000;
 
-const GovProgressModal = ({ isOpen, onClose, jobId, hkdId }) => {
+const GovProgressModal = ({ isOpen, onClose, jobId, hkdId, service = 'hkd' }) => {
   const { token } = useAuth();
   const [status, setStatus] = useState('pending');
   const [imgUrl, setImgUrl] = useState(null);
@@ -40,7 +40,9 @@ const GovProgressModal = ({ isOpen, onClose, jobId, hkdId }) => {
   const fetchStatus = async () => {
     if (!jobId || !token) return;
     try {
-      const res = await govApi.getJobStatus(jobId, token);
+      const res = service === 'tldn'
+        ? await govApi.getTLDNJobStatus(jobId, token)
+        : await govApi.getJobStatus(jobId, token);
       const newStatus = res.data.status;
       const newError = res.data.error || '';
       setStatus(newStatus);

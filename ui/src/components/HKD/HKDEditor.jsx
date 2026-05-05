@@ -4,7 +4,6 @@ import {
   Users,
   Save,
   Download,
-  Send,
   Trash2,
   X,
   ArrowLeft,
@@ -22,13 +21,14 @@ import {
   CreditCard,
   Loader2,
 } from 'lucide-react';
-import { hkdApi, exportApi, govApi, govJobStorage, driveApi, ocrApi } from '../../services/api';
+import { hkdApi, exportApi, govApi, driveApi, ocrApi } from '../../services/api';
 import DriveFileLink from '../Common/DriveFileLink';
 import PasteDropZone from '../Common/PasteDropZone';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../Common/Toast';
 import SearchableSelect from '../Common/SearchableSelect';
 import UploadModal from './UploadModal';
-import GovProgressModal from './GovProgressModal';
+import GovJobModal from '../Common/GovJobModal';
 import CustomerDetailModal from '../Customer/CustomerDetailModal';
 import { validatePhone, validateEmail, sortIndustriesByCode, compressImage } from '../../utils/validators';
 
@@ -246,88 +246,63 @@ const buildGovPayload = (formData, provinces, wardOptions) => {
   };
 };
 
-const GovTransferModal = ({ isOpen, onClose, formData, provinces, wardOptions, onJobStarted }) => {
+const HKDGovModal = ({ isOpen, onClose, formData, provinces, wardOptions, onSave }) => {
   const { token } = useAuth();
-  const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState('');
-  if (!isOpen) return null;
-
   const payload = buildGovPayload(formData, provinces, wardOptions);
   const ci = payload.company_info;
   const ow = payload.owner;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-      <div className="bg-surface rounded-[28px] shadow-2xl w-[560px] max-h-[85vh] flex flex-col">
-        <div className="flex justify-between items-center px-8 py-6 border-b border-faint">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-indigo-50 rounded-xl flex items-center justify-center"><Building2 size={18} className="text-indigo-600" /></div>
-            <div>
-              <h3 className="text-base font-black text-strong uppercase tracking-tight">Xác nhận chuyển GOV</h3>
-              <p className="text-[10px] font-bold text-weak uppercase tracking-widest mt-0.5">Kiểm tra thông tin trước khi gửi</p>
-            </div>
-          </div>
-          <button onClick={onClose} className="p-2 hover:bg-input rounded-xl text-weak"><X size={16} /></button>
+  const previewContent = (
+    <div className="space-y-3 text-xs">
+      <div>
+        <p className="text-[10px] font-black uppercase tracking-widest text-weak mb-2">Thông tin HKD</p>
+        <div className="bg-page rounded-2xl p-4 space-y-1.5 font-bold text-body">
+          <div><span className="text-weak">Tên:</span> {ci.name.full}</div>
+          <div><span className="text-weak">Địa chỉ:</span> {ci.address.street}, {ci.address.ward}, {ci.address.province}</div>
+          <div><span className="text-weak">SĐT:</span> {ci.contact.phone}</div>
+          <div><span className="text-weak">Vốn:</span> {ci.charter_capital.toLocaleString('vi-VN')} VND</div>
         </div>
-        <div className="flex-1 overflow-y-auto px-8 py-6 space-y-4 text-xs">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-weak mb-2">Thông tin HKD</p>
-            <div className="bg-page rounded-2xl p-4 space-y-1.5 font-bold text-body">
-              <div><span className="text-weak">Tên:</span> {ci.name.full}</div>
-              <div><span className="text-weak">Địa chỉ:</span> {ci.address.street}, {ci.address.ward}, {ci.address.province}</div>
-              <div><span className="text-weak">SĐT:</span> {ci.contact.phone}</div>
-              <div><span className="text-weak">Vốn:</span> {ci.charter_capital.toLocaleString('vi-VN')} VND</div>
-            </div>
-          </div>
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-weak mb-2">Chủ sở hữu</p>
-            <div className="bg-page rounded-2xl p-4 space-y-1.5 font-bold text-body">
-              <div><span className="text-weak">Họ tên:</span> {ow.personal_info.full_name}</div>
-              <div><span className="text-weak">CCCD:</span> {ow.personal_info.id_number}</div>
-              <div><span className="text-weak">Ngày sinh:</span> {ow.personal_info.birth_date}</div>
-              <div><span className="text-weak">Địa chỉ:</span> {ow.contact_address.street}, {ow.contact_address.ward}, {ow.contact_address.province}</div>
-            </div>
-          </div>
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-weak mb-2">Ngành nghề ({payload.industries.length})</p>
-            <div className="bg-page rounded-2xl p-4 space-y-1 font-bold text-body">
-              {payload.industries.map((ind, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <span className="text-orange-600">{ind.code}</span>
-                  {ind.is_main && <span className="text-[9px] bg-orange-100 text-orange-600 px-1.5 py-0.5 rounded-full font-black">CHÍNH</span>}
-                </div>
-              ))}
-            </div>
-          </div>
+      </div>
+      <div>
+        <p className="text-[10px] font-black uppercase tracking-widest text-weak mb-2">Chủ sở hữu</p>
+        <div className="bg-page rounded-2xl p-4 space-y-1.5 font-bold text-body">
+          <div><span className="text-weak">Họ tên:</span> {ow.personal_info.full_name}</div>
+          <div><span className="text-weak">CCCD:</span> {ow.personal_info.id_number}</div>
+          <div><span className="text-weak">Ngày sinh:</span> {ow.personal_info.birth_date}</div>
+          <div><span className="text-weak">Địa chỉ:</span> {ow.contact_address.street}, {ow.contact_address.ward}, {ow.contact_address.province}</div>
         </div>
-        <div className="px-8 py-5 border-t border-faint flex justify-between items-center">
-          <span className="text-[11px] font-bold">{submitError ? <span className="text-red-500">{submitError}</span> : <span className="text-weak">Dữ liệu sẽ được gửi tự động lên GOV</span>}</span>
-          <div className="flex gap-3">
-            <button onClick={onClose} className="px-6 py-2.5 text-weak font-bold text-sm">Hủy</button>
-            <button
-              disabled={submitting}
-              onClick={async () => {
-                setSubmitting(true);
-                setSubmitError('');
-                try {
-                  const res = await govApi.submitHkd(payload, token);
-                  const jobId = res.data?.job_id;
-                  if (jobId) onJobStarted?.(jobId);
-                  onClose();
-                } catch (err) {
-                  setSubmitError(err?.response?.data?.detail || 'Gửi thất bại');
-                } finally {
-                  setSubmitting(false);
-                }
-              }}
-              className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-2xl font-black text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition disabled:opacity-50"
-            >
-              {submitting ? <RefreshCw size={15} className="animate-spin" /> : <Send size={15} />} Gửi hồ sơ
-            </button>
-          </div>
+      </div>
+      <div>
+        <p className="text-[10px] font-black uppercase tracking-widest text-weak mb-2">Ngành nghề ({payload.industries.length})</p>
+        <div className="bg-page rounded-2xl p-4 space-y-1 font-bold text-body">
+          {payload.industries.map((ind, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <span className="text-orange-600">{ind.code}</span>
+              {ind.is_main && <span className="text-[9px] bg-orange-100 text-orange-600 px-1.5 py-0.5 rounded-full font-black">CHÍNH</span>}
+            </div>
+          ))}
         </div>
       </div>
     </div>
+  );
+
+  const handleSubmit = async () => {
+    const res = await govApi.submitHkd(payload, token);
+    return { job_id: res.data.job_id };
+  };
+
+  return (
+    <GovJobModal
+      isOpen={isOpen}
+      onClose={onClose}
+      recordId={formData.id}
+      recordType="hkd"
+      recordName={formData.company_full_name}
+      service="hkd"
+      previewContent={previewContent}
+      onSubmit={handleSubmit}
+      onSave={onSave}
+    />
   );
 };
 
@@ -354,6 +329,7 @@ const HKDEditor = ({
   setSelectedFieldId
 }) => {
   const { can } = useAuth();
+  const showToast = useToast();
   const [syncing, setSyncing] = useState(false);
   const [activeIndustryIdx, setActiveIndustryIdx] = useState(null);
   const [showExtra, setShowExtra] = useState(false);
@@ -361,9 +337,7 @@ const HKDEditor = ({
   const [showExport, setShowExport] = useState(false);
   const [showGov, setShowGov] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
-  const [showGovProgress, setShowGovProgress] = useState(false);
   const [govErrors, setGovErrors] = useState([]);
-  const govJob = formData.id ? govJobStorage.get(formData.id) : null;
 
   // CCCD upload state
   const [cccdDocs, setCccdDocs] = useState({});      // { '005': doc, '006': doc }
@@ -388,7 +362,7 @@ const HKDEditor = ({
   const parseNum = (s) => parseInt(String(s).replace(/\D/g, '')) || null;
 
   const handleCccdUpload = async (label, file) => {
-    if (!formData.id) { alert('Vui lòng lưu hồ sơ trước khi upload CCCD.'); return; }
+    if (!formData.id) { showToast('Vui lòng lưu hồ sơ trước khi upload CCCD.', 'warn'); return; }
     setCccdUploading(prev => ({ ...prev, [label]: true }));
     if (label === '005') setOcrRunning(true);
     try {
@@ -412,7 +386,7 @@ const HKDEditor = ({
         if (entries.length > 0) batchUpdateFormData(entries);
       }
     } catch (e) {
-      alert('Lỗi upload: ' + (e.response?.data?.detail || e.message));
+      showToast('Lỗi upload: ' + (e.response?.data?.detail || e.message), 'error');
     } finally {
       setCccdUploading(prev => ({ ...prev, [label]: false }));
       if (label === '005') setOcrRunning(false);
@@ -427,7 +401,7 @@ const HKDEditor = ({
       await driveApi.deleteDoc(doc.id);
       setCccdDocs(prev => { const n = { ...prev }; delete n[label]; return n; });
     } catch (e) {
-      alert('Lỗi xóa: ' + (e.response?.data?.detail || e.message));
+      showToast('Lỗi xóa: ' + (e.response?.data?.detail || e.message), 'error');
     }
   };
 
@@ -438,8 +412,8 @@ const HKDEditor = ({
     try {
       const res = await hkdApi.syncCRM(formData.id);
       updateFormData('crm_link', res.data.crm_link);
-      alert("Đồng bộ CRM thành công!");
-    } catch (e) { alert("Lỗi khi đồng bộ CRM"); }
+      showToast('Đồng bộ CRM thành công!');
+    } catch (e) { showToast('Lỗi khi đồng bộ CRM', 'error'); }
     finally { setSyncing(false); }
   };
 
@@ -484,17 +458,6 @@ const HKDEditor = ({
               <Trash2 size={14} /> Xóa hồ sơ
             </button>
           )}
-          {formData.id && (
-            <button
-              onClick={handleSyncCRM}
-              disabled={syncing}
-              className={`flex items-center gap-2 px-4 py-2 rounded-2xl font-black text-[11px] transition-all border ${formData.crm_link ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-surface border-base text-body hover:border-emerald-500 hover:text-emerald-600'
-                }`}
-            >
-              {syncing ? <RefreshCw size={14} className="animate-spin" /> : <RefreshCw size={14} />}
-              {formData.crm_link ? 'CẬP NHẬT CRM' : 'NHẬP LÊN CRM'}
-            </button>
-          )}
           {can('hkd', formData.id ? 'update' : 'create') && (
             <button onClick={onSave} className="flex items-center gap-2 px-8 py-2 bg-orange-600 text-white rounded-2xl hover:bg-orange-700 shadow-lg shadow-orange-200/50 dark:shadow-none font-black text-xs transition">
               <Save size={18} /> LƯU HỒ SƠ
@@ -521,15 +484,6 @@ const HKDEditor = ({
               }} className="flex items-center gap-2 px-5 py-2.5 bg-surface border border-base text-body rounded-2xl font-black text-xs hover:border-indigo-400 hover:text-indigo-600 shadow-sm transition">
                 <Building2 size={14} /> Chuyển GOV
               </button>
-              {govJob && (
-                <button onClick={() => setShowGovProgress(true)} className={`flex items-center gap-2 px-5 py-2.5 bg-surface border rounded-2xl font-black text-xs shadow-sm transition ${govJob.status === 'completed' ? 'border-emerald-300 text-emerald-600 hover:bg-emerald-50' : govJob.status === 'failed' ? 'border-red-300 text-red-600 hover:bg-red-50' : 'border-blue-300 text-blue-600 hover:bg-blue-50'}`}>
-                  <RefreshCw size={14} />
-                  {govJob.status === 'completed' ? 'GOV: Hoàn thành' : govJob.status === 'failed' ? `GOV: Thất bại` : 'Xem tiến độ GOV'}
-                </button>
-              )}
-              {govJob?.status === 'failed' && govJob.error && (
-                <span className="text-[10px] font-bold text-red-500 px-1">{govJob.error}</span>
-              )}
             </div>
           )}
 
@@ -813,14 +767,9 @@ const HKDEditor = ({
 
           {/* 3. INDUSTRIES */}
           <div className="bg-surface rounded-[24px] p-5 border border-slate-300 dark:border-slate-600 shadow-sm relative z-30">
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-100"><LayoutGrid size={16} /></div>
-                <h3 className="text-xs font-black text-strong uppercase tracking-widest">Ngành nghề</h3>
-              </div>
-              <button onClick={addIndustryRow} className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-600 text-white rounded-xl font-black text-[10px] shadow-md shadow-orange-100 uppercase hover:bg-orange-700 transition">
-                <Plus size={12} /> Thêm
-              </button>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-100"><LayoutGrid size={16} /></div>
+              <h3 className="text-xs font-black text-strong uppercase tracking-widest">Ngành nghề</h3>
             </div>
 
             {formData.industries?.length > 0 ? (
@@ -867,8 +816,11 @@ const HKDEditor = ({
                 </tbody>
               </table>
             ) : (
-              <div className="py-8 text-center text-weak italic text-xs font-bold border border-dashed border-base rounded-xl">Chưa có ngành nghề nào. Bấm "+ Thêm" để thêm.</div>
+              <div className="py-8 text-center text-weak italic text-xs font-bold border border-dashed border-base rounded-xl">Chưa có ngành nghề nào.</div>
             )}
+            <button onClick={addIndustryRow} className="mt-3 w-full flex items-center justify-center gap-1.5 px-3 py-2 border border-dashed border-orange-300 text-orange-600 rounded-xl font-black text-[10px] hover:bg-orange-50 transition">
+              <Plus size={12} /> Thêm ngành nghề
+            </button>
           </div>
 
         </div>
@@ -963,8 +915,7 @@ const HKDEditor = ({
         </div>
       </div>
       <ExportModal isOpen={showExport} onClose={() => setShowExport(false)} formData={formData} />
-      <GovTransferModal isOpen={showGov} onClose={() => setShowGov(false)} formData={formData} provinces={provinces} wardOptions={wardOptions} onJobStarted={(jobId) => { govJobStorage.save(formData.id, jobId); }} />
-      <GovProgressModal isOpen={showGovProgress} onClose={() => setShowGovProgress(false)} jobId={govJob?.jobId} hkdId={formData.id} />
+      <HKDGovModal isOpen={showGov} onClose={() => setShowGov(false)} formData={formData} provinces={provinces} wardOptions={wardOptions} onSave={onSave} />
       <CustomerDetailModal
         customer={showCustomerDetail ? formData.customer : null}
         onClose={() => setShowCustomerDetail(false)}

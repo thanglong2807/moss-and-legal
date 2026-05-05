@@ -149,7 +149,7 @@ def _build_gui_kh(data: dict) -> dict:
         {
             "stt":       i + 1,
             "ten_nganh": ind.get("name", ""),
-            "ghi_chu":   f"\n({ind['note']})" if ind.get("note") else "",
+            "ghi_chu":   f"\n{ind['note']}" if ind.get("note") else "",
             "ma_nganh":  ind.get("code", ""),
             "chinh":     "X" if ind.get("is_main") else "",
         }
@@ -196,4 +196,4 @@ def _build_giay_gioi_thieu(data: dict) -> dict:
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
-export_templates = make_export_templates(TEMPLATE_DIR, registry)
+export_templates = make_export_templates(TEMPLATE_DIR, registry, name_key="hkd_name")

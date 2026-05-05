@@ -152,6 +152,12 @@ export const companyGovApi = {
   submit: (companyId) => api.post(`/company/${companyId}/gov`),
 };
 
+export const govSubmissionApi = {
+  create: (data) => api.post('/gov-submissions/', data),
+  list: (recordId, recordType) => api.get('/gov-submissions/', { params: { record_id: recordId, record_type: recordType } }),
+  patch: (id, data) => api.patch(`/gov-submissions/${id}`, data),
+};
+
 export const exportApi = {
   exportHkd: (hkdId, templateIds) =>
     api.post(`/export/hkd/${hkdId}`, { template_ids: templateIds }, { responseType: 'blob' }),

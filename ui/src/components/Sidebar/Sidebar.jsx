@@ -1,10 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
-  BarChart3, Users, Settings, ChevronLeft, ChevronRight,
+  Users, Settings, ChevronLeft, ChevronRight,
   FileText, Home, LayoutGrid, LogOut, Sun, Moon, ShieldCheck, Building2,
   KeyRound, User, X, Minimize2,
 } from 'lucide-react';
+import logoImage from '../../assets/logo.webp';
+import logoMini from '../../assets/logo_mini.png';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useUI } from '../../context/UIContext';
@@ -202,20 +204,10 @@ const Sidebar = () => {
         {/* Logo */}
         <div className={`px-4 py-5 mb-2 transition-all duration-500 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
           {!isCollapsed && (
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 bg-orange-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-orange-100 transform rotate-3 hover:rotate-0 transition-transform cursor-pointer">
-                <BarChart3 size={18} />
-              </div>
-              <div>
-                <h1 className="text-base italic tracking-tighter text-strong leading-none">CENVI</h1>
-                <div className="text-[9px] text-orange-600 uppercase tracking-[0.2em] leading-none">LAUNCH</div>
-              </div>
-            </div>
+            <img src={logoImage} alt="Logo" className="h-8 w-auto object-contain" />
           )}
           {isCollapsed && (
-            <div className="w-8 h-8 bg-orange-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-orange-100">
-              <BarChart3 size={16} />
-            </div>
+            <img src={logoMini} alt="Logo" className="w-8 h-8 object-contain" />
           )}
         </div>
 

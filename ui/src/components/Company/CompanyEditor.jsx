@@ -6,11 +6,13 @@ import {
   CheckSquare, Square,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../Common/Toast';
 import SearchableSelect from '../Common/SearchableSelect';
 import PersonTable from './PersonTable';
 import CustomerDetailModal from '../Customer/CustomerDetailModal';
-import { companyExportApi, companyTranslateApi } from '../../services/api';
+import { companyExportApi, companyTranslateApi, govApi } from '../../services/api';
 import CompanyUploadModal from './CompanyUploadModal';
+import GovJobModal from '../Common/GovJobModal';
 import { validatePhone, validateEmail, sortIndustriesByCode } from '../../utils/validators';
 import { COMPANY_SEARCH_SITES } from '../../constants';
 
@@ -164,20 +166,124 @@ const ExportModal = ({ isOpen, onClose, formData, onSave }) => {
   );
 };
 
-// ── GOV modal (TODO) ──────────────────────────────────────────────────────────
-const GovModal = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-      <div className="bg-surface rounded-[28px] shadow-2xl w-[420px] p-8 text-center">
-        <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <Building2 size={24} className="text-indigo-400" />
-        </div>
-        <h3 className="text-base font-black text-strong mb-2">Chuyển GOV — Đang phát triển</h3>
-        <p className="text-xs font-bold text-weak mb-6">Tính năng nộp hồ sơ TLDN lên GOV chưa triển khai.<br />Liên hệ admin để cập nhật.</p>
-        <button onClick={onClose} className="px-8 py-2.5 bg-indigo-600 text-white rounded-2xl font-black text-sm hover:bg-indigo-700 transition">Đóng</button>
+// ── Build GOV payload ─────────────────────────────────────────────────────────
+const TYPE_PATH = { 1: 'llc1', 2: 'llc2', 3: 'jsc' };
+
+const toGovDate = (d) => {
+  if (!d) return '';
+  // Already dd/mm/yyyy
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(d)) return d;
+  // ISO yyyy-mm-dd → dd/mm/yyyy
+  const [y, m, day] = d.split('-');
+  return day && m && y ? `${day}/${m}/${y}` : d;
+};
+
+const buildGovPayload = (formData, provinces, wardOptions) => {
+  const resolveName = (list, id) => list?.find(x => x.id === id || x.id === parseInt(id))?.name || '';
+  const ci = formData.company_info || {};
+  const addr = ci.address || {};
+  const contact = ci.contact || {};
+
+  const buildPerson = (p, wardKey) => ({
+    personal_info: {
+      full_name: p.full_name || '',
+      gender: p.gender ?? 0,
+      birth_date: toGovDate(p.birth_date),
+      id_number: p.id_number || '',
+    },
+    contact_address: {
+      country: 'Việt Nam',
+      province: resolveName(provinces, p.province_id),
+      ward: resolveName(wardOptions?.[wardKey], p.ward_id),
+      street: p.street || '',
+    },
+    contact_info: { phone: p.phone || '', fax: '', email: p.email || '', website: '' },
+  });
+
+  const persons = formData.persons || [];
+  const reps = persons.filter(p => p.person_type === 'representative');
+  const nonReps = persons.filter(p => p.person_type !== 'representative');
+
+  const representatives = reps.map((p, i) => ({
+    position: { value: p.position_id || 0, text: p.position_name || '' },
+    ...buildPerson(p, `person_${persons.indexOf(p)}`),
+  }));
+
+  const personKey = { 1: 'owner', 2: 'members', 3: 'founders' }[formData.company_type];
+  const personList = nonReps.map((p, i) => ({
+    type: 1,
+    ...buildPerson(p, `person_${persons.indexOf(p)}`),
+    capital_contribution: {
+      ownership_percentage: p.ownership_percentage ?? (formData.company_type === 1 ? 100 : 0),
+      asset_type_ratio: 100,
+    },
+  }));
+
+  const payload = {
+    company_id: formData.id,
+    company_type: formData.company_type,
+    company_info: {
+      name: {
+        full: formData.company_full_name || '',
+        foreign: ci.name?.foreign || '',
+        short: ci.name?.short || '',
+      },
+      address: {
+        country: 'Việt Nam',
+        province: resolveName(provinces, addr.province_id),
+        ward: resolveName(wardOptions?.company, addr.ward_id),
+        street: addr.street || '',
+      },
+      contact: { phone: contact.phone || '', fax: contact.fax || '', email: contact.email || '', website: contact.website || '' },
+    },
+    charter_capital: { info: { amount: ci.charter_capital || 0, text: '' } },
+    representatives,
+    [personKey]: formData.company_type === 1 ? (personList[0] || {}) : personList,
+    industries: (formData.industries || []).map(ind => ({ code: ind.code, is_main: ind.is_main || false, note: ind.note || '' })),
+    tax: { accounting: { full_name: formData.accounting_name || '', phone: formData.accounting_phone || '' } },
+  };
+
+  return payload;
+};
+
+// ── GOV Transfer Modal ────────────────────────────────────────────────────────
+const GovModal = ({ isOpen, onClose, formData, provinces, wardOptions, onSave }) => {
+  const { token } = useAuth();
+  const typePath = TYPE_PATH[formData.company_type];
+
+  const payload = buildGovPayload(formData, provinces, wardOptions);
+  const ci = payload.company_info;
+
+  const previewContent = (
+    <div>
+      <p className="text-[10px] font-black uppercase tracking-widest text-weak mb-2">Thông tin Doanh nghiệp</p>
+      <div className="bg-page rounded-2xl p-4 space-y-1.5 font-bold text-body text-xs">
+        <div><span className="text-weak">Loại hình:</span> {TYPE_LABELS[formData.company_type] || '—'}</div>
+        <div><span className="text-weak">Tên:</span> {ci.name.full}</div>
+        <div><span className="text-weak">Địa chỉ:</span> {[ci.address.street, ci.address.ward, ci.address.province].filter(Boolean).join(', ')}</div>
+        <div><span className="text-weak">SĐT:</span> {ci.contact.phone}</div>
+        <div><span className="text-weak">Vốn điều lệ:</span> {(payload.charter_capital.info.amount || 0).toLocaleString('vi-VN')} VNĐ</div>
       </div>
     </div>
+  );
+
+  const handleSubmit = async () => {
+    const res = await govApi.submitTLDN(typePath, payload, token);
+    return { job_id: res.data.job_id };
+  };
+
+  return (
+    <GovJobModal
+      isOpen={isOpen}
+      onClose={onClose}
+      recordId={formData.id}
+      recordType="company"
+      recordName={formData.company_full_name}
+      service="tldn"
+      previewContent={previewContent}
+      onSubmit={handleSubmit}
+      onSave={onSave}
+    />
   );
 };
 
@@ -197,6 +303,7 @@ const CompanyEditor = ({
   wardOptions, loadWards, customers,
 }) => {
   const { can } = useAuth();
+  const showToast = useToast();
   const [activeIndustryIdx, setActiveIndustryIdx] = useState(null);
   const [selectedFieldId, setSelectedFieldId] = useState('');
   const [translating, setTranslating] = useState(false);
@@ -370,7 +477,7 @@ const CompanyEditor = ({
             <div className="grid grid-cols-6 gap-3">
               {/* Row 1: Tên đầy đủ */}
               <div className="col-span-6">
-                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Tên doanh nghiệp (đầy đủ)</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Tên doanh nghiệp (đầy đủ) <span className="text-red-500">*</span></label>
                 <div className="flex items-stretch rounded-xl overflow-hidden border border-base bg-page focus-within:border-orange-500 focus-within:bg-surface transition-all">
                   <span className="flex items-center px-3 text-[10px] font-black text-body bg-input border-r border-base whitespace-nowrap select-none">
                     {formData.company_type === 3 ? 'CÔNG TY CỔ PHẦN' : 'CÔNG TY TNHH'}
@@ -420,7 +527,7 @@ const CompanyEditor = ({
                         const res = await companyTranslateApi.translateName(src, formData.company_type);
                         setCI('name.foreign', res.data.result);
                       } catch (e) {
-                        alert('Lỗi dịch: ' + (e.response?.data?.detail || e.message));
+                        showToast('Lỗi dịch: ' + (e.response?.data?.detail || e.message), 'error');
                       } finally { setTranslating(false); }
                     }}
                     disabled={translating || !formData.company_full_name}
@@ -440,7 +547,7 @@ const CompanyEditor = ({
 
               {/* Row 3: Vốn điều lệ standalone — full row */}
               <div className="col-span-6">
-                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Vốn điều lệ (VNĐ)</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Vốn điều lệ (VNĐ) <span className="text-red-500">*</span></label>
                 <input type="text" className="w-full px-3 py-2.5 bg-emerald-50 border border-emerald-200 rounded-xl font-black text-sm outline-none focus:border-emerald-400 text-emerald-700 transition-all"
                   value={fmtNum(ci.charter_capital)}
                   onChange={e => setCI('charter_capital', parseNum(e.target.value))} />
@@ -448,15 +555,15 @@ const CompanyEditor = ({
 
               {/* Address */}
               <div className="col-span-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Tỉnh/Thành phố</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Tỉnh/Thành phố <span className="text-red-500">*</span></label>
                 <SearchableSelect value={addr.province_id || ''} onChange={id => { setCI('address.province_id', id); loadWards('company', id); }} options={provinces} placeholder="-- Chọn --" />
               </div>
               <div className="col-span-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Phường/Xã</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Phường/Xã <span className="text-red-500">*</span></label>
                 <SearchableSelect value={addr.ward_id || ''} onChange={id => setCI('address.ward_id', id)} options={wardCompany} placeholder="-- Chọn --" />
               </div>
               <div className="col-span-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Số nhà, tên đường</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Số nhà, tên đường <span className="text-red-500">*</span></label>
                 <div className="flex gap-1.5">
                   <input className="flex-1 min-w-0 px-3 py-2.5 bg-page border border-base rounded-xl font-black text-sm outline-none"
                     value={addr.street || ''} onChange={e => setCI('address.street', e.target.value)} />
@@ -477,7 +584,7 @@ const CompanyEditor = ({
 
               {/* SĐT + Email + Fax + Website (2x2) */}
               <div className="col-span-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">SĐT</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">SĐT <span className="text-red-500">*</span></label>
                 {(() => { const s = validatePhone(contact.phone); return (
                   <div>
                     <input className={`w-full px-3 py-2.5 bg-page border rounded-xl font-black text-sm outline-none ${s === 'error' ? 'border-red-400' : s === 'warn' ? 'border-yellow-400' : 'border-base'}`}
@@ -488,7 +595,7 @@ const CompanyEditor = ({
                 ); })()}
               </div>
               <div className="col-span-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Email</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Email <span className="text-red-500">*</span></label>
                 {(() => { const s = validateEmail(contact.email); return (
                   <div>
                     <input className={`w-full px-3 py-2.5 bg-page border rounded-xl font-black text-sm outline-none ${s === 'error' ? 'border-red-400' : 'border-base'}`}
@@ -536,14 +643,9 @@ const CompanyEditor = ({
 
           {/* ── 3. Industries ── */}
           <div className="bg-surface rounded-[24px] p-5 border border-slate-300 dark:border-slate-600 shadow-sm relative z-30">
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-100"><LayoutGrid size={16} /></div>
-                <h3 className="text-xs font-black text-strong uppercase tracking-widest">Ngành nghề</h3>
-              </div>
-              <button onClick={addIndustryRow} className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-600 text-white rounded-xl font-black text-[10px] shadow-md shadow-orange-100 uppercase hover:bg-orange-700 transition">
-                <Plus size={12} /> Thêm
-              </button>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-100"><LayoutGrid size={16} /></div>
+              <h3 className="text-xs font-black text-strong uppercase tracking-widest">Ngành nghề</h3>
             </div>
 
             {formData.industries?.length > 0 ? (
@@ -552,7 +654,7 @@ const CompanyEditor = ({
                   <tr className="border-b-2 border-base">
                     <th className="text-left py-2 px-2 text-[9px] font-black uppercase tracking-widest text-body w-[45%]">Mã — Tên ngành nghề</th>
                     <th className="text-left py-2 px-2 text-[9px] font-black uppercase tracking-widest text-body">Ghi chú</th>
-                    <th className="text-center py-2 px-2 text-[9px] font-black uppercase tracking-widest text-body w-[72px]">NN Chính</th>
+                    <th className="text-center py-2 px-2 text-[9px] font-black uppercase tracking-widest text-body w-[72px]">NN Chính <span className="text-red-500">*</span></th>
                     <th className="w-8" />
                   </tr>
                 </thead>
@@ -590,8 +692,11 @@ const CompanyEditor = ({
                 </tbody>
               </table>
             ) : (
-              <div className="py-8 text-center text-weak italic text-xs font-bold border border-dashed border-base rounded-xl">Chưa có ngành nghề nào. Bấm "+ Thêm" để thêm.</div>
+              <div className="py-8 text-center text-weak italic text-xs font-bold border border-dashed border-base rounded-xl">Chưa có ngành nghề nào.</div>
             )}
+            <button onClick={addIndustryRow} className="mt-3 w-full flex items-center justify-center gap-1.5 px-3 py-2 border border-dashed border-orange-300 text-orange-600 rounded-xl font-black text-[10px] hover:bg-orange-50 transition">
+              <Plus size={12} /> Thêm ngành nghề
+            </button>
           </div>
 
           {/* ── 4. Kế toán ── */}
@@ -752,7 +857,7 @@ const CompanyEditor = ({
         folderId={formData.folder_id}
         onFolderCreated={folderId => updateFormData('folder_id', folderId)}
       />
-      <GovModal isOpen={showGov} onClose={() => setShowGov(false)} />
+      <GovModal isOpen={showGov} onClose={() => setShowGov(false)} formData={formData} provinces={provinces} wardOptions={wardOptions} onSave={onSave} />
       {showCustomerDetail && formData.customer && (
         <CustomerDetailModal
           customer={formData.customer}

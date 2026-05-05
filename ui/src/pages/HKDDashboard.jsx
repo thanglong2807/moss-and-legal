@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Plus, Search, XCircle, FileText } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useUI } from '../context/UIContext';
+import { useToast } from '../components/Common/Toast';
 import Pagination from '../components/Common/Pagination';
 import { hkdApi, customerApi, configApi, adminUnitsApi, fieldsApi, industryApi } from '../services/api';
 import { sortIndustriesByCode } from '../utils/validators';
@@ -36,6 +37,7 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
   const navigate = useNavigate();
   const { can } = useAuth();
   const { ultraCollapsed } = useUI();
+  const showToast = useToast();
 
   const [hkds, setHkds] = useState([]);
   const [total, setTotal] = useState(0);
@@ -187,17 +189,17 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
       await hkdApi.delete(formData.id);
       navigate('/hkd');
       fetchInitialData();
-    } catch (e) { alert("Lỗi khi xóa: " + (e.response?.data?.detail || e.message)); }
+    } catch (e) { showToast('Lỗi khi xóa: ' + (e.response?.data?.detail || e.message), 'error'); }
   };
 
   const handleSave = async () => {
-    if (!formData.customer_id) { alert("Hồ sơ phải gắn với khách hàng."); return; }
+    if (!formData.customer_id) { showToast('Hồ sơ phải gắn với khách hàng.', 'error'); return; }
     const industries = formData.industries || [];
     const emptyCodes = industries.filter(i => !i.code?.trim());
-    if (emptyCodes.length > 0) { alert("Có ngành nghề chưa chọn mã. Vui lòng chọn hoặc xóa bỏ."); return; }
+    if (emptyCodes.length > 0) { showToast('Có ngành nghề chưa chọn mã. Vui lòng chọn hoặc xóa bỏ.', 'error'); return; }
     const codes = industries.map(i => i.code.trim());
     const duplicates = codes.filter((c, idx) => codes.indexOf(c) !== idx);
-    if (duplicates.length > 0) { alert(`Mã ngành bị trùng: ${[...new Set(duplicates)].join(', ')}`); return; }
+    if (duplicates.length > 0) { showToast(`Mã ngành bị trùng: ${[...new Set(duplicates)].join(', ')}`, 'error'); return; }
     try {
       if (formData.id) {
         await hkdApi.update(formData.id, buildPayload(formData));
@@ -206,8 +208,8 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
         navigate(`/hkd/${res.data.id}`);
       }
       fetchInitialData();
-      alert("Đã lưu hồ sơ thành công!");
-    } catch (e) { alert("Lỗi khi lưu: " + (e.response?.data?.detail || e.message)); }
+      showToast('Đã lưu hồ sơ thành công!');
+    } catch (e) { showToast('Lỗi khi lưu: ' + (e.response?.data?.detail || e.message), 'error'); }
   };
 
   const copyAllIndustries = () => {

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { UIProvider } from './context/UIContext';
+import { ToastProvider } from './components/Common/Toast';
 import Sidebar from './components/Sidebar/Sidebar';
 import HKDDashboard from './pages/HKDDashboard';
 import CustomerManagement from './pages/CustomerManagement';
@@ -28,6 +29,7 @@ const ProtectedRoute = ({ children }) => {
 
 const AppLayout = () => {
   const [customerFilter, setCustomerFilter] = useState(null);
+  const [companyCustomerFilter, setCompanyCustomerFilter] = useState(null);
   const { can } = useAuth();
 
   return (
@@ -46,6 +48,7 @@ const AppLayout = () => {
           <Route path="/customers" element={
             <CustomerManagement
               onShowHKDs={(id) => setCustomerFilter(id)}
+              onShowCompanies={(id) => setCompanyCustomerFilter(id)}
             />
           } />
 
@@ -63,8 +66,8 @@ const AppLayout = () => {
             />
           } />
 
-          <Route path="/company" element={<CompanyDashboard />} />
-          <Route path="/company/:id" element={<CompanyDashboard />} />
+          <Route path="/company" element={<CompanyDashboard customerFilter={companyCustomerFilter} setCustomerFilter={setCompanyCustomerFilter} />} />
+          <Route path="/company/:id" element={<CompanyDashboard customerFilter={companyCustomerFilter} setCustomerFilter={setCompanyCustomerFilter} />} />
 
           <Route path="/fields" element={<FieldsPage />} />
 
@@ -96,6 +99,7 @@ const App = () => {
     <BrowserRouter>
       <ThemeProvider>
       <UIProvider>
+      <ToastProvider>
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginPageWrapper />} />
@@ -106,6 +110,7 @@ const App = () => {
           } />
         </Routes>
       </AuthProvider>
+      </ToastProvider>
       </UIProvider>
       </ThemeProvider>
     </BrowserRouter>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, XCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../components/Common/Toast';
 import { useUI } from '../context/UIContext';
 import { companyApi, customerApi, configApi, adminUnitsApi, fieldsApi, industryApi, positionsApi } from '../services/api';
 import CompanyCard from '../components/Company/CompanyCard';
@@ -59,11 +60,12 @@ const newBlankForm = (customer, type = 1) => ({
   accounting_phone: '',
 });
 
-const CompanyDashboard = () => {
+const CompanyDashboard = ({ customerFilter, setCustomerFilter }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { can } = useAuth();
   const { ultraCollapsed } = useUI();
+  const showToast = useToast();
 
   const [companies, setCompanies] = useState([]);
   const [customers, setCustomers] = useState([]);
@@ -93,9 +95,9 @@ const CompanyDashboard = () => {
     return () => clearTimeout(t);
   }, [searchQuery]);
 
-  useEffect(() => { setPage(1); }, [debouncedSearch, staffFilter]);
+  useEffect(() => { setPage(1); }, [debouncedSearch, staffFilter, customerFilter]);
 
-  useEffect(() => { fetchCompanies(); }, [page, pageSize, debouncedSearch, staffFilter]);
+  useEffect(() => { fetchCompanies(); }, [page, pageSize, debouncedSearch, staffFilter, customerFilter]);
 
   useEffect(() => {
     if (id) handleSelectCompany(id);
@@ -130,6 +132,7 @@ const CompanyDashboard = () => {
         skip: (page - 1) * pageSize, limit: pageSize,
         ...(debouncedSearch && { search: debouncedSearch }),
         ...(staffFilter && { staff_id: staffFilter }),
+        ...(customerFilter && { customer_id: customerFilter }),
       });
       setCompanies(res.data.items);
       setTotal(res.data.total);
@@ -199,35 +202,36 @@ const CompanyDashboard = () => {
       await companyApi.delete(formData.id);
       navigate('/company');
       fetchCompanies();
-    } catch (e) { alert('Lỗi khi xóa: ' + (e.response?.data?.detail || e.message)); }
+    } catch (e) { showToast('Lỗi khi xóa: ' + (e.response?.data?.detail || e.message), 'error'); }
   };
 
   const handleSave = async () => {
-    if (!formData.customer_id) { alert('Hồ sơ phải gắn với khách hàng.'); return; }
-    if (!formData.company_type) { alert('Vui lòng chọn loại hình doanh nghiệp.'); return; }
+    if (!formData.customer_id) { showToast('Hồ sơ phải gắn với khách hàng.', 'error'); return; }
+    if (!formData.company_type) { showToast('Vui lòng chọn loại hình doanh nghiệp.', 'error'); return; }
     const industries = formData.industries || [];
     const emptyCodes = industries.filter(i => !i.code?.trim());
-    if (emptyCodes.length > 0) { alert('Có ngành nghề chưa chọn mã.'); return; }
+    if (emptyCodes.length > 0) { showToast('Có ngành nghề chưa chọn mã.', 'error'); return; }
     const codes = industries.map(i => i.code.trim());
     const dups = codes.filter((c, idx) => codes.indexOf(c) !== idx);
-    if (dups.length > 0) { alert(`Mã ngành bị trùng: ${[...new Set(dups)].join(', ')}`); return; }
+    if (dups.length > 0) { showToast(`Mã ngành bị trùng: ${[...new Set(dups)].join(', ')}`, 'error'); return; }
     try {
       if (formData.id) {
         await companyApi.update(formData.id, buildPayload(formData));
-        alert('Đã lưu hồ sơ thành công!');
+        showToast('Đã lưu hồ sơ thành công!');
         fetchCompanies();
       } else {
         const res = await companyApi.create(buildPayload(formData));
-        alert('Đã tạo hồ sơ thành công!');
+        showToast('Đã tạo hồ sơ thành công!');
         fetchCompanies();
         navigate(`/company/${res.data.id}`);
       }
-    } catch (e) { alert('Lỗi khi lưu: ' + (e.response?.data?.detail || e.message)); }
+    } catch (e) { showToast('Lỗi khi lưu: ' + (e.response?.data?.detail || e.message), 'error'); }
   };
 
   const pagedCompanies = companies;
 
   const showEditor = !!(id || formData);
+  const activeCustomerName = customerFilter ? customers.find(c => c.id === customerFilter)?.name : null;
 
   return (
     <div className="flex-1 flex overflow-hidden">
@@ -236,12 +240,21 @@ const CompanyDashboard = () => {
         <div className={`w-72 shrink-0 border-r border-base flex flex-col bg-surface overflow-hidden transition-all duration-300 ${ultraCollapsed ? 'hidden' : ''}`}>
           <div className="p-4 border-b border-faint flex flex-col gap-2">
             <div className="flex justify-between items-center">
-              <span className="text-xs font-black text-body uppercase tracking-widest">Doanh nghiệp</span>
-              {can('company', 'create') && (
-                <button onClick={() => setShowSelector(true)} className="bg-orange-600 text-white p-1.5 rounded-lg hover:bg-orange-700 transition shadow-md shadow-orange-100">
-                  <Plus size={14} />
-                </button>
-              )}
+              <span className="text-xs font-black text-body uppercase tracking-widest truncate">
+                {activeCustomerName || 'Doanh nghiệp'}
+              </span>
+              <div className="flex gap-1.5 shrink-0">
+                {customerFilter && (
+                  <button onClick={() => setCustomerFilter?.(null)} className="p-1.5 text-weak hover:text-indigo-600 bg-indigo-50 rounded-lg transition">
+                    <XCircle size={12} />
+                  </button>
+                )}
+                {can('company', 'create') && (
+                  <button onClick={() => setShowSelector(true)} className="bg-orange-600 text-white p-1.5 rounded-lg hover:bg-orange-700 transition shadow-md shadow-orange-100">
+                    <Plus size={14} />
+                  </button>
+                )}
+              </div>
             </div>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-weak" size={12} />
@@ -266,14 +279,23 @@ const CompanyDashboard = () => {
           <div className="p-5 border-b border-faint flex flex-col gap-3">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-xl font-black tracking-tight text-strong">Hồ sơ Doanh nghiệp</h1>
+                <h1 className="text-xl font-black tracking-tight text-strong">
+                  {activeCustomerName ? `Hồ sơ: ${activeCustomerName}` : 'Hồ sơ Doanh nghiệp'}
+                </h1>
                 <p className="text-[11px] font-bold text-weak uppercase tracking-widest mt-0.5">{total} hồ sơ</p>
               </div>
-              {can('company', 'create') && (
-                <button onClick={() => setShowSelector(true)} className="bg-orange-600 text-white px-4 py-2 rounded-2xl hover:bg-orange-700 transition shadow-lg shadow-orange-100 flex items-center gap-2 font-black text-xs">
-                  <Plus size={16} /> MỚI
-                </button>
-              )}
+              <div className="flex items-center gap-2">
+                {customerFilter && (
+                  <button onClick={() => setCustomerFilter?.(null)} className="flex items-center gap-1 text-[10px] font-black hover:text-indigo-600 bg-indigo-50 px-2.5 py-1.5 rounded-xl border border-indigo-100 transition uppercase">
+                    <XCircle size={12} /> Bỏ lọc
+                  </button>
+                )}
+                {can('company', 'create') && (
+                  <button onClick={() => setShowSelector(true)} className="bg-orange-600 text-white px-4 py-2 rounded-2xl hover:bg-orange-700 transition shadow-lg shadow-orange-100 flex items-center gap-2 font-black text-xs">
+                    <Plus size={16} /> MỚI
+                  </button>
+                )}
+              </div>
             </div>
             <div className="flex gap-2">
               <div className="relative flex-1 max-w-sm">

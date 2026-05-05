@@ -1,4 +1,4 @@
-from app.api.v1.endpoints import hkd, fields, industries, customers, configs, admin_units, export, drive, webhook, ocr, company
+from app.api.v1.endpoints import hkd, fields, industries, customers, configs, admin_units, export, drive, webhook, ocr, company, gov_submission
 from app.auth.router import router as auth_router
 from fastapi import APIRouter
 
@@ -15,4 +15,5 @@ api_router.include_router(drive.router, prefix="/drive", tags=["Drive"])
 api_router.include_router(webhook.router, prefix="/webhook", tags=["WH"])
 api_router.include_router(ocr.router, prefix="/ocr", tags=["OCR"])
 api_router.include_router(company.router, prefix="/company", tags=["Company"])
+api_router.include_router(gov_submission.router, prefix="/gov-submissions", tags=["GOV Submissions"])
 

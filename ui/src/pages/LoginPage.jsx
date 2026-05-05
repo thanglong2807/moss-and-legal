@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { BarChart3, Eye, EyeOff, LogIn } from 'lucide-react';
+import { Eye, EyeOff, LogIn } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import bgImage from '../assets/bg.jpg';
+import logoImage from '../assets/logo.webp';
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -26,21 +27,14 @@ const LoginPage = () => {
   };
 
   return (
-    // <div className="min-h-screen bg-page flex items-center justify-center p-4">
     <div
-  className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
-  style={{ backgroundImage: `url(${bgImage})` }}
->
+      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-orange-50"
+      style={{ backgroundImage: `url(${bgImage})` }}
+    >
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="flex items-center gap-3 mb-10 justify-center">
-          <div className="w-12 h-12 bg-orange-600 rounded-[16px] flex items-center justify-center text-white shadow-xl shadow-orange-200 transform rotate-3">
-            <BarChart3 size={28} />
-          </div>
-          <div>
-            <h1 className="text-2xl font-black italic tracking-tighter text-strong">CENVI</h1>
-            <div className="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em] leading-none">LAUNCH</div>
-          </div>
+        <div className="flex justify-center mb-10">
+          <img src={logoImage} alt="Logo" className="h-14 w-auto object-contain" />
         </div>
 
         <div className="bg-surface rounded-3xl shadow-sm border border-faint p-8">

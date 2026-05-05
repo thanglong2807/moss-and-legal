@@ -35,6 +35,9 @@ DATA_DIR = Path(__file__).parent.parent.parent.parent / "data"
 
 _TYPE_DIR = {1: "LLC1", 2: "LLC2", 3: "JSC"}
 
+ROLE_ADMIN = 1   # Admin
+ROLE_LEGAL = 4   # Chuyên viên pháp lý
+
 # ── Phòng ĐKKD lookup ─────────────────────────────────────────────────────────
 
 _PDKKD_MAP: dict[str, str] = {}
@@ -203,7 +206,7 @@ def process_data(raw: dict) -> dict:
             "stt": i + 1,
             "ten_nganh": ind.get("name", ""),
             "ma_nganh": ind.get("code", ""),
-            "ghi_chu": f"\n({ind['note']})" if ind.get("note") else "",
+            "ghi_chu": f"\n{ind['note']}" if ind.get("note") else "",
             "chinh": "X" if ind.get("is_main") else "",
         }
         for i, ind in enumerate(data.get("industries") or [])
@@ -273,14 +276,17 @@ def _person_to_dict(p: CompanyPerson) -> dict:
 
 
 def _get_taxpayer(current_user) -> dict:
-    """
-    Xác định taxpayer (người nộp hồ sơ) từ user đang đăng nhập:
-    - Lấy manager của current_user
-    - Nếu manager có role_id == 4 → dùng manager làm taxpayer
-    - Ngược lại kiểm tra chính current_user có role_id == 4 không
-    - Fallback: trả về empty dict
+    """Xác định taxpayer (người nộp hồ sơ) từ user đang đăng nhập.
+
+    Logic (giống get_legal_user ở GOV_internal, không phân biệt env):
+      - role_id == ROLE_LEGAL (4) : dùng chính user đó
+      - role_id khác LEGAL/ADMIN  : dùng manager nếu manager có role_id == ROLE_LEGAL
+      - role_id == ROLE_ADMIN (1) : dùng chính user đó (export không cần chọn browser idle)
+      - Fallback                  : trả về empty dict
     """
     empty = {"full_name": "", "gender": "", "id_number": "", "full_address": "", "phone": "", "email": ""}
+    if not current_user:
+        return empty
 
     def _user_to_taxpayer(u) -> dict:
         return {
@@ -292,11 +298,21 @@ def _get_taxpayer(current_user) -> dict:
             "email": u.email or "",
         }
 
-    manager = getattr(current_user, "manager", None)
-    if manager and manager.role_id == 4:
-        return _user_to_taxpayer(manager)
+    role_id = getattr(current_user, "role_id", None)
 
-    if getattr(current_user, "role_id", None) == 4:
+    # Chuyên viên PL: dùng trực tiếp
+    if role_id == ROLE_LEGAL:
+        return _user_to_taxpayer(current_user)
+
+    # Role khác (nhân viên, thực tập sinh...): dùng manager nếu manager là LEGAL
+    if role_id not in (ROLE_LEGAL, ROLE_ADMIN):
+        manager = getattr(current_user, "manager", None)
+        if manager and getattr(manager, "role_id", None) == ROLE_LEGAL:
+            return _user_to_taxpayer(manager)
+        return empty
+
+    # Admin: dùng chính user (export không cần chọn browser idle)
+    if role_id == ROLE_ADMIN:
         return _user_to_taxpayer(current_user)
 
     return empty
@@ -422,3 +438,5 @@ async def export_company_docs(db: Session, company_id: int, template_ids: list[s
     ts = int(datetime.now().timestamp())
     zip_name = f"{raw.get('code', str(ts))}_{prefix}_{company_name}.zip" if company_name else f"{raw.get('code', str(ts))}.zip"
     return buf.getvalue(), zip_name
+
+
