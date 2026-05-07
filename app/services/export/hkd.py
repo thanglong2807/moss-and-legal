@@ -69,6 +69,7 @@ def get_full_data(db: Session, hkd_id: int) -> Optional[dict]:
     return {
         "id": hkd.id,
         "code": hkd.code,
+        "hkd_name": hkd.company_full_name or "",
         "company_info": {
             "name": {
                 "full": hkd.company_full_name or "",

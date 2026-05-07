@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 from typing import Optional, Dict
 from datetime import datetime
 
@@ -54,6 +54,7 @@ class UserCreate(BaseModel):
     phone: Optional[str] = None
     personal_email: Optional[str] = None
     gender: Optional[int] = None
+    birth_date: Optional[str] = None
     id_number: Optional[str] = None
     address: Optional[str] = None
     gov_account: Optional[str] = None
@@ -61,6 +62,11 @@ class UserCreate(BaseModel):
     role_id: Optional[int] = None
     staff_config_id: Optional[int] = None
     manager_id: Optional[int] = None
+
+    @field_validator('email', 'personal_email', mode='before')
+    @classmethod
+    def empty_str_to_none(cls, v):
+        return None if v == '' else v
 
 
 class UserUpdate(BaseModel):
@@ -71,6 +77,7 @@ class UserUpdate(BaseModel):
     phone: Optional[str] = None
     personal_email: Optional[str] = None
     gender: Optional[int] = None
+    birth_date: Optional[str] = None
     id_number: Optional[str] = None
     address: Optional[str] = None
     gov_account: Optional[str] = None
@@ -78,6 +85,11 @@ class UserUpdate(BaseModel):
     role_id: Optional[int] = None
     staff_config_id: Optional[int] = None
     manager_id: Optional[int] = None
+
+    @field_validator('email', 'personal_email', mode='before')
+    @classmethod
+    def empty_str_to_none(cls, v):
+        return None if v == '' else v
 
 
 class UserRead(BaseModel):
@@ -88,6 +100,7 @@ class UserRead(BaseModel):
     phone: Optional[str] = None
     personal_email: Optional[str] = None
     gender: Optional[int] = None
+    birth_date: Optional[str] = None
     id_number: Optional[str] = None
     address: Optional[str] = None
     gov_account: Optional[str]

@@ -94,13 +94,13 @@ const ExportModal = ({ isOpen, onClose, formData, onSave }) => {
   if (!isOpen) return null;
   const toggle = (id) => { const s = new Set(selected); s.has(id) ? s.delete(id) : s.add(id); setSelected(s); };
 
-  const handleExport = async () => {
+  const doExport = async (isMerge) => {
     setLoading(true); setErr('');
     try {
       if (onSave) await onSave();
-      const res = await companyExportApi.export(formData.id, [...selected]);
+      const res = await companyExportApi.export(formData.id, [...selected], isMerge);
       const disposition = res.headers['content-disposition'] || '';
-      let filename = `TLDN_${formData.code || 'export'}.${selected.size > 1 ? 'zip' : 'docx'}`;
+      let filename = `TLDN_${formData.code || 'export'}.${isMerge ? 'docx' : selected.size > 1 ? 'zip' : 'docx'}`;
       const match = disposition.match(/filename\*=UTF-8''(.+)/i) || disposition.match(/filename="?([^"]+)"?/i);
       if (match) filename = decodeURIComponent(match[1]);
       const url = URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
@@ -112,6 +112,9 @@ const ExportModal = ({ isOpen, onClose, formData, onSave }) => {
       setErr(msg || 'Lỗi khi tạo file');
     } finally { setLoading(false); }
   };
+
+  const handleExport = () => doExport(false);
+  const handleMerge = () => doExport(true);
 
   const TYPE_LABEL = { 1: 'TNHH 1TV', 2: 'TNHH 2TV+', 3: 'Cổ phần' };
 
@@ -151,8 +154,15 @@ const ExportModal = ({ isOpen, onClose, formData, onSave }) => {
             </div>
           </>
         )}
-        <div className="flex gap-3 justify-end">
+        <div className="flex gap-3 justify-end flex-wrap">
           <button onClick={onClose} className="px-6 py-2.5 text-weak font-bold text-sm">Đóng</button>
+          {templates.length > 0 && selected.size > 1 && (
+            <button disabled={loading} onClick={handleMerge}
+              className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-2xl font-black text-sm hover:bg-indigo-700 disabled:opacity-50 transition shadow-lg shadow-indigo-100">
+              <Download size={15} className={loading ? 'animate-bounce' : ''} />
+              Tải & gộp file
+            </button>
+          )}
           {templates.length > 0 && (
             <button disabled={selected.size === 0 || loading} onClick={handleExport}
               className="flex items-center gap-2 px-6 py-2.5 bg-orange-600 text-white rounded-2xl font-black text-sm hover:bg-orange-700 disabled:opacity-50 transition shadow-lg shadow-orange-100">
@@ -725,7 +735,8 @@ const CompanyEditor = ({
               <div>
                 <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Ngày sinh</label>
                 <input type="date" className="w-full px-4 py-2.5 bg-page rounded-xl text-sm font-bold outline-none border border-base"
-                  value={formData.accounting_birth_date || ''} onChange={e => updateFormData('accounting_birth_date', e.target.value)} />
+                  value={(() => { const bd = formData.accounting_birth_date; if (!bd) return ''; const p = bd.split('/'); return p.length === 3 ? `${p[2]}-${p[1]}-${p[0]}` : bd; })()}
+                  onChange={e => { const v = e.target.value; if (!v) { updateFormData('accounting_birth_date', ''); return; } const [y, m, d] = v.split('-'); updateFormData('accounting_birth_date', `${d}/${m}/${y}`); }} />
               </div>
               <div>
                 <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Số CCCD</label>

@@ -13,3 +13,4 @@ class GovSubmission(Base):
     status      = Column(String(50), nullable=False, default='pending')
     progress    = Column(String(255), nullable=True)
     error       = Column(Text, nullable=True)
+    data        = Column(Text, nullable=True)

@@ -15,6 +15,7 @@ class GovSubmissionPatch(BaseModel):
     status: Optional[str] = None
     progress: Optional[str] = None
     error: Optional[str] = None
+    data: Optional[str] = None
 
 
 class GovSubmissionRead(BaseModel):
@@ -27,6 +28,7 @@ class GovSubmissionRead(BaseModel):
     status: str
     progress: Optional[str]
     error: Optional[str]
+    data: Optional[str] = None
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
 

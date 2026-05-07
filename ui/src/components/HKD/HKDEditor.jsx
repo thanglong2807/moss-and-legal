@@ -131,18 +131,17 @@ const ExportModal = ({ isOpen, onClose, formData }) => {
   if (!isOpen) return null;
   const toggle = (id) => { const s = new Set(selected); s.has(id) ? s.delete(id) : s.add(id); setSelected(s); };
 
-  const handleExport = async () => {
+  const doExport = async (isMerge) => {
     const errs = validateMainIndustry(formData);
     if (errs.length > 0) { setExportErrors(errs); return; }
     setExportErrors([]);
     setLoading(true);
     try {
       const templateIds = [...selected];
-      const res = await exportApi.exportHkd(formData.id, templateIds);
+      const res = await exportApi.exportHkd(formData.id, templateIds, isMerge);
 
-      // Derive filename from Content-Disposition header or fallback
       const disposition = res.headers['content-disposition'] || '';
-      let filename = `HKD_${formData.code || 'export'}.${templateIds.length > 1 ? 'zip' : 'docx'}`;
+      let filename = `HKD_${formData.code || 'export'}.${isMerge ? 'docx' : templateIds.length > 1 ? 'zip' : 'docx'}`;
       const match = disposition.match(/filename\*=UTF-8''(.+)/i) || disposition.match(/filename="?([^"]+)"?/i);
       if (match) filename = decodeURIComponent(match[1]);
 
@@ -160,6 +159,9 @@ const ExportModal = ({ isOpen, onClose, formData }) => {
       setLoading(false);
     }
   };
+
+  const handleExport = () => doExport(false);
+  const handleMerge = () => doExport(true);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
       <div className="bg-surface rounded-[28px] shadow-2xl w-[480px] p-8">
@@ -184,8 +186,18 @@ const ExportModal = ({ isOpen, onClose, formData }) => {
             </div>
           ))}
         </div>
-        <div className="flex gap-3 justify-end">
+        <div className="flex gap-3 justify-end flex-wrap">
           <button onClick={onClose} className="px-6 py-2.5 text-weak font-bold text-sm">Hủy</button>
+          {selected.size > 1 && (
+            <button
+              disabled={loading}
+              onClick={handleMerge}
+              className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-2xl font-black text-sm hover:bg-indigo-700 shadow-md shadow-indigo-200/50 dark:shadow-none disabled:opacity-50 disabled:cursor-not-allowed transition"
+            >
+              <Download size={15} className={loading ? 'animate-bounce' : ''} />
+              Tải & gộp file
+            </button>
+          )}
           <button
             disabled={selected.size === 0 || loading}
             onClick={handleExport}

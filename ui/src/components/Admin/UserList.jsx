@@ -5,7 +5,7 @@ import Pagination, { PAGE_SIZE_OPTIONS } from '../Common/Pagination';
 
 const EMPTY_FORM = {
   email: '', password: '', display_name: '', is_active: true,
-  phone: '', personal_email: '', gender: '', id_number: '', address: '',
+  phone: '', personal_email: '', gender: '', birth_date: '', id_number: '', address: '',
   gov_account: '', gov_pass: '', role_id: '', staff_config_id: '', manager_id: '',
 };
 
@@ -40,6 +40,7 @@ const UserModal = ({ user, roles, staffList, users, onClose, onSaved }) => {
         phone: form.phone || null,
         personal_email: form.personal_email || null,
         gender: form.gender !== '' ? parseInt(form.gender) : null,
+        birth_date: form.birth_date || null,
         id_number: form.id_number || null,
         address: form.address || null,
         gov_account: form.gov_account || null,
@@ -103,6 +104,33 @@ const UserModal = ({ user, roles, staffList, users, onClose, onSaved }) => {
                 <option value="0">Nam</option>
                 <option value="1">Nữ</option>
               </select>
+            </div>
+            <div>
+              <label className="text-[10px] font-black text-body uppercase tracking-widest mb-1 block">Ngày sinh</label>
+              <input
+                className="w-full px-3 py-2.5 bg-page border border-base rounded-xl text-sm font-bold outline-none focus:border-orange-400"
+                value={form.birth_date}
+                onChange={e => {
+                  const raw = e.target.value;
+                  // Convert yyyy-mm-dd (native date input) → dd/mm/yyyy
+                  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+                    const [y, m, d] = raw.split('-');
+                    set('birth_date', `${d}/${m}/${y}`);
+                  } else {
+                    set('birth_date', raw);
+                  }
+                }}
+                onFocus={e => {
+                  // Convert dd/mm/yyyy → yyyy-mm-dd for native date picker
+                  if (/^\d{2}\/\d{2}\/\d{4}$/.test(form.birth_date)) {
+                    const [d, m, y] = form.birth_date.split('/');
+                    e.target.value = `${y}-${m}-${d}`;
+                  }
+                  e.target.type = 'date';
+                }}
+                onBlur={e => { e.target.type = 'text'; }}
+                placeholder="DD/MM/YYYY"
+              />
             </div>
             <div>
               <label className="text-[10px] font-black text-body uppercase tracking-widest mb-1 block">CCCD / CMND</label>

@@ -7,6 +7,17 @@ import { ocrApi, companyDriveApi } from '../../services/api';
 import { compressImage } from '../../utils/validators';
 import { useToast } from '../Common/Toast';
 
+// Normalise any date to dd/mm/yyyy for storage
+const toDMY = (d) => {
+  if (!d) return '';
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(d)) return d;           // already dd/mm/yyyy
+  if (/^\d{4}-\d{2}-\d{2}/.test(d)) {                       // ISO yyyy-mm-dd
+    const [y, m, day] = d.split('T')[0].split('-');
+    return `${day}/${m}/${y}`;
+  }
+  return d;
+};
+
 const ADMIN_PREFIXES = ['thành phố', 'tỉnh', 'tp.', 'quận', 'huyện', 'thị xã', 'phường', 'xã', 'thị trấn'];
 const stripAdminPrefix = (name) => {
   const lower = name.trim().toLowerCase();
@@ -59,7 +70,7 @@ const PersonForm = ({
     if (customer.name) updates.full_name = customer.name;
     if (customer.phone) updates.phone = customer.phone;
     if (customer.gender != null) updates.gender = customer.gender;
-    if (customer.birth_date) updates.birth_date = customer.birth_date;
+    if (customer.birth_date) updates.birth_date = toDMY(customer.birth_date);
     if (customer.id_number) updates.id_number = customer.id_number;
     if (customer.id_card) updates.id_number = customer.id_card;
     if (customer.province_id) { updates.province_id = customer.province_id; loadWards(`person_${index}`, customer.province_id); }
@@ -119,7 +130,7 @@ const PersonForm = ({
         const updates = { ...person };
         if (raw.full_name) updates.full_name = raw.full_name.toUpperCase();
         if (raw.id_number) updates.id_number = raw.id_number;
-        if (raw.birth_date) updates.birth_date = raw.birth_date;
+        if (raw.birth_date) updates.birth_date = toDMY(raw.birth_date);
         if (raw.gender !== undefined && raw.gender !== '') updates.gender = raw.gender === 'Nam' ? 0 : 1;
         if (raw.street) updates.street = raw.street;
         if (raw.province_name) {

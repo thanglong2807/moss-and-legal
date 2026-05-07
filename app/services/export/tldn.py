@@ -229,6 +229,7 @@ def process_data(raw: dict) -> dict:
     data["taxpayer"] = {
         "full_name": taxpayer_raw.get("full_name") or acc.get("full_name", ""),
         "gender": taxpayer_raw.get("gender", ""),
+        "birth_date": taxpayer_raw.get("birth_date", ""),
         "id_number": taxpayer_raw.get("id_number", ""),
         "full_address": taxpayer_raw.get("full_address", ""),
         "contact_info": {
@@ -284,7 +285,7 @@ def _get_taxpayer(current_user) -> dict:
       - role_id == ROLE_ADMIN (1) : dùng chính user đó (export không cần chọn browser idle)
       - Fallback                  : trả về empty dict
     """
-    empty = {"full_name": "", "gender": "", "id_number": "", "full_address": "", "phone": "", "email": ""}
+    empty = {"full_name": "", "gender": "", "birth_date": "", "id_number": "", "full_address": "", "phone": "", "email": ""}
     if not current_user:
         return empty
 
@@ -292,6 +293,7 @@ def _get_taxpayer(current_user) -> dict:
         return {
             "full_name": u.display_name or "",
             "gender": {0: "Nam", 1: "Nữ"}.get(u.gender, ""),
+            "birth_date": u.birth_date or "",
             "id_number": u.id_number or "",
             "full_address": u.address or "",
             "phone": u.phone or "",
@@ -408,7 +410,7 @@ def get_full_data(db: Session, company_id: int) -> dict:
 
 # ── Export runner ─────────────────────────────────────────────────────────────
 
-async def export_company_docs(db: Session, company_id: int, template_ids: list[str], current_user=None) -> tuple[bytes, str]:
+async def export_company_docs(db: Session, company_id: int, template_ids: list[str], current_user=None, is_merge: bool = False) -> tuple[bytes, str]:
     raw = get_full_data(db, company_id)
     raw["taxpayer"] = _get_taxpayer(current_user) if current_user else {}
     ctype = raw.get("company_type", 1)
@@ -428,15 +430,21 @@ async def export_company_docs(db: Session, company_id: int, template_ids: list[s
     if len(results) == 1:
         return results[0]
 
-    buf = io.BytesIO()
-    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
-        for fb, fn in results:
-            zf.writestr(fn, fb)
     _TYPE_PREFIX = {1: "TNHH 1TV", 2: "TNHH 2TV", 3: "CỔ PHẦN"}
     prefix = _TYPE_PREFIX.get(ctype, "CÔNG TY")
     company_name = raw.get("company_info", {}).get("name", {}).get("full", "") or raw.get("code", "")
     ts = int(datetime.now().timestamp())
-    zip_name = f"{raw.get('code', str(ts))}_{prefix}_{company_name}.zip" if company_name else f"{raw.get('code', str(ts))}.zip"
-    return buf.getvalue(), zip_name
+    base_name = f"{prefix}_{company_name}[{raw.get('code', str(ts))}]" if company_name else raw.get('code', str(ts))
+
+    if is_merge:
+        from app.services.export.base import merge_docx_files
+        merged = merge_docx_files([fb for fb, _ in results])
+        return merged, f"{base_name}.docx"
+
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        for fb, fn in results:
+            zf.writestr(fn, fb)
+    return buf.getvalue(), f"{base_name}.zip"
 
 

@@ -129,8 +129,8 @@ export const positionsApi = {
 };
 
 export const companyExportApi = {
-  export: (companyId, templateIds) =>
-    api.post(`/company/${companyId}/export`, { template_ids: templateIds }, { responseType: 'blob' }),
+  export: (companyId, templateIds, isMerge = false) =>
+    api.post(`/company/${companyId}/export`, { template_ids: templateIds, is_merge: isMerge }, { responseType: 'blob' }),
 };
 
 export const companyDriveApi = {
@@ -159,8 +159,8 @@ export const govSubmissionApi = {
 };
 
 export const exportApi = {
-  exportHkd: (hkdId, templateIds) =>
-    api.post(`/export/hkd/${hkdId}`, { template_ids: templateIds }, { responseType: 'blob' }),
+  exportHkd: (hkdId, templateIds, isMerge = false) =>
+    api.post(`/export/hkd/${hkdId}`, { template_ids: templateIds, is_merge: isMerge }, { responseType: 'blob' }),
 };
 
 export const govApi = {

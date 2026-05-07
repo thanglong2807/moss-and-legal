@@ -14,6 +14,7 @@ router = APIRouter()
 
 class ExportRequest(BaseModel):
     template_ids: list[str]
+    is_merge: bool = False
 
     @field_validator("template_ids")
     @classmethod
@@ -38,7 +39,7 @@ async def export_hkd(
     if not data:
         raise HTTPException(status_code=404, detail="HKD not found")
 
-    file_bytes, filename = await export_templates(data, body.template_ids)
+    file_bytes, filename = await export_templates(data, body.template_ids, is_merge=body.is_merge)
 
     is_zip = filename.endswith(".zip")
     media_type = (

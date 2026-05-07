@@ -80,13 +80,20 @@ def delete_company(company_id: int, db: Session = Depends(get_db)):
 
 class ExportRequest(BaseModel):
     template_ids: list[str]
+    is_merge: bool = False
 
 
 @router.post("/{company_id}/export")
 async def export_company(company_id: int, body: ExportRequest, db: Session = Depends(get_db),
                          current_user=Depends(require_permission("company", "view"))):
     from app.services.export.tldn import export_company_docs
-    file_bytes, filename = await export_company_docs(db, company_id, body.template_ids, current_user)
+    from app.auth.models import User as UserModel
+    from sqlalchemy.orm import joinedload
+    # Reload user on the current session so all columns (incl. birth_date) are accessible
+    fresh_user = db.execute(
+        select(UserModel).options(joinedload(UserModel.manager)).where(UserModel.id == current_user.id)
+    ).scalars().first()
+    file_bytes, filename = await export_company_docs(db, company_id, body.template_ids, fresh_user, is_merge=body.is_merge)
     from urllib.parse import quote
     media_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document" \
         if filename.endswith(".docx") else "application/zip"

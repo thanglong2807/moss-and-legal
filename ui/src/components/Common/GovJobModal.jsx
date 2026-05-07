@@ -49,10 +49,10 @@ const HistoryTab = ({ recordId, recordType, service }) => {
           const res = service === 'tldn'
             ? await govApi.getTLDNJobStatus(sub.job_id, token)
             : await govApi.getJobStatus(sub.job_id, token);
-          const { status, progress, error } = res.data;
+          const { status, progress, error, data } = res.data;
           if (status !== sub.status || progress !== sub.progress) {
-            await govSubmissionApi.patch(sub.id, { status, progress: progress || null, error: error || null });
-            setJobs(prev => prev.map(j => j.id === sub.id ? { ...j, status, progress, error } : j));
+            await govSubmissionApi.patch(sub.id, { status, progress: progress || null, error: error || null, data: data || null });
+            setJobs(prev => prev.map(j => j.id === sub.id ? { ...j, status, progress, error, data } : j));
           }
         } catch { /* silent */ }
       }
@@ -77,7 +77,7 @@ const HistoryTab = ({ recordId, recordType, service }) => {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-[10px] font-black text-body truncate">
-                  {sub.progress || sub.job_id}
+                  {(sub.status === 'done' || sub.status === 'failed') ? (sub.data || sub.job_id) : (sub.progress || sub.job_id)}
                 </div>
                 {sub.error && (
                   <div className="text-[9px] font-bold text-red-500 truncate mt-0.5">{sub.error}</div>

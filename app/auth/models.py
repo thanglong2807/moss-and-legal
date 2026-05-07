@@ -44,6 +44,7 @@ class User(Base):
     phone = Column(String(20), nullable=True)
     personal_email = Column(String(255), nullable=True)
     gender = Column(SmallInteger, nullable=True)   # 0=Nam 1=Nữ
+    birth_date = Column(String(10), nullable=True)  # dd/mm/yyyy
     id_number = Column(String(20), nullable=True)  # CCCD
     address = Column(String(500), nullable=True)
 

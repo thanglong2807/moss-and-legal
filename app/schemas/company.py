@@ -1,7 +1,24 @@
 from typing import List, Optional, Any
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+from datetime import date
 from .base import BaseSchema
 from .customer import CustomerRead, ConfigRead
+
+
+def _fmt_date(v) -> Optional[str]:
+    """Convert date/str to dd/mm/yyyy, pass through if already formatted."""
+    if v is None:
+        return None
+    if isinstance(v, date):
+        return v.strftime("%d/%m/%Y")
+    if isinstance(v, str) and v:
+        # already dd/mm/yyyy
+        if len(v) == 10 and v[2] == '/' and v[5] == '/':
+            return v
+        # iso yyyy-mm-dd
+        if len(v) >= 10 and v[4] == '-':
+            return f"{v[8:10]}/{v[5:7]}/{v[:4]}"
+    return v
 
 
 class CompanyPositionRead(BaseSchema):
@@ -33,7 +50,7 @@ class CompanyPersonRead(BaseSchema):
     position_id: Optional[int] = None
     full_name: Optional[str] = None
     gender: Optional[int] = None
-    birth_date: Optional[Any] = None
+    birth_date: Optional[str] = None
     id_number: Optional[str] = None
     province_id: Optional[int] = None
     ward_id: Optional[int] = None
@@ -44,6 +61,10 @@ class CompanyPersonRead(BaseSchema):
     ownership_percentage: Optional[float] = None
     asset_type_ratio: Optional[float] = None
     position: Optional[CompanyPositionRead] = None
+
+    @field_validator('birth_date', mode='before')
+    @classmethod
+    def fmt_birth_date(cls, v): return _fmt_date(v)
 
 
 class CompanyIndustryInput(BaseModel):
@@ -115,6 +136,10 @@ class CompanyRead(BaseSchema):
     accounting_id_number: Optional[str] = None
 
     customer: Optional[CustomerRead] = None
+
+    @field_validator('accounting_birth_date', mode='before')
+    @classmethod
+    def fmt_accounting_birth_date(cls, v): return _fmt_date(v)
     handling_staff: Optional[ConfigRead] = None
     supporting_staff: Optional[ConfigRead] = None
     status: Optional[ConfigRead] = None
