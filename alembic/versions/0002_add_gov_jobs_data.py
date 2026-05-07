@@ -13,9 +13,30 @@ branch_labels = None
 depends_on = None
 
 
+EXPECTED_GOV_JOBS_COLS = {
+    'record_id':   sa.Integer(),
+    'record_type': sa.String(20),
+    'record_name': sa.String(255),
+    'service':     sa.String(20),
+    'progress':    sa.String(255),
+    'error':       sa.Text(),
+    'data':        sa.Text(),
+}
+
+
+def _existing_cols(table):
+    from sqlalchemy import inspect
+    return {c['name'] for c in inspect(op.get_bind()).get_columns(table)}
+
+
 def upgrade():
-    op.add_column('gov_jobs', sa.Column('data', sa.Text(), nullable=True))
-    op.add_column('users', sa.Column('birth_date', sa.String(10), nullable=True))
+    existing = _existing_cols('gov_jobs')
+    for col, typ in EXPECTED_GOV_JOBS_COLS.items():
+        if col not in existing:
+            op.add_column('gov_jobs', sa.Column(col, typ, nullable=True))
+
+    if 'birth_date' not in _existing_cols('users'):
+        op.add_column('users', sa.Column('birth_date', sa.String(10), nullable=True))
 
 
 def downgrade():
