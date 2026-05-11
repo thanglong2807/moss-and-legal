@@ -308,10 +308,10 @@ const PersonForm = ({
 
             <div className="col-span-6 bg-page/50 p-4 rounded-2xl border border-dashed border-base">
               <h4 className="text-[10px] font-black text-body uppercase tracking-widest mb-3">Địa chỉ liên hệ <span className="text-red-500">*</span></h4>
-              <div className="grid grid-cols-3 gap-3">
-                <SearchableSelect value={person.province_id || ''} onChange={id => { upd('province_id', id); if (id) loadWards(`person_${index}`, id); }} options={provinces} placeholder="Tỉnh/Thành" />
-                <SearchableSelect value={person.ward_id || ''} onChange={id => upd('ward_id', id)} options={wardOptions[`person_${index}`] || []} placeholder="Phường/Xã" />
-                <input className="px-3 py-2.5 rounded-xl bg-surface border border-base font-bold text-xs outline-none" placeholder="Số nhà, đường..."
+              <div className="grid grid-cols-6 gap-3">
+                <div className="col-span-2"><SearchableSelect value={person.province_id || ''} onChange={id => { upd('province_id', id); if (id) loadWards(`person_${index}`, id); }} options={provinces} placeholder="Tỉnh/Thành" /></div>
+                <div className="col-span-2"><SearchableSelect value={person.ward_id || ''} onChange={id => upd('ward_id', id)} options={wardOptions[`person_${index}`] || []} placeholder="Phường/Xã" /></div>
+                <input className="col-span-2 w-full px-3 py-2.5 rounded-xl bg-surface border border-base font-bold text-xs outline-none" placeholder="Số nhà, đường..."
                   value={person.street || ''} onChange={e => upd('street', e.target.value)} />
               </div>
             </div>

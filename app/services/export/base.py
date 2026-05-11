@@ -76,6 +76,16 @@ def _join_address(street: str, ward: str, province: str) -> str:
     return ", ".join(parts)
 
 
+def _fmt_pct(v) -> str:
+    if v is None:
+        return "0"
+    v = float(v)
+    if v == int(v):
+        return str(int(v))
+    # e.g. 50.5 → "50,5", 50.25 → "50,25"
+    return str(v).rstrip('0').rstrip('.').replace(".", ",")
+
+
 def _fmt_money_dot(v) -> str:
     if v is None:
         return ""

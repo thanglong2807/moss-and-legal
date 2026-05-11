@@ -171,6 +171,8 @@ const Sidebar = () => {
   const handleUltraCollapse = () => {
     setIsCollapsed(true);
     setUltraCollapsed(true);
+    localStorage.setItem('editorRightHidden', '1');
+    window.dispatchEvent(new CustomEvent('sidebarUltraCollapse'));
   };
 
   const handleExpand = () => {

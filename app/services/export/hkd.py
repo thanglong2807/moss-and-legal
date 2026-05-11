@@ -188,10 +188,11 @@ def _build_giay_gioi_thieu(data: dict) -> dict:
     addr = ci.get("address", {})
     ward = addr.get("ward", "")
     return {
-        "hkd_ward":    ward,
-        "suffix":      _ward_suffix(ward),
-        "hkd_name":    ci.get("name", {}).get("full", "").upper(),
-        "hkd_address": _join_address(addr.get("street", ""), addr.get("ward", ""), addr.get("province", "")),
+        "hkd_ward":     ward,
+        "suffix":       _ward_suffix(ward),
+        "hkd_province": addr.get("province", ""),
+        "hkd_name":     ci.get("name", {}).get("full", "").upper(),
+        "hkd_address":  _join_address(addr.get("street", ""), addr.get("ward", ""), addr.get("province", "")),
     }
 
 

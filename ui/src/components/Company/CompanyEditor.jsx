@@ -3,7 +3,7 @@ import {
   ArrowLeft, Save, Trash2, Plus, X, Search, MapPin,
   Download, Upload, Building2, ExternalLink,
   Info, Users, LayoutGrid, FileText, Loader2,
-  CheckSquare, Square,
+  CheckSquare, Square, ChevronDown, ChevronLeft, ChevronRight, Copy, BookOpen,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../Common/Toast';
@@ -29,21 +29,33 @@ const parseNum = (s) => parseInt(String(s).replace(/\D/g, '')) || null;
 // ── Industry picker dropdown ──────────────────────────────────────────────────
 const IndustrySelect = ({ industries, onSelect, onClose }) => {
   const [query, setQuery] = useState('');
+  const [hi, setHi] = useState(0);
+  const listRef = useRef(null);
   const filtered = industries.filter(i =>
     i.code.toLowerCase().includes(query.toLowerCase()) || i.name.toLowerCase().includes(query.toLowerCase())
   );
+  const scrollToItem = (idx) => { if (!listRef.current) return; const item = listRef.current.children[idx]; if (item) item.scrollIntoView({ block: 'nearest' }); };
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); setHi(h => { const n = Math.min(h + 1, filtered.length - 1); scrollToItem(n); return n; }); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setHi(h => { const n = Math.max(h - 1, 0); scrollToItem(n); return n; }); }
+    else if (e.key === 'Enter') { e.preventDefault(); if (filtered[hi]) onSelect(filtered[hi]); }
+    else if (e.key === 'Escape') { onClose(); }
+  };
   return (
     <div className="absolute top-full left-0 mt-2 w-[480px] max-w-[90vw] bg-surface rounded-2xl shadow-2xl border border-base z-50 overflow-hidden animate-in zoom-in-95 duration-200">
       <div className="px-3 pt-3 pb-2 border-b border-faint flex items-center gap-2">
         <div className="relative flex-1">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-weak" />
-          <input autoFocus className="w-full pl-9 pr-3 py-2 bg-page rounded-xl text-xs font-bold outline-none" placeholder="Tìm mã hoặc tên ngành..." value={query} onChange={e => setQuery(e.target.value)} />
+          <input autoFocus className="w-full pl-9 pr-3 py-2 bg-page rounded-xl text-xs font-bold outline-none"
+            placeholder="Tìm mã hoặc tên ngành..." value={query}
+            onChange={e => { setQuery(e.target.value); setHi(0); }} onKeyDown={handleKeyDown} />
         </div>
         <button onClick={onClose} className="p-1.5 rounded-xl hover:bg-input text-weak transition"><X size={14} /></button>
       </div>
-      <div className="max-h-64 overflow-y-auto">
-        {filtered.map(i => (
-          <div key={i.code} onClick={() => onSelect(i)} className="px-4 py-3 hover:bg-orange-50 cursor-pointer transition border-b border-faint last:border-none">
+      <div ref={listRef} className="max-h-64 overflow-y-auto">
+        {filtered.map((i, idx) => (
+          <div key={i.code} onMouseDown={() => onSelect(i)} onMouseEnter={() => setHi(idx)}
+            className={`px-4 py-3 cursor-pointer transition border-b border-faint last:border-none ${idx === hi ? 'bg-orange-100' : 'hover:bg-orange-50'}`}>
             <div className="text-[10px] font-black text-orange-600 uppercase">{i.code}</div>
             <div className="text-[11px] font-black text-body">{i.name}</div>
           </div>
@@ -316,6 +328,17 @@ const CompanyEditor = ({
   const showToast = useToast();
   const [activeIndustryIdx, setActiveIndustryIdx] = useState(null);
   const [selectedFieldId, setSelectedFieldId] = useState('');
+  const [rightHidden, setRightHidden] = useState(() => localStorage.getItem('editorRightHidden') === '1');
+  const [fieldVisible, setFieldVisible] = useState(true);
+  const [draft, setDraft] = useState({ code: '', name: '', note: '', is_main: false });
+  const [draftPickerOpen, setDraftPickerOpen] = useState(false);
+  const draftNoteRef = useRef(null);
+
+  useEffect(() => {
+    const h = () => setRightHidden(true);
+    window.addEventListener('sidebarUltraCollapse', h);
+    return () => window.removeEventListener('sidebarUltraCollapse', h);
+  }, []);
   const [translating, setTranslating] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
@@ -364,8 +387,14 @@ const CompanyEditor = ({
 
   const setCI = (subpath, value) => updateFormData(`company_info.${subpath}`, value);
 
-  const addIndustryRow = () => {
-    updateFormData('industries', sortIndustriesByCode([{ code: '', name: '', is_main: !(formData.industries?.length), note: '' }, ...(formData.industries || [])]));
+  const commitDraft = () => {
+    if (!draft.code) return;
+    if ((formData.industries || []).some(r => r.code === draft.code)) { showToast('Ngành nghề này đã được thêm', 'error'); return; }
+    const isFirst = !(formData.industries?.length);
+    const next = [...(formData.industries || []), { code: draft.code, name: draft.name, note: draft.note, is_main: draft.is_main || isFirst }];
+    if (draft.is_main) next.forEach((r, i) => { if (i < next.length - 1) r.is_main = false; });
+    updateFormData('industries', sortIndustriesByCode(next));
+    setDraft({ code: '', name: '', note: '', is_main: false });
   };
   const removeIndustryRow = (idx) => {
     updateFormData('industries', formData.industries.filter((_, i) => i !== idx));
@@ -421,7 +450,7 @@ const CompanyEditor = ({
         </div>
       </div>
 
-      <div className="flex-1 flex gap-8 overflow-hidden px-8 py-8 min-w-0">
+      <div className="flex-1 flex gap-3 overflow-hidden px-4 py-4 min-w-0">
         {/* ── Main ── */}
         <div className="flex-1 overflow-y-auto space-y-8 pb-32 min-w-0">
 
@@ -460,7 +489,7 @@ const CompanyEditor = ({
           )}
 
           {/* ── 1. Company Info ── */}
-          <div className="bg-surface rounded-[24px] p-5 border border-slate-300 dark:border-slate-600 shadow-sm relative overflow-hidden">
+          <div className="bg-surface rounded-[24px] p-5 border border-slate-300 dark:border-slate-600 shadow-sm relative">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600 shadow-sm border border-orange-100"><FileText size={16} /></div>
@@ -651,7 +680,52 @@ const CompanyEditor = ({
             />
           </div>
 
-          {/* ── 3. Industries ── */}
+          {/* ── 3. Fields Template ── */}
+          <div className="bg-surface rounded-[24px] p-5 border border-slate-300 dark:border-slate-600 shadow-sm">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-violet-50 rounded-xl flex items-center justify-center text-violet-600 border border-violet-100"><BookOpen size={16} /></div>
+                <h3 className="text-xs font-black text-strong uppercase tracking-widest">Lĩnh vực mẫu</h3>
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={copyFieldIndustries} className="flex items-center gap-1 text-[9px] font-black text-orange-600 bg-orange-50 px-2.5 py-1.5 rounded-lg uppercase hover:bg-orange-100 transition">
+                  <Copy size={10} /> Copy all
+                </button>
+                <button onClick={() => setFieldVisible(v => !v)} className="p-1.5 rounded-lg text-weak hover:text-violet-600 hover:bg-violet-50 transition">
+                  {fieldVisible ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                </button>
+              </div>
+            </div>
+            {fieldVisible && (
+              <>
+                <SearchableSelect value={selectedFieldId} onChange={setSelectedFieldId} options={fields} placeholder="Chọn lĩnh vực..." className="mb-3" />
+                <div className="grid grid-cols-2 gap-2 max-h-[200px] overflow-y-auto pr-1">
+                  {(() => {
+                    const tpl = fields.find(f => f.id === selectedFieldId || f.id === parseInt(selectedFieldId));
+                    if (!tpl) return null;
+                    return tpl.industries?.map((li, idx) => (
+                      <div key={idx}
+                        onClick={() => {
+                          if ((formData.industries || []).some(r => r.code === li.industry.code)) { showToast('Ngành nghề này đã được thêm', 'error'); return; }
+                          const next = [...(formData.industries || []), { code: li.industry.code, name: li.industry.name, is_main: !formData.industries?.length, note: li.note }];
+                          updateFormData('industries', sortIndustriesByCode(next));
+                        }}
+                        className="flex items-center justify-between p-2.5 bg-page border border-faint rounded-xl hover:border-violet-300 hover:bg-violet-50 cursor-pointer transition-all group">
+                        <div className="flex-1 overflow-hidden pr-1">
+                          <div className="text-[10px] font-black text-orange-600">{li.industry?.code}</div>
+                          <div className="text-[10px] font-bold text-body truncate">{li.industry?.name}</div>
+                          {li.note && <div className="text-[9px] text-weak mt-0.5 truncate">{li.note}</div>}
+                        </div>
+                        <Plus size={13} className="text-weak group-hover:text-violet-600 shrink-0 transition-colors" />
+                      </div>
+                    ));
+                  })()}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* ── 4. Industries ── */}
           <div className="bg-surface rounded-[24px] p-5 border border-slate-300 dark:border-slate-600 shadow-sm relative z-30">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-100"><LayoutGrid size={16} /></div>
@@ -678,13 +752,23 @@ const CompanyEditor = ({
                         </div>
                         {activeIndustryIdx === idx && (
                           <IndustrySelect industries={allIndustries}
-                            onSelect={i => { const next = [...formData.industries]; next[idx] = { ...next[idx], code: i.code, name: i.name }; updateFormData('industries', sortIndustriesByCode(next)); setActiveIndustryIdx(null); }}
+                            onSelect={i => {
+                              const dup = formData.industries.some((r, j) => j !== idx && r.code === i.code);
+                              if (dup) { showToast('Ngành nghề này đã được thêm', 'error'); setActiveIndustryIdx(null); return; }
+                              const next = [...formData.industries];
+                              next[idx] = { ...next[idx], code: i.code, name: i.name };
+                              updateFormData('industries', sortIndustriesByCode(next));
+                              setActiveIndustryIdx(null);
+                            }}
                             onClose={() => setActiveIndustryIdx(null)} />
                         )}
                       </td>
                       <td className="py-1.5 px-2">
                         <textarea rows={1} className="w-full px-3 py-2 bg-surface border border-base rounded-xl font-bold text-[11px] outline-none focus:border-orange-400 resize-none text-strong"
-                          value={ind.note || ''} onChange={e => { const next = [...formData.industries]; next[idx].note = e.target.value; updateFormData('industries', next); }} placeholder="..." />
+                          value={ind.note || ''}
+                          onChange={e => { const next = [...formData.industries]; next[idx].note = e.target.value; updateFormData('industries', next); }}
+                          onInput={e => { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }}
+                          placeholder="..." />
                       </td>
                       <td className="py-1.5 px-2 text-center">
                         <button onClick={() => { const next = [...formData.industries]; next.forEach((it, i) => it.is_main = (i === idx)); updateFormData('industries', next); }}
@@ -704,9 +788,44 @@ const CompanyEditor = ({
             ) : (
               <div className="py-8 text-center text-weak italic text-xs font-bold border border-dashed border-base rounded-xl">Chưa có ngành nghề nào.</div>
             )}
-            <button onClick={addIndustryRow} className="mt-3 w-full flex items-center justify-center gap-1.5 px-3 py-2 border border-dashed border-orange-300 text-orange-600 rounded-xl font-black text-[10px] hover:bg-orange-50 transition">
-              <Plus size={12} /> Thêm ngành nghề
-            </button>
+            {/* Draft row */}
+            <div className="mt-2 flex items-center gap-1.5 border-t border-dashed border-base pt-2">
+              <div className="relative w-[45%]">
+                <div onClick={() => setDraftPickerOpen(true)}
+                  className="w-full px-3 py-2 bg-page border border-dashed border-base rounded-xl font-bold text-[11px] cursor-pointer hover:border-orange-400 transition truncate text-strong">
+                  {draft.code ? <><span className="text-orange-600 font-black">{draft.code}</span> — {draft.name}</> : <span className="text-weak italic">Chọn ngành nghề...</span>}
+                </div>
+                {draftPickerOpen && (
+                  <IndustrySelect industries={allIndustries}
+                    onSelect={(i) => {
+                      setDraft(d => ({ ...d, code: i.code, name: i.name }));
+                      setDraftPickerOpen(false);
+                      setTimeout(() => draftNoteRef.current?.focus(), 50);
+                    }}
+                    onClose={() => setDraftPickerOpen(false)} />
+                )}
+              </div>
+              <textarea ref={draftNoteRef}
+                className="flex-1 px-3 py-2 bg-page border border-dashed border-base rounded-xl font-bold text-[11px] outline-none focus:border-orange-400 text-strong resize-none"
+                placeholder="Ghi chú..."
+                rows={1}
+                value={draft.note}
+                onChange={e => setDraft(d => ({ ...d, note: e.target.value }))}
+                onInput={e => { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }}
+ />
+              <div className="w-[72px] flex justify-center">
+                <button onClick={() => setDraft(d => ({ ...d, is_main: !d.is_main }))}
+                  className={`px-2.5 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all ${draft.is_main ? 'bg-orange-600 text-white' : 'bg-input text-body hover:bg-orange-100 hover:text-orange-600'}`}>
+                  CHÍNH
+                </button>
+              </div>
+              <div className="w-8 flex justify-center">
+                <button onClick={commitDraft} disabled={!draft.code}
+                  className="w-8 h-8 flex items-center justify-center rounded-xl bg-emerald-500 text-white hover:bg-emerald-600 transition disabled:opacity-30 disabled:cursor-not-allowed">
+                  <Plus size={15} />
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* ── 4. Kế toán ── */}
@@ -752,8 +871,19 @@ const CompanyEditor = ({
           </div>
         </div>
 
+        {/* Right panel toggle */}
+        <div className="flex flex-col items-center justify-start pt-2 shrink-0">
+          <button
+            onClick={() => { const v = !rightHidden; setRightHidden(v); localStorage.setItem('editorRightHidden', v ? '1' : '0'); }}
+            className="p-1.5 rounded-xl bg-surface border border-base text-weak hover:text-orange-600 hover:border-orange-300 transition"
+            title={rightHidden ? 'Mở panel phải' : 'Ẩn panel phải'}
+          >
+            {rightHidden ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
+          </button>
+        </div>
+
         {/* ── Right Sidebar ── */}
-        <div className="w-80 shrink-0 overflow-y-auto pb-32 space-y-8">
+        <div className={`w-80 shrink-0 overflow-y-auto pb-32 space-y-8 ${rightHidden ? 'hidden' : ''}`}>
           <div className="bg-surface rounded-[32px] p-8 border border-slate-300 dark:border-slate-600 shadow-sm">
             <h4 className="text-[11px] font-black text-weak uppercase tracking-widest mb-8 flex items-center gap-2">
               <Info size={14} className="text-orange-500" /> Hồ sơ & Phân quyền
@@ -832,28 +962,6 @@ const CompanyEditor = ({
               </div>
             </div>
 
-            {/* Field selector / copy industries */}
-            <div className="mt-8 pt-8 border-t border-faint">
-              <div className="flex justify-between items-center mb-4">
-                <h4 className="text-[10px] font-black text-strong uppercase tracking-widest italic">Lĩnh vực mẫu</h4>
-                <button onClick={copyFieldIndustries} className="text-[9px] font-black text-orange-600 bg-orange-50 px-2 py-1 rounded-lg uppercase">COPY ALL</button>
-              </div>
-              <SearchableSelect value={selectedFieldId} onChange={setSelectedFieldId} options={fields} placeholder="Chọn lĩnh vực..." className="mb-4 text-[10px]" />
-              <div className="space-y-2 max-h-[250px] overflow-y-auto pr-1">
-                {fields.find(f => f.id === selectedFieldId || f.id === parseInt(selectedFieldId))?.industries?.map((li, idx) => (
-                  <div key={idx} onClick={() => {
-                    const next = [...(formData.industries || []), { code: li.industry.code, name: li.industry.name, is_main: !formData.industries?.length, note: li.note }];
-                    updateFormData('industries', next);
-                  }} className="p-2.5 bg-surface border border-faint rounded-xl hover:border-orange-300 cursor-pointer transition-all flex items-center justify-between">
-                    <div className="flex-1 overflow-hidden pr-2">
-                      <div className="text-[9px] font-black text-orange-600 uppercase">{li.industry.code}</div>
-                      <div className="text-[10px] font-bold text-body truncate">{li.industry.name}</div>
-                    </div>
-                    <Plus size={12} className="text-weak shrink-0" />
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </div>

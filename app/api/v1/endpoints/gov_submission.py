@@ -11,6 +11,10 @@ router = APIRouter()
 
 @router.post("/", response_model=GovSubmissionRead)
 def create_submission(body: GovSubmissionCreate, db: Session = Depends(get_db), _=Depends(get_current_user)):
+    if body.job_id:
+        existing = db.query(GovSubmission).filter(GovSubmission.job_id == body.job_id).first()
+        if existing:
+            return existing
     sub = GovSubmission(**body.model_dump())
     db.add(sub)
     db.commit()
