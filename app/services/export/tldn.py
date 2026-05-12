@@ -271,8 +271,10 @@ def _person_to_dict(p: CompanyPerson) -> dict:
             "website": "",
         },
         "capital_contribution": {
-            "ownership_percentage": _fmt_pct(p.ownership_percentage),
-            "asset_type_ratio": _fmt_pct(p.asset_type_ratio),
+            "ownership_percentage": p.ownership_percentage or 0,
+            "ownership_percentage_fmt": _fmt_pct(p.ownership_percentage),
+            "asset_type_ratio": p.asset_type_ratio or 0,
+            "asset_type_ratio_fmt": _fmt_pct(p.asset_type_ratio),
         },
     }
 
