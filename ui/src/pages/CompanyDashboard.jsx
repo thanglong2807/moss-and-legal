@@ -58,6 +58,9 @@ const newBlankForm = (customer, type = 1) => ({
   paid_amount: null,
   accounting_name: '',
   accounting_phone: '',
+  tax_code: '',
+  approval_date: '',
+  registration_date: '',
 });
 
 const CompanyDashboard = ({ customerFilter, setCustomerFilter }) => {
@@ -193,6 +196,9 @@ const CompanyDashboard = ({ customerFilter, setCustomerFilter }) => {
     accounting_gender: fd.accounting_gender ?? null,
     accounting_birth_date: fd.accounting_birth_date || null,
     accounting_id_number: fd.accounting_id_number || null,
+    tax_code: fd.tax_code || null,
+    approval_date: fd.approval_date || null,
+    registration_date: fd.registration_date || null,
   });
 
   const handleDelete = async () => {

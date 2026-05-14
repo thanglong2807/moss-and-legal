@@ -174,8 +174,8 @@ const PersonForm = ({
     : (person.full_name ? person.full_name.toUpperCase() : '(Chưa nhập tên)');
 
   return (
-    <div className="bg-page rounded-2xl border border-base overflow-hidden">
-      <div className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-input/50 transition select-none" onClick={() => setOpen(!open)}>
+    <div className="bg-page rounded-2xl border border-base">
+      <div className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-input/50 transition select-none rounded-t-2xl" onClick={() => setOpen(!open)}>
         <div className="w-7 h-7 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-indigo-600 shrink-0">
           <Users size={13} />
         </div>
@@ -306,14 +306,18 @@ const PersonForm = ({
                 value={person.id_number || ''} onChange={e => upd('id_number', e.target.value)} />
             </div>
 
-            <div className="col-span-6 bg-page/50 p-4 rounded-2xl border border-dashed border-base">
-              <h4 className="text-[10px] font-black text-body uppercase tracking-widest mb-3">Địa chỉ liên hệ <span className="text-red-500">*</span></h4>
-              <div className="grid grid-cols-6 gap-3">
-                <div className="col-span-2"><SearchableSelect value={person.province_id || ''} onChange={id => { upd('province_id', id); if (id) loadWards(`person_${index}`, id); }} options={provinces} placeholder="Tỉnh/Thành" /></div>
-                <div className="col-span-2"><SearchableSelect value={person.ward_id || ''} onChange={id => upd('ward_id', id)} options={wardOptions[`person_${index}`] || []} placeholder="Phường/Xã" /></div>
-                <input className="col-span-2 w-full px-3 py-2.5 rounded-xl bg-surface border border-base font-bold text-xs outline-none" placeholder="Số nhà, đường..."
-                  value={person.street || ''} onChange={e => upd('street', e.target.value)} />
-              </div>
+            <div className="col-span-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Tỉnh/Thành phố <span className="text-red-500">*</span></label>
+              <SearchableSelect value={person.province_id || ''} onChange={id => { onChange(index, { ...person, province_id: id || null, ward_id: null }); if (id) loadWards(`person_${index}`, id); }} options={provinces} placeholder="-- Chọn --" />
+            </div>
+            <div className="col-span-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Phường/Xã <span className="text-red-500">*</span></label>
+              <SearchableSelect value={person.ward_id || ''} onChange={id => upd('ward_id', id)} options={wardOptions[`person_${index}`] || []} placeholder="-- Chọn --" />
+            </div>
+            <div className="col-span-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Số nhà, tên đường <span className="text-red-500">*</span></label>
+              <input className="w-full px-3 py-2.5 rounded-xl bg-surface border border-base font-black text-sm outline-none focus:border-indigo-400 transition" placeholder="Số nhà, đường..."
+                value={person.street || ''} onChange={e => upd('street', e.target.value)} />
             </div>
 
             <div className="col-span-3">

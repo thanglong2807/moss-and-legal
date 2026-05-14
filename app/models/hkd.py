@@ -32,6 +32,9 @@ class BusinessHousehold(Base):
     id_crm = Column(String(100), nullable=True)
     paid_amount = Column(BigInteger, nullable=True)
     folder_id = Column(String(200), nullable=True)   # Google Drive folder id
+    tax_code = Column(String(20), nullable=True)
+    approval_date = Column(String(10), nullable=True)   # dd/mm/yyyy
+    registration_date = Column(String(10), nullable=True)  # dd/mm/yyyy
 
     # Relationships
     customer = relationship("Customer", back_populates="households")

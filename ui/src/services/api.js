@@ -267,4 +267,11 @@ export const driveApi = {
   deleteDoc: (docId) => api.delete(`/drive/documents/${docId}`),
 };
 
+export const templateExportApi = {
+  viettelDocx: (fileKey, data) =>
+    api.post(`/template-export/viettel-docx/${fileKey}`, data, { responseType: 'blob' }),
+  mergeAll: (data) =>
+    api.post('/template-export/merge-all', data, { responseType: 'blob' }),
+};
+
 export default api;

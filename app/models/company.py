@@ -51,6 +51,9 @@ class Company(Base):
     accounting_gender = Column(Integer, nullable=True)
     accounting_birth_date = Column(Date, nullable=True)
     accounting_id_number = Column(String(20), nullable=True)
+    tax_code = Column(String(20), nullable=True)
+    approval_date = Column(String(10), nullable=True)   # dd/mm/yyyy
+    registration_date = Column(String(10), nullable=True)  # dd/mm/yyyy
 
     # Relationships
     customer = relationship("Customer")

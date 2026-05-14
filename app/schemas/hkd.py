@@ -20,6 +20,9 @@ class HKDCreate(BaseModel):
     source_id: Optional[int] = None
     note: Optional[str] = None
     paid_amount: Optional[int] = None
+    tax_code: Optional[str] = None
+    approval_date: Optional[str] = None
+    registration_date: Optional[str] = None
 
 class HKDUpdate(BaseModel):
     company_full_name: Optional[str] = None
@@ -34,6 +37,9 @@ class HKDUpdate(BaseModel):
     note: Optional[str] = None
     paid_amount: Optional[int] = None
     id_crm: Optional[str] = None
+    tax_code: Optional[str] = None
+    approval_date: Optional[str] = None
+    registration_date: Optional[str] = None
 
 class HKDRead(BaseSchema):
     code: str
@@ -50,6 +56,9 @@ class HKDRead(BaseSchema):
     id_crm: Optional[str] = None
     paid_amount: Optional[int] = None
     folder_id: Optional[str] = None
+    tax_code: Optional[str] = None
+    approval_date: Optional[str] = None
+    registration_date: Optional[str] = None
 
     # Relationships
     customer: Optional[CustomerRead] = None

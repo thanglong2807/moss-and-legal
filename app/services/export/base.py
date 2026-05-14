@@ -309,11 +309,10 @@ def merge_docx_files(file_bytes_list: List[bytes]) -> bytes:
     # copies it with the paragraph content.
     # Keep body-level terminals intact — fix_section_types() needs them to
     # compute section indices correctly; docxcompose skips them anyway.
-    for doc in docs:
+    for doc in docs[:-1]:
         body = doc.element.body
         terminal = body.find(qn('w:sectPr'))
-        if terminal is not None:
-            _inline_sectPr(body, terminal)
+        _inline_sectPr(body, terminal)
 
     # Replace base_doc's body-level terminal with last doc's so the final
     # section of the merged file inherits the last page's layout.

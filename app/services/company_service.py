@@ -141,6 +141,9 @@ class CompanyService:
             paid_amount=obj_in.paid_amount,
             accounting_name=obj_in.accounting_name,
             accounting_phone=obj_in.accounting_phone,
+            tax_code=obj_in.tax_code,
+            approval_date=obj_in.approval_date,
+            registration_date=obj_in.registration_date,
         )
         db.add(company)
         db.flush()
@@ -246,6 +249,9 @@ class CompanyService:
         if obj_in.paid_amount is not None: company.paid_amount = obj_in.paid_amount
         if obj_in.accounting_name is not None: company.accounting_name = obj_in.accounting_name
         if obj_in.accounting_phone is not None: company.accounting_phone = obj_in.accounting_phone
+        company.tax_code = obj_in.tax_code
+        company.approval_date = obj_in.approval_date
+        company.registration_date = obj_in.registration_date
 
         if obj_in.persons is not None:
             db.query(CompanyPerson).filter(CompanyPerson.company_id == company.id).delete()

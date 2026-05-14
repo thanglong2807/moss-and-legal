@@ -50,3 +50,27 @@ async def serve_spa(full_path: str):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="127.0.0.1", port=settings.APP_PORT, reload=True)
+
+'''
+Cái có rồi:
+Tên công ty
+Địa chỉ trụ sở, lấy full 
+Tên người đại diện PL đầu
+Chức danh
+CCCD
+
+Cái chưa có:
+
+Ngày đăng ký
+Mã số thuế - cần lưu
+Ngày cấp DKKD - cần lưu
+Nơi cấp DKKD
+
+Ngày cấp CCCD
+Nơi cấp CCCD
+
+Chọn loại form -> hệ thống tự lấy sheet tương ứng
+
+
+
+'''

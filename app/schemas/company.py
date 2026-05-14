@@ -91,6 +91,9 @@ class CompanyCreate(BaseModel):
     accounting_gender: Optional[int] = None
     accounting_birth_date: Optional[str] = None
     accounting_id_number: Optional[str] = None
+    tax_code: Optional[str] = None
+    approval_date: Optional[str] = None
+    registration_date: Optional[str] = None
 
 
 class CompanyUpdate(BaseModel):
@@ -111,6 +114,9 @@ class CompanyUpdate(BaseModel):
     accounting_gender: Optional[int] = None
     accounting_birth_date: Optional[str] = None
     accounting_id_number: Optional[str] = None
+    tax_code: Optional[str] = None
+    approval_date: Optional[str] = None
+    registration_date: Optional[str] = None
 
 
 class CompanyRead(BaseSchema):
@@ -134,6 +140,9 @@ class CompanyRead(BaseSchema):
     accounting_gender: Optional[int] = None
     accounting_birth_date: Optional[str] = None
     accounting_id_number: Optional[str] = None
+    tax_code: Optional[str] = None
+    approval_date: Optional[str] = None
+    registration_date: Optional[str] = None
 
     customer: Optional[CustomerRead] = None
 

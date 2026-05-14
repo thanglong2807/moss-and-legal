@@ -11,6 +11,7 @@ import ConfigPage from './pages/ConfigPage';
 import FieldsPage from './pages/FieldsPage';
 import AdminPage from './pages/AdminPage';
 import CompanyDashboard from './pages/CompanyDashboard';
+import CompanyExportPage from './pages/CompanyExportPage';
 import LoginPage from './pages/LoginPage';
 import './index.css';
 
@@ -68,6 +69,7 @@ const AppLayout = () => {
 
           <Route path="/company" element={<CompanyDashboard customerFilter={companyCustomerFilter} setCustomerFilter={setCompanyCustomerFilter} />} />
           <Route path="/company/:id" element={<CompanyDashboard customerFilter={companyCustomerFilter} setCustomerFilter={setCompanyCustomerFilter} />} />
+          <Route path="/company/:id/export" element={<CompanyExportPage />} />
 
           <Route path="/fields" element={<FieldsPage />} />
 

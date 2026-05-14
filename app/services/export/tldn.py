@@ -138,6 +138,7 @@ def process_data(raw: dict) -> dict:
     """
     data = copy.deepcopy(raw)
     ctype = data.get("company_type", 1)
+    data["company_type_text"] = "CỔ PHẦN" if ctype == 3 else "TNHH"
 
     # Company address
     ci = data["company_info"]
@@ -154,7 +155,7 @@ def process_data(raw: dict) -> dict:
     data["charter_capital"]["info"]["count"] = f"{round(amount / 10000):,}".replace(",", ".")
 
     def _set_capital_amount(person: dict) -> None:
-        pct = person.get("capital_contribution", {}).get("ownership_percentage") or 0
+        pct = float(person.get("capital_contribution", {}).get("ownership_percentage") or 0)
         raw = int(round(amount * pct / 100))
         person["capital_contribution"]["capital_amount"] = _fmt_money_dot(raw)
         person["capital_contribution"]["capital_amount_text"] = _so_thanh_chu(raw)
@@ -241,6 +242,22 @@ def process_data(raw: dict) -> dict:
         },
     }
 
+    # Format percentages to display strings after all numeric calculations are done
+    def _fmt_person_pct(person: dict) -> None:
+        cc = person.get("capital_contribution", {})
+        cc["ownership_percentage"] = _fmt_pct(cc.get("ownership_percentage"))
+        cc["asset_type_ratio"] = _fmt_pct(cc.get("asset_type_ratio"))
+
+    for p in data.get("representatives", []):
+        _fmt_person_pct(p)
+    if ctype == 1:
+        _fmt_person_pct(data.get("owner", {}))
+    elif ctype == 2:
+        for p in data.get("members", []):
+            _fmt_person_pct(p)
+    else:
+        for p in data.get("founders", []):
+            _fmt_person_pct(p)
     return data
 
 
@@ -271,9 +288,9 @@ def _person_to_dict(p: CompanyPerson) -> dict:
             "website": "",
         },
         "capital_contribution": {
-            "ownership_percentage": p.ownership_percentage or 0,
+            "ownership_percentage": float(p.ownership_percentage or 0),
             "ownership_percentage_fmt": _fmt_pct(p.ownership_percentage),
-            "asset_type_ratio": p.asset_type_ratio or 0,
+            "asset_type_ratio": float(p.asset_type_ratio or 0),
             "asset_type_ratio_fmt": _fmt_pct(p.asset_type_ratio),
         },
     }

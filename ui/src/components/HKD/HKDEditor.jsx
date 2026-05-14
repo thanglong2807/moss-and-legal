@@ -511,7 +511,14 @@ const HKDEditor = ({
             </button>
           )}
           {can('hkd', formData.id ? 'update' : 'create') && (
-            <button onClick={onSave} className="flex items-center gap-2 px-8 py-2 bg-orange-600 text-white rounded-2xl hover:bg-orange-700 shadow-lg shadow-orange-200/50 dark:shadow-none font-black text-xs transition">
+            <button onClick={() => {
+              const isApproved = statuses.find(s => s.id === formData.status_id)?.name?.toLowerCase().includes('chấp thuận');
+              if (isApproved && (!formData.tax_code?.trim() || !formData.approval_date?.trim())) {
+                alert('Vui lòng nhập Mã số thuế và Ngày chấp thuận trước khi lưu.');
+                return;
+              }
+              onSave();
+            }} className="flex items-center gap-2 px-8 py-2 bg-orange-600 text-white rounded-2xl hover:bg-orange-700 shadow-lg shadow-orange-200/50 dark:shadow-none font-black text-xs transition">
               <Save size={18} /> LƯU HỒ SƠ
             </button>
           )}
@@ -990,6 +997,44 @@ const HKDEditor = ({
                   {statuses.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                 </select>
               </div>
+
+              {/* 3 field chấp thuận */}
+              <div className="space-y-3">
+                {statuses.find(s => s.id === formData.status_id)?.name?.toLowerCase().includes('chấp thuận') && (
+                  <div className="flex items-start gap-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl px-3 py-2 text-[11px] text-yellow-700 dark:text-yellow-400 font-semibold">
+                    <span>⚠️</span>
+                    <span>Vui lòng nhập Mã số thuế và Ngày chấp thuận để lưu trạng thái này.</span>
+                  </div>
+                )}
+                <div>
+                  <label className="text-[10px] font-black uppercase text-weak block mb-1 px-1">Ngày đăng ký</label>
+                  <input type="text" placeholder="dd/mm/yyyy"
+                    className="w-full bg-page rounded-xl px-4 py-2.5 text-[11px] font-bold border border-faint outline-none focus:ring-2 focus:ring-orange-300 transition"
+                    value={formData.registration_date || ''}
+                    onChange={e => updateFormData('registration_date', e.target.value)} />
+                </div>
+                <div>
+                  <label className="text-[10px] font-black uppercase text-weak block mb-1 px-1">
+                    Mã số thuế
+                    {statuses.find(s => s.id === formData.status_id)?.name?.toLowerCase().includes('chấp thuận') && <span className="text-red-500 ml-1">*</span>}
+                  </label>
+                  <input type="text" placeholder="0123456789"
+                    className="w-full bg-page rounded-xl px-4 py-2.5 text-[11px] font-bold border border-faint outline-none focus:ring-2 focus:ring-orange-300 transition"
+                    value={formData.tax_code || ''}
+                    onChange={e => updateFormData('tax_code', e.target.value)} />
+                </div>
+                <div>
+                  <label className="text-[10px] font-black uppercase text-weak block mb-1 px-1">
+                    Ngày chấp thuận
+                    {statuses.find(s => s.id === formData.status_id)?.name?.toLowerCase().includes('chấp thuận') && <span className="text-red-500 ml-1">*</span>}
+                  </label>
+                  <input type="text" placeholder="dd/mm/yyyy"
+                    className="w-full bg-page rounded-xl px-4 py-2.5 text-[11px] font-bold border border-faint outline-none focus:ring-2 focus:ring-orange-300 transition"
+                    value={formData.approval_date || ''}
+                    onChange={e => updateFormData('approval_date', e.target.value)} />
+                </div>
+              </div>
+
               <div className="pt-4 border-t border-faint">
                 <label className="text-[10px] font-black uppercase text-weak block mb-2 px-1">Số tiền đã thanh toán (VNĐ)</label>
                 <input

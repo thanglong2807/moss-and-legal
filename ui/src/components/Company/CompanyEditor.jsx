@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Save, Trash2, Plus, X, Search, MapPin,
   Download, Upload, Building2, ExternalLink,
@@ -17,6 +18,76 @@ import { validatePhone, validateEmail, sortIndustriesByCode } from '../../utils/
 import { COMPANY_SEARCH_SITES } from '../../constants';
 
 const TYPE_LABELS = { 1: 'TNHH 1TV', 2: 'TNHH 2TV+', 3: 'Cổ phần' };
+
+const _isApproved = (fd, statuses) =>
+  !!statuses?.find(s => s.id === fd.status_id)?.name?.toLowerCase().includes('chấp thuận');
+
+// [label, getValue, onlyWhen?]
+const REQUIRED_FIELDS = [
+  { label: 'Tên doanh nghiệp',   getValue: fd => fd.company_full_name },
+  { label: 'Vốn điều lệ',        getValue: fd => fd.company_info?.charter_capital },
+  { label: 'Tỉnh/Thành phố',     getValue: fd => fd.company_info?.address?.province_id },
+  { label: 'Phường/Xã',          getValue: fd => fd.company_info?.address?.ward_id },
+  { label: 'Số nhà/Đường',       getValue: fd => fd.company_info?.address?.street },
+  { label: 'SĐT',                getValue: fd => fd.company_info?.contact?.phone },
+  { label: 'Email',              getValue: fd => fd.company_info?.contact?.email },
+  { label: 'Mã số thuế',         getValue: fd => fd.tax_code,       onlyWhen: _isApproved },
+  { label: 'Ngày chấp thuận',    getValue: fd => fd.approval_date,  onlyWhen: _isApproved },
+];
+
+const _personLabel = (p, idx) => {
+  if (p.person_type === 'representative') return 'Người đại diện';
+  if (p.person_type === 'owner')   return 'Chủ sở hữu';
+  if (p.person_type === 'member')  return `Thành viên ${idx + 1}`;
+  return `Cổ đông ${idx + 1}`;
+};
+
+// context: 'save' includes conditional fields + person checks; others skip conditional + skip person detail
+const getErrors = (fd, statuses, context) => {
+  const errors = [];
+
+  // Company-level required fields
+  for (const f of REQUIRED_FIELDS) {
+    if (f.onlyWhen && (context !== 'save' || !f.onlyWhen(fd, statuses))) continue;
+    const val = f.getValue(fd);
+    if (!val && val !== 0) errors.push(f.label);
+  }
+
+  // Person validation (all contexts)
+  const persons = fd.persons || [];
+  if (!persons.length) {
+    errors.push('Cần ít nhất 1 người (chủ/thành viên hoặc đại diện)');
+  } else {
+    // Capital total for LLC2/JSC
+    if ([2, 3].includes(fd.company_type)) {
+      const key = fd.company_type === 2 ? 'member' : 'founder';
+      const nonReps = persons.filter(p => p.person_type === key);
+      if (nonReps.length) {
+        const total = nonReps.reduce((s, p) => s + parseFloat(p.ownership_percentage || 0), 0);
+        if (Math.abs(total - 100) > 0.1)
+          errors.push(`Tổng vốn góp phải 100% (hiện: ${total.toFixed(1)}%)`);
+      }
+    }
+
+    // Per-person detail
+    persons.forEach((p, i) => {
+        const missing = [];
+        if (!p.full_name?.trim())    missing.push('tên');
+        if (p.gender == null)         missing.push('giới tính');
+        if (!p.birth_date?.trim())   missing.push('ngày sinh');
+        if (!p.id_number?.trim())    missing.push('số CCCD');
+        if (p.person_type === 'representative' && !p.position_id) missing.push('chức danh');
+        if (p.person_type !== 'representative' && p.person_type !== 'owner' && !(parseFloat(p.ownership_percentage) > 0))
+          missing.push('tỉ lệ vốn');
+        if (!p.province_id)           missing.push('tỉnh/TP');
+        if (!p.ward_id)               missing.push('phường/xã');
+        if (!p.street?.trim())        missing.push('địa chỉ');
+        if (missing.length) errors.push(`${_personLabel(p, i)}: thiếu ${missing.join(', ')}`);
+      });
+  }
+
+  return errors;
+};
 const TYPE_COLORS = {
   1: 'bg-purple-600 text-white shadow-purple-200/60',
   2: 'bg-blue-600 text-white shadow-blue-200/60',
@@ -326,6 +397,7 @@ const CompanyEditor = ({
 }) => {
   const { can } = useAuth();
   const showToast = useToast();
+  const navigate = useNavigate();
   const [activeIndustryIdx, setActiveIndustryIdx] = useState(null);
   const [selectedFieldId, setSelectedFieldId] = useState('');
   const [rightHidden, setRightHidden] = useState(() => localStorage.getItem('editorRightHidden') === '1');
@@ -340,10 +412,19 @@ const CompanyEditor = ({
     return () => window.removeEventListener('sidebarUltraCollapse', h);
   }, []);
   const [translating, setTranslating] = useState(false);
-  const [showExport, setShowExport] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
   const [showGov, setShowGov] = useState(false);
   const [showCustomerDetail, setShowCustomerDetail] = useState(false);
+  const [validationErrors, setValidationErrors] = useState([]);
+
+  useEffect(() => { if (validationErrors.length) setValidationErrors([]); }, [formData]);
+
+  const validate = (context, action) => {
+    const errs = getErrors(formData, statuses, context);
+    if (errs.length) { setValidationErrors(errs); return; }
+    setValidationErrors([]);
+    action();
+  };
 
   // Cache persons by type key so switching back restores them
   const personsCache = useRef({});
@@ -443,7 +524,8 @@ const CompanyEditor = ({
             </button>
           )}
           {can('company', formData.id ? 'update' : 'create') && (
-            <button onClick={onSave} className="flex items-center gap-2 px-8 py-2 bg-orange-600 text-white rounded-2xl hover:bg-orange-700 shadow-lg shadow-orange-200/50 dark:shadow-none font-black text-xs transition">
+            <button onClick={onSave}
+              className="flex items-center gap-2 px-8 py-2 bg-orange-600 text-white rounded-2xl hover:bg-orange-700 shadow-lg shadow-orange-200/50 dark:shadow-none font-black text-xs transition">
               <Save size={18} /> LƯU HỒ SƠ
             </button>
           )}
@@ -473,7 +555,7 @@ const CompanyEditor = ({
           {/* Action buttons */}
           {formData.id && (
             <div className="flex gap-3 flex-wrap">
-              <button onClick={() => setShowExport(true)}
+              <button onClick={() => validate('export', () => navigate(`/company/${formData.id}/export`))}
                 className="flex items-center gap-2 px-5 py-2.5 bg-surface border border-base text-body rounded-2xl font-black text-xs hover:border-orange-400 hover:text-orange-600 shadow-sm transition">
                 <Download size={14} /> Xuất hồ sơ
               </button>
@@ -481,10 +563,22 @@ const CompanyEditor = ({
                 className="flex items-center gap-2 px-5 py-2.5 bg-surface border border-base text-body rounded-2xl font-black text-xs hover:border-blue-400 hover:text-blue-600 shadow-sm transition">
                 <Upload size={14} /> Upload Drive
               </button>
-              <button onClick={() => setShowGov(true)}
+              <button onClick={() => validate('gov', () => setShowGov(true))}
                 className="flex items-center gap-2 px-5 py-2.5 bg-surface border border-base text-body rounded-2xl font-black text-xs hover:border-indigo-400 hover:text-indigo-600 shadow-sm transition">
                 <Building2 size={14} /> Chuyển GOV
               </button>
+            </div>
+          )}
+
+          {/* Validation errors — hiện ngay dưới cụm nút */}
+          {validationErrors.length > 0 && (
+            <div className="bg-red-50 border border-red-200 rounded-2xl px-4 py-3 text-[11px] font-bold text-red-600">
+              <div className="flex items-center gap-1.5 mb-1.5 text-red-700">
+                <span>⚠</span><span className="uppercase tracking-wider text-[10px]">Cần bổ sung trước khi thực hiện</span>
+              </div>
+              <ul className="space-y-0.5 pl-4 list-disc">
+                {validationErrors.map((e, i) => <li key={i}>{e}</li>)}
+              </ul>
             </div>
           )}
 
@@ -595,7 +689,7 @@ const CompanyEditor = ({
               {/* Address */}
               <div className="col-span-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Tỉnh/Thành phố <span className="text-red-500">*</span></label>
-                <SearchableSelect value={addr.province_id || ''} onChange={id => { setCI('address.province_id', id); loadWards('company', id); }} options={provinces} placeholder="-- Chọn --" />
+                <SearchableSelect value={addr.province_id || ''} onChange={id => { updateFormData('company_info', { ...ci, address: { ...addr, province_id: id || null, ward_id: null } }); loadWards('company', id); }} options={provinces} placeholder="-- Chọn --" />
               </div>
               <div className="col-span-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-body mb-1 block px-1">Phường/Xã <span className="text-red-500">*</span></label>
@@ -898,6 +992,43 @@ const CompanyEditor = ({
                 </select>
               </div>
 
+              {/* 3 field chấp thuận */}
+              <div className="space-y-3">
+                {statuses.find(s => s.id === formData.status_id)?.name?.toLowerCase().includes('chấp thuận') && (
+                  <div className="flex items-start gap-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl px-3 py-2 text-[11px] text-yellow-700 dark:text-yellow-400 font-semibold">
+                    <span>⚠️</span>
+                    <span>Vui lòng nhập Mã số thuế và Ngày chấp thuận để lưu trạng thái này.</span>
+                  </div>
+                )}
+                <div>
+                  <label className="text-[10px] font-black uppercase text-weak block mb-1 px-1">Ngày đăng ký</label>
+                  <input type="text" placeholder="dd/mm/yyyy"
+                    className="w-full bg-page rounded-xl px-4 py-2.5 text-[11px] font-bold border border-faint outline-none focus:ring-2 focus:ring-orange-300 transition"
+                    value={formData.registration_date || ''}
+                    onChange={e => updateFormData('registration_date', e.target.value)} />
+                </div>
+                <div>
+                  <label className="text-[10px] font-black uppercase text-weak block mb-1 px-1">
+                    Mã số thuế
+                    {statuses.find(s => s.id === formData.status_id)?.name?.toLowerCase().includes('chấp thuận') && <span className="text-red-500 ml-1">*</span>}
+                  </label>
+                  <input type="text" placeholder="0123456789"
+                    className="w-full bg-page rounded-xl px-4 py-2.5 text-[11px] font-bold border border-faint outline-none focus:ring-2 focus:ring-orange-300 transition"
+                    value={formData.tax_code || ''}
+                    onChange={e => updateFormData('tax_code', e.target.value)} />
+                </div>
+                <div>
+                  <label className="text-[10px] font-black uppercase text-weak block mb-1 px-1">
+                    Ngày chấp thuận
+                    {statuses.find(s => s.id === formData.status_id)?.name?.toLowerCase().includes('chấp thuận') && <span className="text-red-500 ml-1">*</span>}
+                  </label>
+                  <input type="text" placeholder="dd/mm/yyyy"
+                    className="w-full bg-page rounded-xl px-4 py-2.5 text-[11px] font-bold border border-faint outline-none focus:ring-2 focus:ring-orange-300 transition"
+                    value={formData.approval_date || ''}
+                    onChange={e => updateFormData('approval_date', e.target.value)} />
+                </div>
+              </div>
+
               <div className="pt-4 border-t border-faint">
                 <label className="text-[10px] font-black uppercase text-weak block mb-2 px-1">Nguồn</label>
                 <select value={formData.source_id || ''} onChange={e => updateFormData('source_id', parseInt(e.target.value))}
@@ -967,7 +1098,6 @@ const CompanyEditor = ({
       </div>
 
       {/* ── Modals ── */}
-      <ExportModal isOpen={showExport} onClose={() => setShowExport(false)} formData={formData} onSave={onSave} />
       <CompanyUploadModal
         isOpen={showUpload}
         onClose={() => setShowUpload(false)}

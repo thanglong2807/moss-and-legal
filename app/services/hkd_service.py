@@ -93,7 +93,10 @@ class HKDService:
             status_id=obj_in.status_id,
             source_id=obj_in.source_id,
             note=obj_in.note,
-            paid_amount=obj_in.paid_amount
+            paid_amount=obj_in.paid_amount,
+            tax_code=obj_in.tax_code,
+            approval_date=obj_in.approval_date,
+            registration_date=obj_in.registration_date,
         )
         db.add(hkd)
         db.flush()
@@ -266,6 +269,9 @@ class HKDService:
         if obj_in.source_id is not None: hkd.source_id = obj_in.source_id
         if obj_in.note is not None: hkd.note = obj_in.note
         if obj_in.paid_amount is not None: hkd.paid_amount = obj_in.paid_amount
+        hkd.tax_code = obj_in.tax_code
+        hkd.approval_date = obj_in.approval_date
+        hkd.registration_date = obj_in.registration_date
 
         # 2. Update Owner if provided
         if obj_in.owner:

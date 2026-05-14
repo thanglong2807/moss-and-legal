@@ -22,3 +22,5 @@ class FieldIndustryLink(BaseSchema):
 
 class FieldWithIndustries(FieldBase):
     industries: List[FieldIndustryLink] = []
+
+

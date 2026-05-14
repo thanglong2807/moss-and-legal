@@ -180,6 +180,9 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
     source_id: fd.source_id,
     note: fd.note,
     paid_amount: fd.paid_amount,
+    tax_code: fd.tax_code || null,
+    approval_date: fd.approval_date || null,
+    registration_date: fd.registration_date || null,
   });
 
   const handleDelete = async () => {
