@@ -38,10 +38,10 @@ const StaffModal = ({ mode, data, onClose, onSaved }) => {
     setLoading(true);
     try {
       if (isEdit) {
-        const body = { full_name: fullName, phone, is_active: isActive };
+        const body = { display_name: fullName, phone, is_active: isActive };
         await axios.put(`${API}/${data.id}`, body, { headers: authHeaders() });
       } else {
-        const body = { full_name: fullName, email, password, phone };
+        const body = { display_name: fullName, email, password, phone };
         await axios.post(API, body, { headers: authHeaders() });
       }
       onSaved();
@@ -159,7 +159,7 @@ const StaffPage = () => {
         axios.get(API, { headers: authHeaders() }),
         axios.get('/api/v1/tenant/subscription', { headers: authHeaders() }).catch(() => ({ data: null })),
       ]);
-      setStaff(sr.data?.data ?? sr.data ?? []);
+      setStaff(Array.isArray(sr.data) ? sr.data : (sr.data?.items ?? []));
       setSub(subr.data);
     } catch {
       // ignore

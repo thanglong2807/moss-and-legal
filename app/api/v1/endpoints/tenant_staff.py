@@ -73,6 +73,30 @@ def _check_user_limit(db: Session, tenant_id: int) -> None:
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
+@router.get("/roles")
+def list_roles(
+    db: Session = Depends(get_db),
+    current_user=Depends(require_tenant_admin),
+):
+    """Danh sách roles của tenant hiện tại."""
+    roles = db.execute(
+        select(Role).where(
+            Role.tenant_id == current_user.tenant_id,
+            Role.deleted_at.is_(None),
+        ).order_by(Role.level, Role.id)
+    ).scalars().all()
+
+    return [
+        {
+            "id": r.id,
+            "name": r.name,
+            "level": r.level,
+            "parent_id": r.parent_id,
+        }
+        for r in roles
+    ]
+
+
 @router.get("/")
 def list_staff(
     page: int = Query(1, ge=1),
@@ -243,27 +267,3 @@ def delete_staff(
 
     user.deleted_at = datetime.utcnow()
     db.commit()
-
-
-@router.get("/roles")
-def list_roles(
-    db: Session = Depends(get_db),
-    current_user=Depends(require_tenant_admin),
-):
-    """Danh sách roles của tenant hiện tại."""
-    roles = db.execute(
-        select(Role).where(
-            Role.tenant_id == current_user.tenant_id,
-            Role.deleted_at.is_(None),
-        ).order_by(Role.level, Role.id)
-    ).scalars().all()
-
-    return [
-        {
-            "id": r.id,
-            "name": r.name,
-            "level": r.level,
-            "parent_id": r.parent_id,
-        }
-        for r in roles
-    ]

@@ -15,13 +15,23 @@ UI_DIST_PATH = os.path.join(os.path.dirname(__file__), "ui", "dist")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    from app.services.scheduler import start_scheduler
-    start_scheduler()
+    try:
+        from app.services.scheduler import start_scheduler
+        start_scheduler()
+    except ImportError:
+        import logging
+        logging.getLogger(__name__).warning(
+            "apscheduler not installed — renewal reminder scheduler disabled. "
+            "Run: pip install apscheduler"
+        )
     yield
     # Shutdown
-    from app.services.scheduler import scheduler
-    if scheduler.running:
-        scheduler.shutdown(wait=False)
+    try:
+        from app.services.scheduler import scheduler
+        if scheduler.running:
+            scheduler.shutdown(wait=False)
+    except ImportError:
+        pass
 
 
 app = FastAPI(

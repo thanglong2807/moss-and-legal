@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from typing import Optional
 
+from sqlalchemy import func as sqlfunc
 from app.core.database import get_db
 from app.auth.dependencies import require_tenant_admin, require_super_admin
 from app.models.audit_log import AuditLog
@@ -21,17 +22,15 @@ def list_audit_logs(
     current_user=Depends(require_tenant_admin),
 ):
     """TenantAdmin xem audit log của tenant mình."""
-    stmt = select(AuditLog).where(AuditLog.tenant_id == current_user.tenant_id)
+    base = select(AuditLog).where(AuditLog.tenant_id == current_user.tenant_id)
     if action:
-        stmt = stmt.where(AuditLog.action == action.upper())
+        base = base.where(AuditLog.action == action.upper())
     if resource:
-        stmt = stmt.where(AuditLog.resource == resource.lower())
+        base = base.where(AuditLog.resource == resource.lower())
 
-    total = db.execute(
-        select(AuditLog).where(AuditLog.tenant_id == current_user.tenant_id)
-    ).scalars().all()
+    total = db.execute(select(sqlfunc.count()).select_from(base.subquery())).scalar() or 0
 
-    stmt = stmt.order_by(AuditLog.created_at.desc()).offset((page - 1) * limit).limit(limit)
+    stmt = base.order_by(AuditLog.created_at.desc()).offset((page - 1) * limit).limit(limit)
     logs = db.execute(stmt).scalars().all()
 
     return {
@@ -78,7 +77,7 @@ def list_audit_logs_super(
         stmt = stmt.where(AuditLog.resource == resource.lower())
         count_stmt = count_stmt.where(AuditLog.resource == resource.lower())
 
-    total = len(db.execute(count_stmt).scalars().all())
+    total = db.execute(select(sqlfunc.count()).select_from(count_stmt.subquery())).scalar() or 0
     stmt = stmt.order_by(AuditLog.created_at.desc()).offset((page - 1) * limit).limit(limit)
     logs = db.execute(stmt).scalars().all()
 
