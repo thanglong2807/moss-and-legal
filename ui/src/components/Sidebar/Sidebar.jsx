@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import {
   Users, Settings, ChevronLeft, ChevronRight,
   FileText, Home, LayoutGrid, LogOut, Sun, Moon, ShieldCheck, Building2,
-  KeyRound, User, X, Minimize2, CreditCard, Globe,
+  KeyRound, User, X, Minimize2, CreditCard, Globe, Users2, Download,
 } from 'lucide-react';
 import logoImage from '../../assets/logo.webp';
 import logoMini from '../../assets/logo_mini.png';
@@ -201,11 +201,13 @@ const Sidebar = () => {
     : [
         { icon: Home,        label: 'Tổng quan',      key: 'home',        always: true },
         { icon: Users,       label: 'Khách hàng',     key: 'customers',   module: 'customers' },
+        { icon: Users2,      label: 'Nhân viên',      key: 'staff',       module: 'users' },
         { icon: Building2,   label: 'Thành lập DN',   key: 'company',     module: 'company' },
         { icon: FileText,    label: 'Hộ kinh doanh',  key: 'hkd',         module: 'hkd' },
         { icon: LayoutGrid,  label: 'Lĩnh vực',       key: 'fields',      module: 'fields' },
+        { icon: Download,    label: 'Xuất dữ liệu',   key: 'export-data', always: true },
         { icon: Settings,    label: 'Cấu hình',        key: 'config',      module: 'config' },
-        { icon: ShieldCheck, label: 'Nhân viên',      key: 'admin',       module: 'users' },
+        { icon: ShieldCheck, label: 'Quản trị',       key: 'admin',       module: 'users' },
         ...(isTenantAdmin ? [{ icon: CreditCard, label: 'Gói đăng ký', key: 'subscription', always: true, badge: subWarning }] : []),
       ].filter(item => item.always || can(item.module));
 

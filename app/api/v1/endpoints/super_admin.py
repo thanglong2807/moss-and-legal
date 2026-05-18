@@ -303,6 +303,7 @@ def create_tenant_admin(
 ):
     """Tạo tài khoản admin cho tenant."""
     from app.auth.service import hash_password
+    from app.services.email_service import send_welcome_admin
 
     tenant = db.execute(select(Tenant).where(Tenant.id == tenant_id, Tenant.deleted_at.is_(None))).scalars().first()
     if not tenant:
@@ -314,9 +315,12 @@ def create_tenant_admin(
 
     role = _get_or_create_admin_role(db, tenant_id, tenant.slug)
 
+    # Lưu password plaintext trước khi hash để gửi email
+    plain_password = data.password
+
     user = User(
         email=data.email,
-        hashed_password=hash_password(data.password),
+        hashed_password=hash_password(plain_password),
         display_name=data.display_name,
         phone=data.phone,
         is_active=True,
@@ -327,6 +331,19 @@ def create_tenant_admin(
     db.add(user)
     db.commit()
     db.refresh(user)
+
+    # Gửi email chào mừng (non-blocking — nếu SMTP chưa cấu hình sẽ log warning)
+    try:
+        send_welcome_admin(
+            tenant_name=tenant.name,
+            email=user.email,
+            display_name=user.display_name,
+            password=plain_password,
+        )
+    except Exception:
+        import logging
+        logging.getLogger(__name__).exception("Failed to send welcome email to %s", user.email)
+
     return {
         "id": user.id,
         "display_name": user.display_name,

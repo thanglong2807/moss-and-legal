@@ -17,6 +17,9 @@ import SuperAdminDashboard from './pages/SuperAdminDashboard';
 import SubscriptionPage from './pages/SubscriptionPage';
 import PaymentPage from './pages/PaymentPage';
 import PaymentResultPage from './pages/PaymentResultPage';
+import StaffPage from './pages/StaffPage';
+import LandingPage from './pages/LandingPage';
+import ExportPage from './pages/ExportPage';
 import './index.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -42,7 +45,7 @@ const AppLayout = () => {
       <Sidebar />
       <main className="flex-1 flex overflow-hidden">
         <Routes>
-          <Route path="/" element={<Navigate to="/hkd" replace />} />
+          <Route path="/" element={<Navigate to="/home" replace />} />
 
           <Route path="/home" element={
             <div className="flex-1 flex flex-col items-center justify-center p-12 bg-page text-weak italic">
@@ -97,6 +100,8 @@ const AppLayout = () => {
           <Route path="/subscription" element={<SubscriptionPage />} />
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/payment/result" element={<PaymentResultPage />} />
+          <Route path="/staff" element={<StaffPage />} />
+          <Route path="/export-data" element={<ExportPage />} />
 
           <Route path="*" element={<Navigate to="/hkd" replace />} />
         </Routes>
@@ -113,6 +118,7 @@ const App = () => {
       <ToastProvider>
       <AuthProvider>
         <Routes>
+          <Route path="/" element={<RootRoute />} />
           <Route path="/login" element={<LoginPageWrapper />} />
           <Route path="/*" element={
             <ProtectedRoute>
@@ -126,6 +132,14 @@ const App = () => {
       </ThemeProvider>
     </BrowserRouter>
   );
+};
+
+// Show landing page for unauthenticated users, redirect to /home if logged in
+const RootRoute = () => {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (user) return <Navigate to="/home" replace />;
+  return <LandingPage />;
 };
 
 // Redirect to /hkd if already logged in

@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
+from contextlib import asynccontextmanager
 from app.api.v1.api import api_router
 from app.core.config import settings
 from app.core.logging import logger
@@ -10,9 +11,23 @@ import os
 
 UI_DIST_PATH = os.path.join(os.path.dirname(__file__), "ui", "dist")
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    from app.services.scheduler import start_scheduler
+    start_scheduler()
+    yield
+    # Shutdown
+    from app.services.scheduler import scheduler
+    if scheduler.running:
+        scheduler.shutdown(wait=False)
+
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json"
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    lifespan=lifespan,
 )
 
 # Set all CORS enabled origins

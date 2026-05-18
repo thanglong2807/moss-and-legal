@@ -39,7 +39,10 @@ const TenantAdminModal = ({ tenant, onClose }) => {
     setLoading(true);
     try {
       const r = await axios.get(`${API}/tenants/${tenant.id}/admins`, { headers: authHeaders() });
-      setAdmins(r.data);
+      setAdmins(Array.isArray(r.data) ? r.data : []);
+    } catch (e) {
+      setErr(e.response?.data?.detail || 'Lỗi tải danh sách admin');
+      setAdmins([]);
     } finally { setLoading(false); }
   }, [tenant.id]);
 

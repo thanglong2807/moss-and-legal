@@ -60,6 +60,14 @@ class Settings(BaseSettings):
     # App base URL (dùng cho payment return URLs)
     APP_BASE_URL: str = "http://localhost:8200"
 
+    # SMTP Email
+    SMTP_HOST: str = ""
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_FROM: str = "noreply@mosslegal.vn"
+    SMTP_TLS: bool = True
+
     @property
     def DATABASE_URL(self) -> str:
         return f"mysql+pymysql://{self.MYSQL_USER}:{self.MYSQL_PASSWORD}@{self.MYSQL_SERVER}:{self.MYSQL_PORT}/{self.MYSQL_DB}"

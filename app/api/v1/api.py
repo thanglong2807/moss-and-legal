@@ -1,4 +1,4 @@
-from app.api.v1.endpoints import hkd, fields, industries, customers, configs, admin_units, export, drive, webhook, ocr, company, gov_submission, template_export, super_admin, tenant_admin, payment
+from app.api.v1.endpoints import hkd, fields, industries, customers, configs, admin_units, export, drive, webhook, ocr, company, gov_submission, template_export, super_admin, tenant_admin, payment, audit, tenant_staff, tenant_export
 from app.auth.router import router as auth_router
 from fastapi import APIRouter
 
@@ -20,4 +20,7 @@ api_router.include_router(template_export.router, prefix="/template-export", tag
 api_router.include_router(super_admin.router, prefix="/super-admin", tags=["Super Admin"])
 api_router.include_router(tenant_admin.router, prefix="/tenant", tags=["Tenant Admin"])
 api_router.include_router(payment.router, prefix="/payment", tags=["Payment"])
+api_router.include_router(audit.router, prefix="/audit", tags=["Audit Log"])
+api_router.include_router(tenant_staff.router, prefix="/tenant/staff", tags=["Tenant Staff"])
+api_router.include_router(tenant_export.router, prefix="/tenant/export", tags=["Tenant Export"])
 

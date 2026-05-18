@@ -19,6 +19,7 @@ google-genai
 bcrypt
 python-jose[cryptography]
 deep-translator
+apscheduler
 # Testing
 pytest
 pytest-asyncio
