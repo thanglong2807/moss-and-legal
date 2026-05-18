@@ -25,16 +25,16 @@ class ViettelMergeGroup(BaseModel):
     data: ViettelMergeData = ViettelMergeData()
 
 
-class CenviMergeData(BaseModel):
+class MossLegalMergeData(BaseModel):
     pass
 
 
-class CenviMergeGroup(BaseModel):
+class MossLegalMergeGroup(BaseModel):
     ids: List[str] = []
-    data: Optional[CenviMergeData] = None
+    data: Optional[MossLegalMergeData] = None
 
 
 class MergeAllRequest(BaseModel):
     company_id: int
     viettel: ViettelMergeGroup = ViettelMergeGroup()
-    cenvi: Optional[CenviMergeGroup] = None
+    moss_legal: Optional[MossLegalMergeGroup] = None

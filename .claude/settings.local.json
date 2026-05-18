@@ -2,7 +2,26 @@
   "permissions": {
     "allow": [
       "Bash(node_modules/.bin/vite build *)",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(Get-ChildItem -Path \"E:\\\\phan_mem\\\\platform\\\\cenvi_launch\\\\.claude\\\\worktrees\\\\lucid-banzai-9398d4\" -Force)",
+      "Bash(Select-Object Mode, Name)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(ls -la \"E:\\\\\\\\phan_mem\\\\\\\\platform\\\\\\\\cenvi_launch\\\\\\\\.claude\\\\\\\\worktrees\\\\\\\\lucid-banzai-9398d4\")",
+      "Bash(find \"E:\\\\\\\\phan_mem\\\\\\\\platform\\\\\\\\cenvi_launch\\\\\\\\.claude\\\\\\\\worktrees\\\\\\\\lucid-banzai-9398d4\" -maxdepth 2 -type d)",
+      "Bash(findstr /i \"jose sqlalchemy pymysql passlib bcrypt\")",
+      "Read(//e/phan_mem/platform/cenvi_launch/**)",
+      "Bash('E:\\\\phan_mem\\\\platform\\\\cenvi_launch\\\\venv\\\\Scripts\\\\python.exe' -c ' *)",
+      "Bash(\"E:\\\\phan_mem\\\\platform\\\\cenvi_launch\\\\venv\\\\Scripts\\\\alembic.exe\" --config \"E:\\\\phan_mem\\\\platform\\\\cenvi_launch\\\\.claude\\\\worktrees\\\\lucid-banzai-9398d4\\\\alembic.ini\" upgrade head)",
+      "PowerShell($env:PYTHONPATH = \"E:\\\\phan_mem\\\\platform\\\\cenvi_launch\\\\.claude\\\\worktrees\\\\lucid-banzai-9398d4\"; Set-Location \"E:\\\\phan_mem\\\\platform\\\\cenvi_launch\"; Copy-Item \".env\" \"E:\\\\phan_mem\\\\platform\\\\cenvi_launch\\\\.claude\\\\worktrees\\\\lucid-banzai-9398d4\\\\.env\" -Force; Write-Host \"Copied .env to worktree\")",
+      "Bash(Get-ChildItem \"E:\\\\phan_mem\\\\platform\\\\cenvi_launch\\\\.claude\\\\worktrees\\\\lucid-banzai-9398d4\\\\ui\\\\src\\\\assets\" -File)",
+      "Bash(Select-Object Name)",
+      "Bash(Format-Table -HideTableHeaders)",
+      "Bash(\"E:\\\\phan_mem\\\\platform\\\\cenvi_launch\\\\venv\\\\Scripts\\\\python.exe\" -c \"import app.api.v1.api; print\\('API import OK'\\)\")",
+      "Bash(\"E:\\\\phan_mem\\\\platform\\\\cenvi_launch\\\\venv\\\\Scripts\\\\python.exe\" -c \"import main; print\\('main import OK'\\)\")",
+      "Bash(netstat -ano)",
+      "Bash(findstr \":8200\\\\|:8100\")",
+      "Bash(findstr LISTENING)",
+      "Bash(\"E:\\\\phan_mem\\\\platform\\\\cenvi_launch\\\\venv\\\\Scripts\\\\python.exe\" main.py)"
     ]
   }
 }

@@ -11,3 +11,4 @@ class Document(Base):
     file_name  = Column(String(500), nullable=False)
     drive_link = Column(String(1000), nullable=True)
     drive_file_id = Column(String(200), nullable=True) # for deletion
+    tenant_id  = Column(Integer, ForeignKey("tenants.id"), nullable=True, index=True)

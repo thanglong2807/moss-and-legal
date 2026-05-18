@@ -7,21 +7,25 @@ class StaffConfig(Base):
     __tablename__ = "staff_configs"
     crm_id = Column(String(50), unique=True, index=True, nullable=True)
     name = Column(String(255), nullable=False)
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=True, index=True)
 
 class SourceConfig(Base):
     __tablename__ = "source_configs"
     crm_id = Column(String(50), unique=True, index=True, nullable=True)
     name = Column(String(255), nullable=False)
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=True, index=True)
 
 class StatusConfig(Base):
     __tablename__ = "status_configs"
     crm_id = Column(String(50), unique=True, index=True, nullable=True)
     name = Column(String(255), nullable=False)
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=True, index=True)
 
 class Customer(Base):
     __tablename__ = "customers"
     name = Column(String(255), nullable=False)
     phone = Column(String(20), nullable=False, index=True)
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=True, index=True)
     
     source_id = Column(Integer, ForeignKey("source_configs.id"))
     staff_id = Column(Integer, ForeignKey("staff_configs.id"))

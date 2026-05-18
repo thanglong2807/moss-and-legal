@@ -13,6 +13,10 @@ import AdminPage from './pages/AdminPage';
 import CompanyDashboard from './pages/CompanyDashboard';
 import CompanyExportPage from './pages/CompanyExportPage';
 import LoginPage from './pages/LoginPage';
+import SuperAdminDashboard from './pages/SuperAdminDashboard';
+import SubscriptionPage from './pages/SubscriptionPage';
+import PaymentPage from './pages/PaymentPage';
+import PaymentResultPage from './pages/PaymentResultPage';
 import './index.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -42,7 +46,7 @@ const AppLayout = () => {
 
           <Route path="/home" element={
             <div className="flex-1 flex flex-col items-center justify-center p-12 bg-page text-weak italic">
-              <h2 className="text-xl font-black italic uppercase tracking-widest text-orange-600/20">CENVI CRM DASHBOARD</h2>
+              <h2 className="text-xl font-black italic uppercase tracking-widest text-orange-600/20">MOSS&LEGAL DASHBOARD</h2>
             </div>
           } />
 
@@ -88,6 +92,11 @@ const AppLayout = () => {
                   <p className="text-weak font-bold text-sm">Bạn không có quyền truy cập trang này.</p>
                 </div>
           } />
+
+          <Route path="/super-admin" element={<SuperAdminDashboard />} />
+          <Route path="/subscription" element={<SubscriptionPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/payment/result" element={<PaymentResultPage />} />
 
           <Route path="*" element={<Navigate to="/hkd" replace />} />
         </Routes>

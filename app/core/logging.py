@@ -9,4 +9,4 @@ def setup_logging():
     )
 
 setup_logging()
-logger = logging.getLogger("cenvi-launch")
+logger = logging.getLogger("moss-legal")

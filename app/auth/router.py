@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Form
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
+from sqlalchemy import select
+from datetime import datetime
 
 from app.core.database import get_db
 from app.auth import user_service, role_service
@@ -15,6 +17,30 @@ from app.auth.schemas import (
 )
 
 router = APIRouter()
+
+
+def _get_subscription_data(db: Session, tenant_id):
+    """Lấy thông tin subscription active của tenant (hoặc None)."""
+    if not tenant_id:
+        return None
+    from app.models.subscription import Subscription, SubscriptionPlan
+    sub = db.execute(
+        select(Subscription)
+        .where(
+            Subscription.tenant_id == tenant_id,
+            Subscription.status == "active",
+            Subscription.deleted_at.is_(None),
+        )
+        .order_by(Subscription.end_date.desc())
+    ).scalars().first()
+    if not sub:
+        return None
+    return {
+        "plan_name": sub.plan.name if sub.plan else None,
+        "max_users": sub.plan.max_users if sub.plan else None,
+        "end_date": sub.end_date.isoformat() if sub.end_date else None,
+        "status": sub.status,
+    }
 
 
 # ── Auth ──────────────────────────────────────────────────────────────────────
@@ -32,30 +58,37 @@ def login(
         raise HTTPException(status_code=403, detail="Tài khoản bị khoá")
 
     perms = role_service.permissions_to_dict(user.role)
+    subscription_data = _get_subscription_data(db, user.tenant_id)
     return {
-        "access_token": create_access_token(user.id),
-        "refresh_token": create_refresh_token(user.id),
+        "access_token": create_access_token(user.id, user.tenant_id, user.is_super_admin),
+        "refresh_token": create_refresh_token(user.id, user.tenant_id, user.is_super_admin),
         "user": {
             "id": user.id,
             "email": user.email,
             "display_name": user.display_name,
             "roles": [user.role.name] if user.role else [],
             "permissions": perms,
+            "tenant_id": user.tenant_id,
+            "is_super_admin": user.is_super_admin,
+            "subscription": subscription_data,
         },
     }
 
 
 @router.get("/me")
 def me(current_user=Depends(get_current_user), db: Session = Depends(get_db)):
-    # Re-fetch to get fresh permissions
     user = user_service.get_user_by_id(db, current_user.id)
     perms = role_service.permissions_to_dict(user.role)
+    subscription_data = _get_subscription_data(db, user.tenant_id)
     return {
         "id": user.id,
         "email": user.email,
         "display_name": user.display_name,
         "roles": [user.role.name] if user.role else [],
         "permissions": perms,
+        "tenant_id": user.tenant_id,
+        "is_super_admin": user.is_super_admin,
+        "subscription": subscription_data,
     }
 
 
@@ -107,8 +140,8 @@ def refresh(
     if not user or not user.is_active:
         raise HTTPException(status_code=401, detail="Tài khoản không tồn tại")
     return {
-        "access_token": create_access_token(user.id),
-        "refresh_token": create_refresh_token(user.id),
+        "access_token": create_access_token(user.id, user.tenant_id, user.is_super_admin),
+        "refresh_token": create_refresh_token(user.id, user.tenant_id, user.is_super_admin),
     }
 
 
@@ -117,16 +150,19 @@ def refresh(
 @router.get("/users")
 def list_users(
     skip: int = 0, limit: int = 50, search: str = None,
-    db: Session = Depends(get_db), _=Depends(require_admin),
+    db: Session = Depends(get_db),
+    current_user=Depends(require_admin),
 ):
-    return user_service.get_users(db, skip=skip, limit=limit, search=search)
+    # Super admin thấy tất cả; tenant admin chỉ thấy users trong tenant của mình
+    tenant_id = None if current_user.is_super_admin else current_user.tenant_id
+    return user_service.get_users(db, skip=skip, limit=limit, search=search, tenant_id=tenant_id)
 
 
 @router.post("/users", status_code=201)
-def create_user(obj: UserCreate, db: Session = Depends(get_db), _=Depends(require_admin)):
-    if user_service.get_user_by_email(db, obj.email):
+def create_user(obj: UserCreate, db: Session = Depends(get_db), current_user=Depends(require_admin)):
+    if obj.email and user_service.get_user_by_email(db, obj.email):
         raise HTTPException(status_code=400, detail="Email đã tồn tại")
-    return user_service.create_user(db, obj)
+    return user_service.create_user(db, obj, acting_user=current_user)
 
 
 @router.put("/users/{user_id}")
@@ -148,8 +184,9 @@ def delete_user(user_id: int, db: Session = Depends(get_db), _=Depends(require_a
 # ── Roles (admin only) ────────────────────────────────────────────────────────
 
 @router.get("/roles")
-def list_roles(db: Session = Depends(get_db), _=Depends(get_current_user)):
-    return role_service.get_roles(db)
+def list_roles(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    tenant_id = None if current_user.is_super_admin else current_user.tenant_id
+    return role_service.get_roles(db, tenant_id=tenant_id)
 
 
 @router.post("/roles", status_code=201)

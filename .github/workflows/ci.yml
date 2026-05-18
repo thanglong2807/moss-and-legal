@@ -51,6 +51,6 @@ jobs:
           context: .
           push: true
           tags: |
-            ndthaiw/cenvi_launch:${{ steps.get_version.outputs.VERSION }}
-            ndthaiw/cenvi_launch:latest
+            ndthaiw/moss_legal:${{ steps.get_version.outputs.VERSION }}
+            ndthaiw/moss_legal:latest
           no-cache: true

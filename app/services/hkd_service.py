@@ -41,7 +41,7 @@ def _validate_industries(industries) -> None:
         raise HTTPException(status_code=422, detail=f"Mã ngành bị trùng: {', '.join(sorted(duplicates))}")
 
 class HKDService:
-    def create(self, db: Session, obj_in: HKDCreate):
+    def create(self, db: Session, obj_in: HKDCreate, tenant_id: int = None):
         # 1. Handle Auto-fill from Customer if customer_id is provided
         from app.models.customer import Customer
         customer = None
@@ -97,6 +97,7 @@ class HKDService:
             tax_code=obj_in.tax_code,
             approval_date=obj_in.approval_date,
             registration_date=obj_in.registration_date,
+            tenant_id=tenant_id,
         )
         db.add(hkd)
         db.flush()
@@ -163,11 +164,14 @@ class HKDService:
 
     def get_list(self, db: Session, skip: int = 0, limit: int = 20,
                  customer_id: int = None, search: str = None,
-                 branch_name: str = None, staff_id: int = None, source_id: int = None):
+                 branch_name: str = None, staff_id: int = None, source_id: int = None,
+                 tenant_id: int = None):
         from sqlalchemy import func, or_
         from app.models.customer import Customer
 
         base = select(BusinessHousehold).where(BusinessHousehold.deleted_at.is_(None))
+        if tenant_id is not None:
+            base = base.where(BusinessHousehold.tenant_id == tenant_id)
 
         if customer_id:
             base = base.where(BusinessHousehold.customer_id == customer_id)
@@ -213,7 +217,7 @@ class HKDService:
         _attach_hkd_industries(db, hkds)
         return {"items": hkds, "total": total}
 
-    def get_by_id(self, db: Session, hkd_id: int):
+    def get_by_id(self, db: Session, hkd_id: int, tenant_id: int = None):
         stmt = select(BusinessHousehold).where(BusinessHousehold.id == hkd_id).options(
             joinedload(BusinessHousehold.customer),
             joinedload(BusinessHousehold.handling_staff),
@@ -222,6 +226,8 @@ class HKDService:
             joinedload(BusinessHousehold.source),
             joinedload(BusinessHousehold.owner),
         )
+        if tenant_id is not None:
+            stmt = stmt.where(BusinessHousehold.tenant_id == tenant_id)
         hkd = db.execute(stmt).scalars().first()
         if hkd:
             _attach_hkd_industries(db, [hkd])

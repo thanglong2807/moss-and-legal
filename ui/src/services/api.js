@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY || 'cenvi_access_token';
-const REFRESH_KEY = import.meta.env.VITE_REFRESH_KEY || 'cenvi_refresh_token';
+const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY || 'mosslegal_access_token';
+const REFRESH_KEY = import.meta.env.VITE_REFRESH_KEY || 'mosslegal_refresh_token';
 const AUTH_BASE = '/api/v1/auth';
-const GOV_BASE = import.meta.env.VITE_GOV_BASE || 'https://api.cenviplatform.com';
+const GOV_BASE = import.meta.env.VITE_GOV_BASE || 'https://api.mosslegal.vn';
 console.log('[api.js] GOV_BASE =', GOV_BASE, '| VITE_GOV_BASE raw =', import.meta.env.VITE_GOV_BASE);
 
 const govHeaders = (token) => ({ Authorization: `Bearer ${token}` });
@@ -183,7 +183,7 @@ export const govApi = {
 };
 
 // ── GOV job localStorage helpers ─────────────────────────────────────────────
-const GOV_JOBS_KEY = 'cenvi_gov_jobs';
+const GOV_JOBS_KEY = 'mosslegal_gov_jobs';
 
 const GOV_JOB_TTL_MS = 60 * 60 * 1000; // 1 hour
 

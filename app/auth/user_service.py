@@ -44,9 +44,11 @@ def _base_query():
     )
 
 
-def get_users(db: Session, skip: int = 0, limit: int = 50, search: str = None):
+def get_users(db: Session, skip: int = 0, limit: int = 50, search: str = None, tenant_id: int = None):
     from sqlalchemy import or_, func
     q = _base_query()
+    if tenant_id is not None:
+        q = q.where(User.tenant_id == tenant_id)
     if search:
         like = f"%{search}%"
         q = q.where(or_(User.display_name.ilike(like), User.email.ilike(like), User.phone.ilike(like)))
@@ -68,7 +70,38 @@ def get_user_by_id(db: Session, user_id: int) -> Optional[User]:
     ).scalars().first()
 
 
-def create_user(db: Session, obj: UserCreate) -> UserRead:
+def create_user(db: Session, obj: UserCreate, acting_user=None) -> UserRead:
+    from sqlalchemy import func
+    from fastapi import HTTPException
+
+    # Enforce user limit for tenant admins
+    if acting_user and not acting_user.is_super_admin and acting_user.tenant_id:
+        from app.models.subscription import Subscription, SubscriptionPlan
+        sub = db.execute(
+            select(Subscription)
+            .options(joinedload(Subscription.plan))
+            .where(
+                Subscription.tenant_id == acting_user.tenant_id,
+                Subscription.status == "active",
+                Subscription.deleted_at.is_(None),
+            )
+            .order_by(Subscription.end_date.desc())
+        ).scalars().first()
+        if sub and sub.plan and sub.plan.max_users != -1:
+            current_count = db.execute(
+                select(func.count(User.id)).where(
+                    User.tenant_id == acting_user.tenant_id,
+                    User.deleted_at.is_(None),
+                )
+            ).scalar()
+            if current_count >= sub.plan.max_users:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Đã đạt giới hạn {sub.plan.max_users} người dùng của gói {sub.plan.name}. "
+                           "Vui lòng nâng cấp gói để thêm người dùng.",
+                )
+
+    tenant_id = acting_user.tenant_id if acting_user and not acting_user.is_super_admin else None
     user = User(
         email=obj.email or None,
         hashed_password=hash_password(obj.password),
@@ -85,6 +118,7 @@ def create_user(db: Session, obj: UserCreate) -> UserRead:
         role_id=obj.role_id,
         staff_config_id=obj.staff_config_id,
         manager_id=obj.manager_id,
+        tenant_id=tenant_id,
     )
     db.add(user)
     db.commit()

@@ -7,6 +7,7 @@ from app.models.master_data import AdministrativeUnit, Industry  # noqa: F401
 class BusinessHousehold(Base):
     __tablename__ = "business_households"
     code = Column(String(20), unique=True, index=True, nullable=False)
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=True, index=True)
     company_full_name = Column(String(255), nullable=True)
     company_foreign_name = Column(String(255))
     company_short_name = Column(String(255))

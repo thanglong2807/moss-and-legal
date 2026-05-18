@@ -52,3 +52,24 @@ def require_admin(current_user=Depends(get_current_user)):
     if not current_user.role or current_user.role.name != "ADMIN":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Chỉ ADMIN mới có quyền này")
     return current_user
+
+
+def require_super_admin(current_user=Depends(get_current_user)):
+    if not current_user.is_super_admin:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Chỉ Super Admin mới có quyền này")
+    return current_user
+
+
+def require_tenant_admin(current_user=Depends(get_current_user)):
+    if current_user.is_super_admin:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Super Admin không truy cập được tài nguyên tenant")
+    if not current_user.role or current_user.role.level != 1:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Chỉ Tenant Admin mới có quyền này")
+    return current_user
+
+
+def get_tenant_id(current_user=Depends(get_current_user)) -> int:
+    """Trả về tenant_id của user hiện tại. Lỗi 400 nếu là super admin."""
+    if current_user.is_super_admin or current_user.tenant_id is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Endpoint này chỉ dành cho tenant users")
+    return current_user.tenant_id

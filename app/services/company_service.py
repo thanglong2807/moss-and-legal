@@ -110,7 +110,7 @@ def _industries_for(company):
 
 
 class CompanyService:
-    def create(self, db: Session, obj_in: CompanyCreate) -> Company:
+    def create(self, db: Session, obj_in: CompanyCreate, tenant_id: int = None) -> Company:
         comp_info = obj_in.company_info or {}
         addr = comp_info.get("address", {})
         contact = comp_info.get("contact", {})
@@ -144,6 +144,7 @@ class CompanyService:
             tax_code=obj_in.tax_code,
             approval_date=obj_in.approval_date,
             registration_date=obj_in.registration_date,
+            tenant_id=tenant_id,
         )
         db.add(company)
         db.flush()
@@ -186,10 +187,13 @@ class CompanyService:
         return company
 
     def get_list(self, db: Session, skip: int = 0, limit: int = 20,
-                 customer_id: int = None, search: str = None, staff_id: int = None):
+                 customer_id: int = None, search: str = None, staff_id: int = None,
+                 tenant_id: int = None):
         from sqlalchemy import func, or_
         from app.models.customer import Customer
         base = select(Company).where(Company.deleted_at.is_(None))
+        if tenant_id is not None:
+            base = base.where(Company.tenant_id == tenant_id)
         if customer_id:
             base = base.where(Company.customer_id == customer_id)
         if staff_id:
@@ -205,8 +209,10 @@ class CompanyService:
         _attach_industries(db, companies)
         return {"items": companies, "total": total}
 
-    def get_by_id(self, db: Session, company_id: int):
+    def get_by_id(self, db: Session, company_id: int, tenant_id: int = None):
         stmt = select(Company).where(Company.id == company_id).options(*_load_options())
+        if tenant_id is not None:
+            stmt = stmt.where(Company.tenant_id == tenant_id)
         company = db.execute(stmt).scalars().first()
         if company:
             _attach_industries(db, [company])

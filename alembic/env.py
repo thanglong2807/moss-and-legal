@@ -20,7 +20,8 @@ from app.models.customer import Customer, StaffConfig, SourceConfig, StatusConfi
 from app.models.document import Document
 from app.models.ocr_log import OcrLog
 from app.models.gov_job import GovJob
-from app.auth.models import User, Role, RolePermission
+from app.auth.models import Tenant, User, Role, RolePermission
+from app.models.subscription import SubscriptionPlan, Subscription, Payment
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

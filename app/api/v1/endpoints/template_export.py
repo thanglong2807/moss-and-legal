@@ -128,7 +128,7 @@ async def export_merge_all(
     viettel_data["rep_date"] = body.viettel.data.rep_date or ""
     company_code = raw.get("code", str(body.company_id))
 
-    tldn_ids = body.cenvi.ids if body.cenvi else []
+    tldn_ids = body.moss_legal.ids if body.moss_legal else []
 
     all_bytes: list[bytes] = []
 

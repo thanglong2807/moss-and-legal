@@ -18,6 +18,7 @@ class Company(Base):
     __tablename__ = "companies"
     code = Column(String(20), unique=True, index=True, nullable=False)
     company_type = Column(SmallInteger, nullable=False)  # 1=LLC1, 2=LLC2, 3=JSC
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=True, index=True)
 
     company_full_name = Column(String(255), nullable=True)
     company_foreign_name = Column(String(255))

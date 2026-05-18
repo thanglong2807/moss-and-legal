@@ -5,7 +5,7 @@ from app.schemas.customer import CustomerCreate, CustomerUpdate
 
 class CustomerService:
     def get_list(self, db: Session, source_id: int = None, branch_name: str = None,
-                 search: str = None, skip: int = 0, limit: int = 50):
+                 search: str = None, skip: int = 0, limit: int = 50, tenant_id: int = None):
         from sqlalchemy import or_
         stmt = select(Customer).options(
             joinedload(Customer.source),
@@ -15,6 +15,8 @@ class CustomerService:
             joinedload(Customer.ward),
         ).order_by(desc(Customer.id))
 
+        if tenant_id is not None:
+            stmt = stmt.where(Customer.tenant_id == tenant_id)
         if source_id:
             stmt = stmt.where(Customer.source_id == source_id)
         if branch_name:
@@ -37,8 +39,10 @@ class CustomerService:
         )
         return db.execute(stmt).scalars().first()
 
-    def create(self, db: Session, obj_in: CustomerCreate):
+    def create(self, db: Session, obj_in: CustomerCreate, tenant_id: int = None):
         db_obj = Customer(**obj_in.dict())
+        if tenant_id is not None:
+            db_obj.tenant_id = tenant_id
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)

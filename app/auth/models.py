@@ -1,7 +1,22 @@
-from sqlalchemy import Column, String, Boolean, Integer, ForeignKey, SmallInteger
+from sqlalchemy import Column, String, Boolean, Integer, ForeignKey, SmallInteger, JSON
 from sqlalchemy.orm import relationship
 from app.models.base import Base
 from app.models.customer import StaffConfig  # noqa: F401 — needed for relationship resolution
+
+
+class Tenant(Base):
+    __tablename__ = "tenants"
+
+    name = Column(String(255), nullable=False)
+    slug = Column(String(100), nullable=False, unique=True, index=True)
+    contact_email = Column(String(255), nullable=False)
+    contact_phone = Column(String(20), nullable=True)
+    address = Column(String(500), nullable=True)
+    is_active = Column(Boolean, default=True)
+    settings = Column(JSON, nullable=True)   # { modules, notes, billing_email, max_users_override }
+
+    users = relationship("User", back_populates="tenant")
+    subscriptions = relationship("Subscription", back_populates="tenant")
 
 
 class Role(Base):
@@ -10,6 +25,7 @@ class Role(Base):
     name = Column(String(100), nullable=False, unique=True)
     level = Column(Integer, default=1)
     parent_id = Column(Integer, ForeignKey("roles.id"), nullable=True)
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=True, index=True)
 
     permissions = relationship("RolePermission", back_populates="role", cascade="all, delete-orphan")
     users = relationship("User", back_populates="role")
@@ -54,7 +70,10 @@ class User(Base):
     role_id = Column(Integer, ForeignKey("roles.id"), nullable=True)
     staff_config_id = Column(Integer, ForeignKey("staff_configs.id"), nullable=True)
     manager_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=True, index=True)
+    is_super_admin = Column(Boolean, default=False, nullable=False)
 
     role = relationship("Role", back_populates="users")
     staff_config = relationship("StaffConfig")
     manager = relationship("User", foreign_keys=[manager_id], remote_side="User.id")
+    tenant = relationship("Tenant", back_populates="users")

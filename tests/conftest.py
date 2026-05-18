@@ -76,7 +76,7 @@ def _admin_setup():
                 session.add(RolePermission(role_id=role.id, module=m,
                                            can_view=True, can_create=True,
                                            can_update=True, can_delete=True))
-            user = User(email="test@cenvi.vn", hashed_password=hash_password("test123"),
+            user = User(email="test@mosslegal.vn", hashed_password=hash_password("test123"),
                         display_name="Test Admin", is_active=True, role_id=role.id)
             session.add(user)
             session.commit()
@@ -87,6 +87,6 @@ def _admin_setup():
 @pytest.fixture
 def auth_headers(client, _admin_setup):
     """Login và trả về Authorization header."""
-    res = client.post("/api/v1/auth/login", data={"username": "test@cenvi.vn", "password": "test123"})
+    res = client.post("/api/v1/auth/login", data={"username": "test@mosslegal.vn", "password": "test123"})
     token = res.json()["access_token"]
     return {"Authorization": f"Bearer {token}"}

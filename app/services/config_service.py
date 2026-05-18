@@ -8,13 +8,16 @@ from app.schemas.customer import ConfigBase
 class ConfigService:
     # ── Staff ─────────────────────────────────────────────────────────────────
 
-    def get_staff(self, db: Session):
-        return db.execute(
-            select(StaffConfig).where(StaffConfig.deleted_at == None)
-        ).scalars().all()
+    def get_staff(self, db: Session, tenant_id: int = None):
+        q = select(StaffConfig).where(StaffConfig.deleted_at == None)
+        if tenant_id is not None:
+            q = q.where(StaffConfig.tenant_id == tenant_id)
+        return db.execute(q).scalars().all()
 
-    def create_staff(self, db: Session, obj_in: ConfigBase):
+    def create_staff(self, db: Session, obj_in: ConfigBase, tenant_id: int = None):
         db_obj = StaffConfig(**obj_in.dict())
+        if tenant_id is not None:
+            db_obj.tenant_id = tenant_id
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
@@ -22,13 +25,16 @@ class ConfigService:
 
     # ── Sources ───────────────────────────────────────────────────────────────
 
-    def get_sources(self, db: Session):
-        return db.execute(
-            select(SourceConfig).where(SourceConfig.deleted_at == None)
-        ).scalars().all()
+    def get_sources(self, db: Session, tenant_id: int = None):
+        q = select(SourceConfig).where(SourceConfig.deleted_at == None)
+        if tenant_id is not None:
+            q = q.where(SourceConfig.tenant_id == tenant_id)
+        return db.execute(q).scalars().all()
 
-    def create_source(self, db: Session, obj_in: ConfigBase):
+    def create_source(self, db: Session, obj_in: ConfigBase, tenant_id: int = None):
         db_obj = SourceConfig(**obj_in.dict())
+        if tenant_id is not None:
+            db_obj.tenant_id = tenant_id
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
@@ -36,13 +42,16 @@ class ConfigService:
 
     # ── Statuses ──────────────────────────────────────────────────────────────
 
-    def get_statuses(self, db: Session):
-        return db.execute(
-            select(StatusConfig).where(StatusConfig.deleted_at == None)
-        ).scalars().all()
+    def get_statuses(self, db: Session, tenant_id: int = None):
+        q = select(StatusConfig).where(StatusConfig.deleted_at == None)
+        if tenant_id is not None:
+            q = q.where(StatusConfig.tenant_id == tenant_id)
+        return db.execute(q).scalars().all()
 
-    def create_status(self, db: Session, obj_in: ConfigBase):
+    def create_status(self, db: Session, obj_in: ConfigBase, tenant_id: int = None):
         db_obj = StatusConfig(**obj_in.dict())
+        if tenant_id is not None:
+            db_obj.tenant_id = tenant_id
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)

@@ -9,7 +9,7 @@ from app.schemas.document import DocumentRead
 from app.services.company_service import company_service
 from app.services import company_document_service
 from app.models.company import CompanyPosition
-from app.auth.dependencies import require_permission, get_current_user
+from app.auth.dependencies import require_permission, get_current_user, get_tenant_id
 from sqlalchemy import select
 
 router = APIRouter()
@@ -40,19 +40,26 @@ def list_positions(company_type: Optional[int] = None, db: Session = Depends(get
     return db.execute(stmt).scalars().all()
 
 
-@router.get("/", dependencies=[Depends(require_permission("company", "view"))])
+@router.get("/")
 def list_companies(
     skip: int = 0, limit: int = 20, customer_id: Optional[int] = None,
     search: Optional[str] = None, staff_id: Optional[int] = None,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(require_permission("company", "view")),
+    tenant_id: int = Depends(get_tenant_id),
 ):
     return company_service.get_list(db, skip=skip, limit=limit, customer_id=customer_id,
-                                    search=search, staff_id=staff_id)
+                                    search=search, staff_id=staff_id, tenant_id=tenant_id)
 
 
-@router.post("/", response_model=CompanyRead, dependencies=[Depends(require_permission("company", "create"))])
-def create_company(data: CompanyCreate, db: Session = Depends(get_db)):
-    return company_service.create(db, data)
+@router.post("/", response_model=CompanyRead)
+def create_company(
+    data: CompanyCreate,
+    db: Session = Depends(get_db),
+    current_user=Depends(require_permission("company", "create")),
+    tenant_id: int = Depends(get_tenant_id),
+):
+    return company_service.create(db, data, tenant_id=tenant_id)
 
 
 @router.get("/{company_id}", response_model=CompanyRead, dependencies=[Depends(require_permission("company", "view"))])

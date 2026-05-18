@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import {
   Users, Settings, ChevronLeft, ChevronRight,
   FileText, Home, LayoutGrid, LogOut, Sun, Moon, ShieldCheck, Building2,
-  KeyRound, User, X, Minimize2,
+  KeyRound, User, X, Minimize2, CreditCard, Globe,
 } from 'lucide-react';
 import logoImage from '../../assets/logo.webp';
 import logoMini from '../../assets/logo_mini.png';
@@ -12,7 +12,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useUI } from '../../context/UIContext';
 import axios from 'axios';
 
-const SidebarItem = ({ icon: Icon, label, itemKey, isCollapsed }) => (
+const SidebarItem = ({ icon: Icon, label, itemKey, isCollapsed, badge }) => (
   <NavLink
     to={`/${itemKey}`}
     className={({ isActive }) =>
@@ -28,13 +28,17 @@ const SidebarItem = ({ icon: Icon, label, itemKey, isCollapsed }) => (
         {isActive && (
           <div className="absolute left-0 top-2 bottom-2 w-1 bg-orange-600 rounded-r-full shadow-[0_0_10px_rgba(234,88,12,0.4)] animate-in slide-in-from-left duration-300" />
         )}
-        <div className={`transition-all duration-300 shrink-0 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
+        <div className={`transition-all duration-300 shrink-0 relative ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
           <Icon size={18} className={isActive ? 'drop-shadow-[0_0_6px_rgba(234,88,12,0.3)]' : ''} />
+          {badge && <span className="absolute -top-1 -right-1 w-2 h-2 bg-amber-500 rounded-full" />}
         </div>
         {!isCollapsed && (
-          <span className={`text-xs tracking-wide transition-all duration-300 ${isActive ? 'translate-x-0.5 text-orange-600' : 'group-hover:translate-x-0.5'}`}>
+          <span className={`text-xs tracking-wide transition-all duration-300 flex-1 ${isActive ? 'translate-x-0.5 text-orange-600' : 'group-hover:translate-x-0.5'}`}>
             {label}
           </span>
+        )}
+        {!isCollapsed && badge && (
+          <span className="text-[9px] bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 px-1.5 py-0.5 rounded-full font-semibold">!</span>
         )}
         {isCollapsed && (
           <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-slate-900 text-white text-[10px] tracking-wide rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 whitespace-nowrap">
@@ -57,7 +61,7 @@ const ProfileModal = ({ user, onClose }) => {
   const [err, setErr] = React.useState('');
   const [loading, setLoading] = React.useState(false);
 
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem('mosslegal_access_token');
   const headers = { Authorization: `Bearer ${token}` };
 
   const handleUpdateProfile = async (e) => {
@@ -164,7 +168,7 @@ const Sidebar = () => {
     () => localStorage.getItem('ui_ultra_collapsed') === 'true'
   );
   const [showProfile, setShowProfile] = React.useState(false);
-  const { user, can, logout } = useAuth();
+  const { user, can, logout, isSuperAdmin, isTenantAdmin } = useAuth();
   const { dark, toggle: toggleTheme } = useTheme();
   const { ultraCollapsed, setUltraCollapsed } = useUI();
 
@@ -184,15 +188,26 @@ const Sidebar = () => {
     if (window.confirm('Bạn có chắc muốn đăng xuất không?')) logout();
   };
 
-  const menuItems = [
-    { icon: Home,        label: 'Tổng quan',      key: 'home',      always: true },
-    { icon: Users,       label: 'Khách hàng',     key: 'customers', module: 'customers' },
-    { icon: Building2,   label: 'Thành lập DN',   key: 'company',   module: 'company' },
-    { icon: FileText,    label: 'Hộ kinh doanh',  key: 'hkd',       module: 'hkd' },
-    { icon: LayoutGrid,  label: 'Lĩnh vực',       key: 'fields',    module: 'fields' },
-    { icon: Settings,    label: 'Cấu hình',        key: 'config',    module: 'config' },
-    { icon: ShieldCheck, label: 'Nhân viên',      key: 'admin',     module: 'users' },
-  ].filter(item => item.always || can(item.module));
+  const daysLeft = user?.subscription?.end_date
+    ? Math.ceil((new Date(user.subscription.end_date) - new Date()) / 86400000)
+    : null;
+  const subWarning = !isSuperAdmin && daysLeft !== null && daysLeft <= 14;
+
+  const menuItems = isSuperAdmin
+    ? [
+        { icon: Globe,       label: 'Quản lý Tenant', key: 'super-admin', always: true },
+        { icon: Home,        label: 'Tổng quan',      key: 'home',        always: true },
+      ]
+    : [
+        { icon: Home,        label: 'Tổng quan',      key: 'home',        always: true },
+        { icon: Users,       label: 'Khách hàng',     key: 'customers',   module: 'customers' },
+        { icon: Building2,   label: 'Thành lập DN',   key: 'company',     module: 'company' },
+        { icon: FileText,    label: 'Hộ kinh doanh',  key: 'hkd',         module: 'hkd' },
+        { icon: LayoutGrid,  label: 'Lĩnh vực',       key: 'fields',      module: 'fields' },
+        { icon: Settings,    label: 'Cấu hình',        key: 'config',      module: 'config' },
+        { icon: ShieldCheck, label: 'Nhân viên',      key: 'admin',       module: 'users' },
+        ...(isTenantAdmin ? [{ icon: CreditCard, label: 'Gói đăng ký', key: 'subscription', always: true, badge: subWarning }] : []),
+      ].filter(item => item.always || can(item.module));
 
   const displayName = user?.display_name || user?.displayname || user?.full_name || user?.name || user?.email || '';
   const initials = displayName
@@ -216,7 +231,7 @@ const Sidebar = () => {
         {/* Nav */}
         <nav className="flex-1 px-2 space-y-0.5">
           {menuItems.map(item => (
-            <SidebarItem key={item.key} icon={item.icon} label={item.label} itemKey={item.key} isCollapsed={isCollapsed} />
+            <SidebarItem key={item.key} icon={item.icon} label={item.label} itemKey={item.key} isCollapsed={isCollapsed} badge={item.badge} />
           ))}
         </nav>
 

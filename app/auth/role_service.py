@@ -17,12 +17,17 @@ def _enrich(role: Role) -> RoleRead:
     )
 
 
-def get_roles(db: Session) -> list[RoleRead]:
-    roles = db.execute(
+def get_roles(db: Session, tenant_id: int = None) -> list[RoleRead]:
+    q = (
         select(Role)
         .options(joinedload(Role.permissions), joinedload(Role.parent))
         .order_by(Role.level, Role.name)
-    ).scalars().unique().all()
+    )
+    if tenant_id is not None:
+        # Trả về roles của tenant + system roles (tenant_id IS NULL)
+        from sqlalchemy import or_
+        q = q.where(or_(Role.tenant_id == tenant_id, Role.tenant_id.is_(None)))
+    roles = db.execute(q).scalars().unique().all()
     return [_enrich(r) for r in roles]
 
 

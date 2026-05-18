@@ -292,7 +292,7 @@ const CompanyExportPage = () => {
     try {
       const res = await templateExportApi.mergeAll({
         company_id: company.id,
-        cenvi: { ids: [...tldnSelected] },
+        moss_legal: { ids: [...tldnSelected] },
         viettel: {
           ids: [...(viettelState?.selected || [])],
           data: {

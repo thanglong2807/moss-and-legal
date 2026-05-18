@@ -84,7 +84,7 @@ const UserModal = ({ user, roles, staffList, users, onClose, onSaved }) => {
             <div>
               <label className="text-[10px] font-black text-body uppercase tracking-widest mb-1 block">Email hệ thống</label>
               <input type="email" className="w-full px-3 py-2.5 bg-page border border-base rounded-xl text-sm font-bold outline-none focus:border-orange-400"
-                value={form.email} onChange={e => set('email', e.target.value)} placeholder="email@cenvi.vn" />
+                value={form.email} onChange={e => set('email', e.target.value)} placeholder="email@mosslegal.vn" />
             </div>
             <div>
               <label className="text-[10px] font-black text-body uppercase tracking-widest mb-1 block">Email cá nhân</label>

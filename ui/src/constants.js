@@ -1,5 +1,5 @@
 /**
- * Global Constants for Cenvi CRM
+ * Global Constants for MOSS&LEGAL
  */
 
 export const BRANCHES = [

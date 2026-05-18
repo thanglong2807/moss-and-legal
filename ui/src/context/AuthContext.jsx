@@ -2,8 +2,8 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 import axios from 'axios';
 
 const AUTH_BASE = '/api/v1/auth';
-const TOKEN_KEY = 'cenvi_access_token';
-const REFRESH_KEY = 'cenvi_refresh_token';
+const TOKEN_KEY = 'mosslegal_access_token';
+const REFRESH_KEY = 'mosslegal_refresh_token';
 
 const AuthContext = createContext(null);
 
@@ -32,6 +32,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAdmin = user?.roles?.includes('ADMIN') ?? false;
+  const isSuperAdmin = user?.is_super_admin ?? false;
+  const isTenantAdmin = !isSuperAdmin && (user?.roles?.includes('ADMIN') ?? false);
+  const hasActiveSubscription = isSuperAdmin || (user?.subscription?.status === 'active');
 
   // can('hkd')            → kiểm tra can_view (mặc định)
   // can('hkd', 'delete')  → kiểm tra can_delete
@@ -124,7 +127,7 @@ export const AuthProvider = ({ children }) => {
   }, [fetchMe, refreshToken]);
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, isAdmin, can, login, logout, refreshToken }}>
+    <AuthContext.Provider value={{ user, token, loading, isAdmin, isSuperAdmin, isTenantAdmin, hasActiveSubscription, can, login, logout, refreshToken }}>
       {children}
     </AuthContext.Provider>
   );

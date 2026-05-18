@@ -10,9 +10,9 @@ class GoogleSettings(BaseModel):
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Cenvi Launch BE"
+    PROJECT_NAME: str = "MOSS&LEGAL"
     API_V1_STR: str = "/api/v1"
-    APP_VERSION: str = "1.0.0"
+    APP_VERSION: str = "2.0.0"
     APP_PORT: int = 8200
 
     # MySQL Database Configuration
@@ -42,6 +42,23 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
+
+    # VNPay
+    VNPAY_TMN_CODE: str = ""
+    VNPAY_HASH_SECRET: str = ""
+    VNPAY_URL: str = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
+    VNPAY_RETURN_URL: str = ""
+
+    # Momo
+    MOMO_PARTNER_CODE: str = ""
+    MOMO_ACCESS_KEY: str = ""
+    MOMO_SECRET_KEY: str = ""
+    MOMO_ENDPOINT: str = "https://test-payment.momo.vn/v2/gateway/api/create"
+    MOMO_RETURN_URL: str = ""
+    MOMO_NOTIFY_URL: str = ""
+
+    # App base URL (dùng cho payment return URLs)
+    APP_BASE_URL: str = "http://localhost:8200"
 
     @property
     def DATABASE_URL(self) -> str:

@@ -1,6 +1,6 @@
 services:
   app:
-    image: ndthaiw/cenvi_launch:latest
+    image: ndthaiw/moss_legal:latest
     restart: unless-stopped
     ports:
       - "${APP_PORT:-8200}:${APP_PORT:-8200}"

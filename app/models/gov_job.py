@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, String, Integer, ForeignKey, DateTime
 from app.models.base import Base
 
 
@@ -10,3 +10,4 @@ class GovJob(Base):
     task_name = Column(String(100), nullable=False)
     status = Column(String(50), nullable=False, default="pending")
     started_at = Column(DateTime, nullable=True)
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=True, index=True)
