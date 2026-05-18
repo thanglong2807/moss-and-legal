@@ -223,10 +223,10 @@ const Sidebar = () => {
         {/* Logo */}
         <div className={`px-4 py-5 mb-2 transition-all duration-500 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
           {!isCollapsed && (
-            <img src={logoImage} alt="Logo" className="h-8 w-auto object-contain" />
+            <span className="font-black text-orange-600 tracking-tight text-sm uppercase select-none">MOSS&amp;LEGAL</span>
           )}
           {isCollapsed && (
-            <img src={logoMini} alt="Logo" className="w-8 h-8 object-contain" />
+            <span className="font-black text-orange-600 text-xs select-none">M&amp;L</span>
           )}
         </div>
 

@@ -40,6 +40,10 @@ export const AuthProvider = ({ children }) => {
   // can('hkd', 'delete')  → kiểm tra can_delete
   const can = useCallback((module, action = 'view') => {
     if (!user) return false;
+    // SuperAdmin và TenantAdmin (role.level=1) có toàn quyền mọi module
+    const _sa = user?.is_super_admin ?? false;
+    const _ta = !_sa && (user?.roles?.includes('ADMIN') ?? false);
+    if (_sa || _ta) return true;
     const perm = user.permissions?.[module];
     if (!perm) return false;  // module không khai báo → không có quyền
     const key = { view: 'can_view', create: 'can_create', update: 'can_update', delete: 'can_delete' }[action];
