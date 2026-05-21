@@ -187,8 +187,22 @@ def upgrade_subscription(
 @router.get("/plans")
 def list_available_plans(db: Session = Depends(get_db), _=Depends(get_current_user)):
     """Danh sách gói để tenant xem và chọn."""
-    return db.execute(
+    plans = db.execute(
         select(SubscriptionPlan)
         .where(SubscriptionPlan.is_active == True, SubscriptionPlan.deleted_at.is_(None))
         .order_by(SubscriptionPlan.id)
     ).scalars().all()
+    return [
+        {
+            "id": p.id,
+            "name": p.name,
+            "max_users": p.max_users,
+            "price_3m": p.price_3m,
+            "price_9m": p.price_9m,
+            "price_12m": p.price_12m,
+            "price_24m": p.price_24m,
+            "price_36m": p.price_36m,
+            "is_active": p.is_active,
+        }
+        for p in plans
+    ]

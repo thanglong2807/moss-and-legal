@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Download, Loader2, CheckSquare, Square, ChevronDown, ChevronRight, AlertCircle, Merge, Plus } from 'lucide-react';
+import { ArrowLeft, Download, Loader2, CheckSquare, Square, AlertCircle, Merge, Plus } from 'lucide-react';
 import axios from 'axios';
-import { companyApi, companyExportApi, templateExportApi } from '../services/api';
+import { companyApi, companyExportApi } from '../services/api';
 
 const authHeaders = () => ({ Authorization: `Bearer ${localStorage.getItem('mosslegal_access_token')}` });
 
@@ -32,23 +32,6 @@ const TLDN_TEMPLATES = {
     { id: '005', name: 'Danh sách chủ sở hữu hưởng lợi' },
   ],
 };
-
-// ── "Các file khác" config — extensible ──────────────────────────────────────
-const OTHER_GROUPS = [
-  {
-    key: 'viettel',
-    label: 'Hợp đồng Viettel',
-    customFields: [
-      { key: 'rep_place', label: 'Nơi cấp CCCD', placeholder: 'Cục Cảnh sát QLHC về TTXH...', required: true },
-      { key: 'rep_date',  label: 'Cấp ngày',     placeholder: 'dd/mm/yyyy', required: true },
-    ],
-    templates: [
-      { id: 'PYC1Y',  name: 'Phiếu yêu cầu 1 năm' },
-      { id: 'PYC3Y',  name: 'Phiếu yêu cầu 3 năm' },
-      { id: 'BBXNDL', name: 'BBXNDL' },
-    ],
-  },
-];
 
 // ── Shared checkbox list ──────────────────────────────────────────────────────
 const TemplateList = ({ templates, selected, onToggle }) => (
@@ -133,102 +116,6 @@ const TldnSection = ({ company, selected, onToggle, onSelectAll }) => {
   );
 };
 
-// ── Other group item ──────────────────────────────────────────────────────────
-const OtherGroupItem = ({ group, companyId, companyCode, selected, onToggle, onSelectAll, fields, onFieldChange }) => {
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState('');
-
-  const allSelected = selected.size === group.templates.length;
-  const isReady = group.customFields.filter(f => f.required).every(f => fields[f.key]?.trim());
-
-  const doExport = async () => {
-    if (!isReady) { setErr('Vui lòng nhập đủ thông tin bắt buộc.'); return; }
-    if (!selected.size) { setErr('Chọn ít nhất 1 biểu mẫu.'); return; }
-    setLoading(true); setErr('');
-    const errors = [];
-    for (const fileKey of selected) {
-      try {
-        const res = await templateExportApi.viettelDocx(fileKey, { company_id: companyId, ...fields });
-        const url = URL.createObjectURL(new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }));
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `HopDong_Viettel_${fileKey}_${companyCode}.docx`;
-        a.click();
-        URL.revokeObjectURL(url);
-      } catch {
-        errors.push(fileKey);
-      }
-    }
-    setLoading(false);
-    if (errors.length) setErr(`Lỗi khi xuất: ${errors.join(', ')}`);
-  };
-
-  return (
-    <div className="border border-base rounded-2xl overflow-hidden">
-      <button onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center gap-3 px-5 py-3.5 bg-surface hover:bg-page transition text-left">
-        {open
-          ? <ChevronDown size={14} className="text-weak shrink-0" />
-          : <ChevronRight size={14} className="text-weak shrink-0" />}
-        <span className="text-xs font-black text-strong">{group.label}</span>
-        {selected.size > 0 && (
-          <span className="ml-1 text-[10px] font-black text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">
-            {selected.size} chọn
-          </span>
-        )}
-        <span className="ml-auto text-[10px] text-weak font-semibold">{group.templates.length} biểu mẫu</span>
-      </button>
-
-      {open && (
-        <div className="px-5 pb-5 pt-3 border-t border-faint space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            {group.customFields.map(f => (
-              <div key={f.key}>
-                <label className="text-[10px] font-black uppercase tracking-widest text-weak block mb-1">
-                  {f.label} {f.required && <span className="text-red-500">*</span>}
-                </label>
-                <input
-                  type="text"
-                  placeholder={f.placeholder}
-                  value={fields[f.key] || ''}
-                  onChange={e => onFieldChange(f.key, e.target.value)}
-                  className="w-full bg-page border border-faint rounded-xl px-4 py-2.5 text-[11px] font-bold text-strong outline-none focus:ring-2 focus:ring-orange-300 transition placeholder:text-weak/50"
-                />
-              </div>
-            ))}
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-black uppercase tracking-widest text-weak">Chọn biểu mẫu</span>
-              <button onClick={() => onSelectAll(group.templates, allSelected)}
-                className="text-[10px] font-black text-orange-600 hover:underline">
-                {allSelected ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
-              </button>
-            </div>
-            <TemplateList templates={group.templates} selected={selected} onToggle={onToggle} />
-          </div>
-
-          {err && (
-            <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-2.5">
-              <AlertCircle size={13} /> {err}
-            </div>
-          )}
-
-          <div className="flex justify-end">
-            <button disabled={!isReady || selected.size === 0 || loading} onClick={doExport}
-              className="flex items-center gap-2 px-6 py-2.5 bg-emerald-600 text-white rounded-2xl font-black text-sm hover:bg-emerald-700 disabled:opacity-50 transition shadow-lg shadow-emerald-100">
-              {loading ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
-              Tải xuống ({selected.size})
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
 // ── Main page ─────────────────────────────────────────────────────────────────
 const CompanyExportPage = () => {
   const { id } = useParams();
@@ -238,17 +125,6 @@ const CompanyExportPage = () => {
 
   // Lifted state — TLDN
   const [tldnSelected, setTldnSelected] = useState(new Set());
-
-  // Lifted state — Other groups: { [groupKey]: { selected: Set, fields: {} } }
-  const [groupStates, setGroupStates] = useState(() =>
-    Object.fromEntries(OTHER_GROUPS.map(g => [
-      g.key,
-      {
-        selected: new Set(),
-        fields: Object.fromEntries(g.customFields.map(f => [f.key, ''])),
-      },
-    ]))
-  );
 
   const [mergeLoading, setMergeLoading] = useState(false);
   const [mergeErr, setMergeErr] = useState('');
@@ -267,17 +143,27 @@ const CompanyExportPage = () => {
       const tpls = TLDN_TEMPLATES[r.data.company_type] || [];
       setTldnSelected(new Set(tpls.map(t => t.id)));
       setLoading(false);
-    }).catch(() => setLoading(false));
 
-    // Load custom templates for company category
-    setCustomLoading(true);
-    axios.get('/api/v1/tenant/document-types?category=company', { headers: authHeaders() })
-      .then(r => {
-        const active = (r.data.items || []).filter(t => t.is_active && t.has_template);
-        setCustomTemplates(active);
-      })
-      .catch(() => {})
-      .finally(() => setCustomLoading(false));
+      // Load custom templates theo loại hình DN (tldn_1/2/3) + company (backward compat)
+      setCustomLoading(true);
+      const typeToCategory = { 1: 'tldn_1', 2: 'tldn_2', 3: 'tldn_3' };
+      const cat = typeToCategory[r.data.company_type] || 'tldn_1';
+      Promise.all([
+        axios.get(`/api/v1/tenant/document-types?category=${cat}`, { headers: authHeaders() }),
+        axios.get('/api/v1/tenant/document-types?category=company', { headers: authHeaders() }),
+      ])
+        .then(([r1, r2]) => {
+          const items1 = (r1.data.items || []).filter(t => t.is_active && t.has_template);
+          const items2 = (r2.data.items || []).filter(t => t.is_active && t.has_template);
+          // Gộp, tránh trùng id
+          const seen = new Set(items1.map(t => t.id));
+          const merged = [...items1, ...items2.filter(t => !seen.has(t.id))];
+          setCustomTemplates(merged);
+          setCustomSelected(new Set(merged.map(t => t.template_key)));
+        })
+        .catch(() => {})
+        .finally(() => setCustomLoading(false));
+    }).catch(() => setLoading(false));
   }, [id]);
 
   const customToggle = (tid) => setCustomSelected(s => { const n = new Set(s); n.has(tid) ? n.delete(tid) : n.add(tid); return n; });
@@ -313,46 +199,22 @@ const CompanyExportPage = () => {
   const tldnSelectAll = (templates, allSelected) =>
     setTldnSelected(allSelected ? new Set() : new Set(templates.map(t => t.id)));
 
-  // Group toggle helpers
-  const groupToggle = (key, tid) => setGroupStates(prev => {
-    const s = new Set(prev[key].selected);
-    s.has(tid) ? s.delete(tid) : s.add(tid);
-    return { ...prev, [key]: { ...prev[key], selected: s } };
-  });
-  const groupSelectAll = (key, templates, allSelected) => setGroupStates(prev => ({
-    ...prev,
-    [key]: { ...prev[key], selected: allSelected ? new Set() : new Set(templates.map(t => t.id)) },
-  }));
-  const groupFieldChange = (key, fieldKey, value) => setGroupStates(prev => ({
-    ...prev,
-    [key]: { ...prev[key], fields: { ...prev[key].fields, [fieldKey]: value } },
-  }));
-
-  // Merge all
-  const totalSelected = tldnSelected.size + Object.values(groupStates).reduce((s, g) => s + g.selected.size, 0);
-  const viettelState = groupStates['viettel'];
-  const viettelReady = OTHER_GROUPS.find(g => g.key === 'viettel')
-    ?.customFields.filter(f => f.required).every(f => viettelState?.fields[f.key]?.trim());
-  const mergeReady = totalSelected > 0 && (viettelState?.selected.size === 0 || viettelReady);
+  // Merge all (chỉ TLDN)
+  const totalSelected = tldnSelected.size + customSelected.size;
+  const mergeReady = tldnSelected.size > 1;
 
   const handleMergeAll = async () => {
     setMergeLoading(true); setMergeErr('');
     try {
-      const res = await templateExportApi.mergeAll({
-        company_id: company.id,
-        moss_legal: { ids: [...tldnSelected] },
-        viettel: {
-          ids: [...(viettelState?.selected || [])],
-          data: {
-            rep_place: viettelState?.fields?.rep_place || '',
-            rep_date: viettelState?.fields?.rep_date || '',
-          },
-        },
-      });
-      const url = URL.createObjectURL(new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }));
+      const res = await companyExportApi.export(company.id, [...tldnSelected], true);
+      const disposition = res.headers['content-disposition'] || '';
+      let filename = `HoSo_TLDN_${company.code}.docx`;
+      const match = disposition.match(/filename\*=UTF-8''(.+)/i) || disposition.match(/filename="?([^"]+)"?/i);
+      if (match) filename = decodeURIComponent(match[1]);
+      const url = URL.createObjectURL(new Blob([res.data], { type: res.headers['content-type'] }));
       const a = document.createElement('a');
       a.href = url;
-      a.download = `HoSo_TLDN_${company.code}.docx`;
+      a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
     } catch (e) {
@@ -402,9 +264,6 @@ const CompanyExportPage = () => {
                   <AlertCircle size={12} /> {mergeErr}
                 </div>
               )}
-              {viettelState?.selected.size > 0 && !viettelReady && (
-                <p className="text-[10px] text-amber-600 font-bold mt-1">⚠ Cần nhập Nơi cấp &amp; Cấp ngày ở Hợp đồng Viettel</p>
-              )}
             </div>
             <button
               disabled={!mergeReady || mergeLoading}
@@ -434,33 +293,13 @@ const CompanyExportPage = () => {
             </div>
           </div>
 
-          {/* Section 2: Các file khác */}
-          <div>
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-weak mb-3 px-1">Các file khác</h3>
-            <div className="space-y-2">
-              {OTHER_GROUPS.map(group => (
-                <OtherGroupItem
-                  key={group.key}
-                  group={group}
-                  companyId={company?.id || parseInt(id)}
-                  companyCode={company?.code || id}
-                  selected={groupStates[group.key].selected}
-                  onToggle={(tid) => groupToggle(group.key, tid)}
-                  onSelectAll={(templates, all) => groupSelectAll(group.key, templates, all)}
-                  fields={groupStates[group.key].fields}
-                  onFieldChange={(fk, v) => groupFieldChange(group.key, fk, v)}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Section 3: Custom templates của tenant */}
+          {/* Section 2: Custom templates của tenant */}
           {(customLoading || customTemplates.length > 0) && (
             <div className="bg-surface rounded-2xl border border-base overflow-hidden">
               <div className="flex items-center justify-between px-5 py-3.5 border-b border-faint bg-slate-50 dark:bg-slate-800/40">
                 <div className="flex items-center gap-2">
                   <span className="text-[10px] font-black uppercase tracking-widest text-strong">Hồ sơ tùy chỉnh</span>
-                  <span className="text-[10px] text-weak font-semibold">— mẫu của công ty bạn</span>
+                  <span className="text-[10px] text-weak font-semibold">— mẫu tùy chỉnh ({typeLabel})</span>
                 </div>
                 <a href="/settings" className="text-[10px] text-orange-600 hover:underline font-semibold flex items-center gap-1">
                   <Plus size={10} /> Thêm mẫu

@@ -148,11 +148,27 @@ def delete_tenant(tenant_id: int, db: Session = Depends(get_db), _=Depends(requi
 
 # ── Plan management ───────────────────────────────────────────────────────────
 
+def _plan_dict(p: SubscriptionPlan) -> dict:
+    return {
+        "id": p.id,
+        "name": p.name,
+        "max_users": p.max_users,
+        "price_3m": p.price_3m,
+        "price_9m": p.price_9m,
+        "price_12m": p.price_12m,
+        "price_24m": p.price_24m,
+        "price_36m": p.price_36m,
+        "is_active": p.is_active,
+        "created_at": p.created_at.isoformat() if p.created_at else None,
+    }
+
+
 @router.get("/plans")
 def list_plans(db: Session = Depends(get_db), _=Depends(require_super_admin)):
-    return db.execute(
+    plans = db.execute(
         select(SubscriptionPlan).where(SubscriptionPlan.deleted_at.is_(None)).order_by(SubscriptionPlan.id)
     ).scalars().all()
+    return [_plan_dict(p) for p in plans]
 
 
 @router.post("/plans", status_code=201)
@@ -161,7 +177,7 @@ def create_plan(data: PlanCreate, db: Session = Depends(get_db), _=Depends(requi
     db.add(plan)
     db.commit()
     db.refresh(plan)
-    return plan
+    return _plan_dict(plan)
 
 
 @router.put("/plans/{plan_id}")
@@ -173,7 +189,7 @@ def update_plan(plan_id: int, data: PlanUpdate, db: Session = Depends(get_db), _
         setattr(plan, k, v)
     db.commit()
     db.refresh(plan)
-    return plan
+    return _plan_dict(plan)
 
 
 @router.delete("/plans/{plan_id}", status_code=204)
@@ -187,14 +203,31 @@ def delete_plan(plan_id: int, db: Session = Depends(get_db), _=Depends(require_s
 
 # ── Subscription management ───────────────────────────────────────────────────
 
+def _sub_dict(s: Subscription) -> dict:
+    return {
+        "id": s.id,
+        "tenant_id": s.tenant_id,
+        "tenant": {"id": s.tenant.id, "name": s.tenant.name} if s.tenant else None,
+        "plan_id": s.plan_id,
+        "plan": {"id": s.plan.id, "name": s.plan.name} if s.plan else None,
+        "status": s.status,
+        "duration_months": s.duration_months,
+        "start_date": s.start_date.isoformat() if s.start_date else None,
+        "end_date": s.end_date.isoformat() if s.end_date else None,
+        "amount_paid": s.amount_paid,
+        "created_at": s.created_at.isoformat() if s.created_at else None,
+    }
+
+
 @router.get("/subscriptions")
 def list_subscriptions(db: Session = Depends(get_db), _=Depends(require_super_admin)):
-    return db.execute(
+    subs = db.execute(
         select(Subscription)
         .options(joinedload(Subscription.plan), joinedload(Subscription.tenant))
         .where(Subscription.deleted_at.is_(None))
         .order_by(Subscription.created_at.desc())
     ).scalars().unique().all()
+    return [_sub_dict(s) for s in subs]
 
 
 @router.post("/subscriptions", status_code=201)
@@ -223,7 +256,13 @@ def create_subscription(data: SubscriptionCreate, db: Session = Depends(get_db),
     db.add(sub)
     db.commit()
     db.refresh(sub)
-    return sub
+    # Reload with relationships to build response dict safely
+    sub = db.execute(
+        select(Subscription)
+        .options(joinedload(Subscription.plan), joinedload(Subscription.tenant))
+        .where(Subscription.id == sub.id)
+    ).scalars().first()
+    return _sub_dict(sub)
 
 
 @router.put("/subscriptions/{sub_id}/activate")
@@ -655,45 +694,45 @@ def system_info(db: Session = Depends(get_db), _=Depends(require_super_admin)):
         select(func.count(Subscription.id)).where(Subscription.status == "active", Subscription.deleted_at.is_(None))
     ).scalar() or 0
 
+    # Flat structure matching frontend expectations
     return {
-        "app": {
-            "name": settings.PROJECT_NAME,
-            "version": settings.APP_VERSION,
-            "debug": settings.DEBUG,
-        },
-        "runtime": {
-            "python": sys.version,
-            "platform": platform.system(),
-        },
-        "database": {
-            "server": settings.MYSQL_SERVER,
-            "port": settings.MYSQL_PORT,
-            "db": settings.MYSQL_DB,
+        # Stats for StatCards
+        "stats": {
             "total_users": total_users,
             "total_tenants": total_tenants,
             "active_subscriptions": active_subs,
         },
+        # Version info for detail table
+        "version": settings.APP_VERSION,
+        "python_version": sys.version.split()[0],
+        "db_server": f"{settings.MYSQL_SERVER}:{settings.MYSQL_PORT}",
+        "environment": "production" if not settings.DEBUG else "development",
+        # Integration status — keys must match frontend INTEGRATIONS[].key
         "integrations": {
-            "smtp_configured": bool(settings.SMTP_HOST and settings.SMTP_USER),
-            "gemini_configured": bool(settings.GEMINI_API_KEY),
-            "google_drive_configured": bool(settings.GOOGLE_TOKEN_BASE64),
-            "vnpay_configured": bool(settings.VNPAY_TMN_CODE),
-            "momo_configured": bool(settings.MOMO_PARTNER_CODE),
+            "smtp": bool(getattr(settings, "SMTP_HOST", None) and getattr(settings, "SMTP_USER", None)),
+            "gemini": bool(getattr(settings, "GEMINI_API_KEY", None)),
+            "google_drive": bool(getattr(settings, "GOOGLE_TOKEN_BASE64", None)),
+            "vnpay": bool(getattr(settings, "VNPAY_TMN_CODE", None)),
+            "momo": bool(getattr(settings, "MOMO_PARTNER_CODE", None)),
         },
     }
 
 
+class TestEmailBody(BaseModel):
+    email: str
+
+
 @router.post("/system/test-email")
 def test_email(
-    to_email: str,
+    body: TestEmailBody,
     db: Session = Depends(get_db),
     _=Depends(require_super_admin),
 ):
     """Gửi email test để kiểm tra cấu hình SMTP."""
     from app.services.email_service import send_test_email
     try:
-        send_test_email(to_email)
-        return {"message": f"Email test đã gửi đến {to_email}"}
+        send_test_email(body.email)
+        return {"message": f"Email test đã gửi đến {body.email}"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Gửi email thất bại: {str(e)}")
 

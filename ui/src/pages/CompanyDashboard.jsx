@@ -217,7 +217,8 @@ const CompanyDashboard = ({ customerFilter, setCustomerFilter }) => {
     if (dups.length > 0) { showToast(`Mã ngành bị trùng: ${[...new Set(dups)].join(', ')}`, 'error'); return; }
     try {
       if (formData.id) {
-        await companyApi.update(formData.id, buildPayload(formData));
+        const saveRes = await companyApi.update(formData.id, buildPayload(formData));
+        setFormData(saveRes.data);
         showToast('Đã lưu hồ sơ thành công!');
         fetchCompanies();
       } else {
