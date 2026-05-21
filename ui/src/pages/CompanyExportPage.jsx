@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Download, Loader2, CheckSquare, Square, ChevronDown, ChevronRight, AlertCircle, Merge } from 'lucide-react';
+import { ArrowLeft, Download, Loader2, CheckSquare, Square, ChevronDown, ChevronRight, AlertCircle, Merge, Plus } from 'lucide-react';
+import axios from 'axios';
 import { companyApi, companyExportApi, templateExportApi } from '../services/api';
+
+const authHeaders = () => ({ Authorization: `Bearer ${localStorage.getItem('mosslegal_access_token')}` });
 
 // ── TLDN templates per company type ──────────────────────────────────────────
 const TLDN_TEMPLATES = {
@@ -250,6 +253,13 @@ const CompanyExportPage = () => {
   const [mergeLoading, setMergeLoading] = useState(false);
   const [mergeErr, setMergeErr] = useState('');
 
+  // Custom tenant templates (company category)
+  const [customTemplates, setCustomTemplates] = useState([]);
+  const [customSelected, setCustomSelected] = useState(new Set());
+  const [customLoading, setCustomLoading] = useState(false);
+  const [customExportLoading, setCustomExportLoading] = useState(false);
+  const [customExportErr, setCustomExportErr] = useState('');
+
   useEffect(() => {
     companyApi.get(id).then(r => {
       setCompany(r.data);
@@ -258,7 +268,45 @@ const CompanyExportPage = () => {
       setTldnSelected(new Set(tpls.map(t => t.id)));
       setLoading(false);
     }).catch(() => setLoading(false));
+
+    // Load custom templates for company category
+    setCustomLoading(true);
+    axios.get('/api/v1/tenant/document-types?category=company', { headers: authHeaders() })
+      .then(r => {
+        const active = (r.data.items || []).filter(t => t.is_active && t.has_template);
+        setCustomTemplates(active);
+      })
+      .catch(() => {})
+      .finally(() => setCustomLoading(false));
   }, [id]);
+
+  const customToggle = (tid) => setCustomSelected(s => { const n = new Set(s); n.has(tid) ? n.delete(tid) : n.add(tid); return n; });
+
+  const handleCustomExport = async (isMerge) => {
+    if (!customSelected.size) return;
+    setCustomExportLoading(true); setCustomExportErr('');
+    try {
+      const res = await axios.post(
+        `/api/v1/export/hkd/${id}`,  // reuse HKD export endpoint — works for any entity with tenant templates
+        { template_ids: [...customSelected], is_merge: isMerge },
+        { headers: authHeaders(), responseType: 'arraybuffer' }
+      );
+      const ct = res.headers['content-type'] || '';
+      const isZip = ct.includes('zip');
+      const disp = res.headers['content-disposition'] || '';
+      const match = disp.match(/filename\*=UTF-8''(.+)/i) || disp.match(/filename="?([^"]+)"?/i);
+      const filename = match ? decodeURIComponent(match[1]) : `custom_${company?.code || id}.${isMerge || !isZip ? 'docx' : 'zip'}`;
+      const url = URL.createObjectURL(new Blob([res.data], { type: ct }));
+      const a = document.createElement('a'); a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      let msg = 'Lỗi khi tạo file';
+      if (e.response?.data) {
+        try { msg = JSON.parse(new TextDecoder().decode(e.response.data))?.detail || msg; } catch { /* */ }
+      }
+      setCustomExportErr(msg);
+    } finally { setCustomExportLoading(false); }
+  };
 
   // TLDN toggle helpers
   const tldnToggle = (tid) => setTldnSelected(s => { const n = new Set(s); n.has(tid) ? n.delete(tid) : n.add(tid); return n; });
@@ -405,6 +453,55 @@ const CompanyExportPage = () => {
               ))}
             </div>
           </div>
+
+          {/* Section 3: Custom templates của tenant */}
+          {(customLoading || customTemplates.length > 0) && (
+            <div className="bg-surface rounded-2xl border border-base overflow-hidden">
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-faint bg-slate-50 dark:bg-slate-800/40">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-strong">Hồ sơ tùy chỉnh</span>
+                  <span className="text-[10px] text-weak font-semibold">— mẫu của công ty bạn</span>
+                </div>
+                <a href="/settings" className="text-[10px] text-orange-600 hover:underline font-semibold flex items-center gap-1">
+                  <Plus size={10} /> Thêm mẫu
+                </a>
+              </div>
+              <div className="p-5">
+                {customLoading ? (
+                  <div className="flex items-center justify-center py-6">
+                    <Loader2 size={18} className="animate-spin text-orange-500" />
+                  </div>
+                ) : (
+                  <>
+                    <TemplateList
+                      templates={customTemplates.map(t => ({ id: t.template_key, name: t.name }))}
+                      selected={customSelected}
+                      onToggle={customToggle}
+                    />
+                    {customExportErr && (
+                      <div className="flex items-center gap-2 mt-3 text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-2.5">
+                        <AlertCircle size={13} /> {customExportErr}
+                      </div>
+                    )}
+                    <div className="flex gap-2 justify-end mt-4">
+                      {customSelected.size > 1 && (
+                        <button disabled={customExportLoading} onClick={() => handleCustomExport(true)}
+                          className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-2xl font-black text-sm hover:bg-indigo-700 disabled:opacity-50 transition shadow-lg shadow-indigo-100">
+                          {customExportLoading ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
+                          Tải &amp; gộp
+                        </button>
+                      )}
+                      <button disabled={customSelected.size === 0 || customExportLoading} onClick={() => handleCustomExport(false)}
+                        className="flex items-center gap-2 px-6 py-2.5 bg-orange-600 text-white rounded-2xl font-black text-sm hover:bg-orange-700 disabled:opacity-50 transition shadow-lg shadow-orange-100">
+                        {customExportLoading ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
+                        Tải xuống ({customSelected.size})
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
 
         </div>
       </div>

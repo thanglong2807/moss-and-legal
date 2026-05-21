@@ -21,7 +21,7 @@ def _enrich(user: User) -> UserRead:
         id_number=user.id_number,
         address=user.address,
         gov_account=user.gov_account,
-        gov_pass=user.gov_pass,
+        # gov_pass intentionally excluded from response
         role_id=user.role_id,
         role_name=user.role.name if user.role else None,
         staff_config_id=user.staff_config_id,

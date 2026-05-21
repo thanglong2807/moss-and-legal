@@ -1,7 +1,7 @@
 """Super Admin endpoints — quản lý tenants, plans, subscriptions."""
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session, joinedload
-from sqlalchemy import select, func
+from sqlalchemy import select, func, or_
 from datetime import datetime
 from typing import Optional, Any, Dict
 from pydantic import BaseModel
@@ -547,3 +547,375 @@ def get_tenants_detail(db: Session = Depends(get_db), _=Depends(require_super_ad
             "created_at": t.created_at.isoformat() if t.created_at else None,
         })
     return result
+
+
+# ── Users management (cross-tenant) ──────────────────────────────────────────
+
+@router.get("/users")
+def list_all_users(
+    tenant_id: Optional[int] = Query(None),
+    search: Optional[str] = Query(None),
+    is_active: Optional[bool] = Query(None),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
+    db: Session = Depends(get_db),
+    _=Depends(require_super_admin),
+):
+    """Super admin xem tất cả users toàn platform."""
+    from app.auth.models import Role
+    stmt = (
+        select(User)
+        .outerjoin(Role, User.role_id == Role.id)
+        .outerjoin(Tenant, User.tenant_id == Tenant.id)
+        .where(User.deleted_at.is_(None))
+        .order_by(User.id.desc())
+    )
+    if tenant_id is not None:
+        stmt = stmt.where(User.tenant_id == tenant_id)
+    if is_active is not None:
+        stmt = stmt.where(User.is_active == is_active)
+    if search:
+        s = f"%{search}%"
+        stmt = stmt.where(or_(User.display_name.ilike(s), User.email.ilike(s), User.phone.ilike(s)))
+
+    total = db.execute(select(func.count()).select_from(stmt.subquery())).scalar() or 0
+    users = db.execute(stmt.offset(skip).limit(limit)).scalars().unique().all()
+
+    # Pre-fetch tenants for display
+    tenant_map = {}
+    for u in users:
+        if u.tenant_id and u.tenant_id not in tenant_map:
+            t = db.execute(select(Tenant).where(Tenant.id == u.tenant_id)).scalars().first()
+            tenant_map[u.tenant_id] = t.name if t else f"Tenant #{u.tenant_id}"
+
+    return {
+        "total": total,
+        "items": [
+            {
+                "id": u.id,
+                "display_name": u.display_name,
+                "email": u.email,
+                "phone": u.phone,
+                "is_active": u.is_active,
+                "is_super_admin": u.is_super_admin,
+                "tenant_id": u.tenant_id,
+                "tenant_name": tenant_map.get(u.tenant_id, "—") if u.tenant_id else "Super Admin",
+                "role_name": u.role.name if u.role else None,
+                "role_level": u.role.level if u.role else None,
+                "created_at": u.created_at.isoformat() if u.created_at else None,
+            }
+            for u in users
+        ],
+    }
+
+
+@router.put("/users/{user_id}/toggle-active")
+def toggle_user_active(user_id: int, db: Session = Depends(get_db), _=Depends(require_super_admin)):
+    """Khoá / mở khoá tài khoản user bất kỳ."""
+    user = db.execute(select(User).where(User.id == user_id, User.deleted_at.is_(None))).scalars().first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Không tìm thấy user")
+    if user.is_super_admin:
+        raise HTTPException(status_code=403, detail="Không thể khoá tài khoản Super Admin")
+    user.is_active = not user.is_active
+    db.commit()
+    return {"id": user.id, "is_active": user.is_active}
+
+
+@router.put("/users/{user_id}/reset-password")
+def reset_user_password(
+    user_id: int,
+    db: Session = Depends(get_db),
+    _=Depends(require_super_admin),
+):
+    """Đặt lại mật khẩu ngẫu nhiên cho user và trả về mật khẩu mới."""
+    import secrets, string
+    from app.auth.service import hash_password
+    user = db.execute(select(User).where(User.id == user_id, User.deleted_at.is_(None))).scalars().first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Không tìm thấy user")
+    alphabet = string.ascii_letters + string.digits
+    new_pass = ''.join(secrets.choice(alphabet) for _ in range(12))
+    user.hashed_password = hash_password(new_pass)
+    db.commit()
+    return {"id": user.id, "new_password": new_pass, "message": "Mật khẩu đã được đặt lại — hãy gửi cho user ngay"}
+
+
+# ── System info & health ──────────────────────────────────────────────────────
+
+@router.get("/system/info")
+def system_info(db: Session = Depends(get_db), _=Depends(require_super_admin)):
+    """Thông tin hệ thống: version, DB stats, cấu hình."""
+    from app.core.config import settings
+    import platform, sys
+
+    total_users = db.execute(select(func.count(User.id)).where(User.deleted_at.is_(None))).scalar() or 0
+    total_tenants = db.execute(select(func.count(Tenant.id)).where(Tenant.deleted_at.is_(None))).scalar() or 0
+    active_subs = db.execute(
+        select(func.count(Subscription.id)).where(Subscription.status == "active", Subscription.deleted_at.is_(None))
+    ).scalar() or 0
+
+    return {
+        "app": {
+            "name": settings.PROJECT_NAME,
+            "version": settings.APP_VERSION,
+            "debug": settings.DEBUG,
+        },
+        "runtime": {
+            "python": sys.version,
+            "platform": platform.system(),
+        },
+        "database": {
+            "server": settings.MYSQL_SERVER,
+            "port": settings.MYSQL_PORT,
+            "db": settings.MYSQL_DB,
+            "total_users": total_users,
+            "total_tenants": total_tenants,
+            "active_subscriptions": active_subs,
+        },
+        "integrations": {
+            "smtp_configured": bool(settings.SMTP_HOST and settings.SMTP_USER),
+            "gemini_configured": bool(settings.GEMINI_API_KEY),
+            "google_drive_configured": bool(settings.GOOGLE_TOKEN_BASE64),
+            "vnpay_configured": bool(settings.VNPAY_TMN_CODE),
+            "momo_configured": bool(settings.MOMO_PARTNER_CODE),
+        },
+    }
+
+
+@router.post("/system/test-email")
+def test_email(
+    to_email: str,
+    db: Session = Depends(get_db),
+    _=Depends(require_super_admin),
+):
+    """Gửi email test để kiểm tra cấu hình SMTP."""
+    from app.services.email_service import send_test_email
+    try:
+        send_test_email(to_email)
+        return {"message": f"Email test đã gửi đến {to_email}"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gửi email thất bại: {str(e)}")
+
+
+@router.get("/system/expiring-soon")
+def expiring_soon(
+    days: int = Query(14, ge=1, le=90),
+    db: Session = Depends(get_db),
+    _=Depends(require_super_admin),
+):
+    """Danh sách tenants có subscription sắp hết hạn trong N ngày."""
+    from datetime import timedelta
+    cutoff = datetime.utcnow() + timedelta(days=days)
+    subs = db.execute(
+        select(Subscription)
+        .options(joinedload(Subscription.tenant), joinedload(Subscription.plan))
+        .where(
+            Subscription.status == "active",
+            Subscription.deleted_at.is_(None),
+            Subscription.end_date <= cutoff,
+            Subscription.end_date >= datetime.utcnow(),
+        )
+        .order_by(Subscription.end_date.asc())
+    ).scalars().unique().all()
+
+    return [
+        {
+            "tenant_id": s.tenant_id,
+            "tenant_name": s.tenant.name if s.tenant else "—",
+            "tenant_email": s.tenant.contact_email if s.tenant else "—",
+            "plan_name": s.plan.name if s.plan else "—",
+            "end_date": s.end_date.isoformat() if s.end_date else None,
+            "days_left": (s.end_date - datetime.utcnow()).days if s.end_date else None,
+        }
+        for s in subs
+    ]
+
+
+# ── System integration config ─────────────────────────────────────────────────
+
+def _mask_value(value: str) -> str:
+    """Giữ lại 4 ký tự đầu, che phần còn lại bằng ••••••."""
+    if not value:
+        return ""
+    if len(value) <= 4:
+        return "••••••"
+    return value[:4] + "••••••"
+
+
+def _get_env_path():
+    """Trả về đường dẫn tuyệt đối tới file .env ở thư mục gốc dự án."""
+    from pathlib import Path
+    # app/ nằm trong project root → đi lên 3 cấp từ file này
+    return Path(__file__).resolve().parent.parent.parent.parent / ".env"
+
+
+def _read_env_dict() -> dict:
+    """Đọc file .env và trả về dict KEY -> value."""
+    env_path = _get_env_path()
+    result = {}
+    if not env_path.exists():
+        return result
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        result[key.strip()] = value.strip()
+    return result
+
+
+def _write_env_dict(updates: dict) -> None:
+    """Cập nhật các KEY=VALUE trong file .env theo dict updates."""
+    env_path = _get_env_path()
+    lines = []
+    if env_path.exists():
+        lines = env_path.read_text(encoding="utf-8").splitlines()
+
+    updated_keys = set()
+    new_lines = []
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#") or "=" not in stripped:
+            new_lines.append(line)
+            continue
+        key = stripped.partition("=")[0].strip()
+        if key in updates:
+            new_lines.append(f"{key}={updates[key]}")
+            updated_keys.add(key)
+        else:
+            new_lines.append(line)
+
+    # Thêm các key chưa có trong file
+    for key, value in updates.items():
+        if key not in updated_keys:
+            new_lines.append(f"{key}={value}")
+
+    env_path.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
+
+
+class SystemConfigUpdate(BaseModel):
+    smtp_host: Optional[str] = None
+    smtp_port: Optional[int] = None
+    smtp_user: Optional[str] = None
+    smtp_password: Optional[str] = None
+    smtp_from: Optional[str] = None
+    smtp_tls: Optional[bool] = None
+    gemini_api_key: Optional[str] = None
+    gemini_model: Optional[str] = None
+    google_token_base64: Optional[str] = None
+    google_drive_hkd: Optional[str] = None
+    google_drive_tldn: Optional[str] = None
+    vnpay_tmn_code: Optional[str] = None
+    vnpay_hash_secret: Optional[str] = None
+    vnpay_url: Optional[str] = None
+    vnpay_return_url: Optional[str] = None
+    momo_partner_code: Optional[str] = None
+    momo_access_key: Optional[str] = None
+    momo_secret_key: Optional[str] = None
+    momo_endpoint: Optional[str] = None
+    momo_return_url: Optional[str] = None
+    momo_notify_url: Optional[str] = None
+
+
+@router.get("/system/config")
+def get_system_config(_=Depends(require_super_admin)):
+    """Đọc cấu hình tích hợp từ .env, trả về với giá trị nhạy cảm được che."""
+    from app.core.config import settings as s
+
+    return {
+        "smtp": {
+            "host": s.SMTP_HOST,
+            "port": s.SMTP_PORT,
+            "user": s.SMTP_USER,
+            "password": _mask_value(s.SMTP_PASSWORD),
+            "from": s.SMTP_FROM,
+            "tls": s.SMTP_TLS,
+        },
+        "gemini": {
+            "api_key": _mask_value(s.GEMINI_API_KEY),
+            "model": s.GEMINI_OCR_MODEL,
+        },
+        "google_drive": {
+            "token_configured": bool(s.GOOGLE_TOKEN_BASE64),
+            "drive_hkd": s.GOOGLE_DRIVE_HKD,
+            "drive_tldn": s.GOOGLE_DRIVE_TLDN,
+        },
+        "vnpay": {
+            "tmn_code": _mask_value(s.VNPAY_TMN_CODE),
+            "hash_secret": _mask_value(s.VNPAY_HASH_SECRET),
+            "url": s.VNPAY_URL,
+            "return_url": s.VNPAY_RETURN_URL,
+        },
+        "momo": {
+            "partner_code": _mask_value(s.MOMO_PARTNER_CODE),
+            "access_key": _mask_value(s.MOMO_ACCESS_KEY),
+            "secret_key": _mask_value(s.MOMO_SECRET_KEY),
+            "endpoint": s.MOMO_ENDPOINT,
+            "return_url": s.MOMO_RETURN_URL,
+            "notify_url": s.MOMO_NOTIFY_URL,
+        },
+    }
+
+
+_FIELD_TO_ENV_KEY = {
+    "smtp_host": "SMTP_HOST",
+    "smtp_port": "SMTP_PORT",
+    "smtp_user": "SMTP_USER",
+    "smtp_password": "SMTP_PASSWORD",
+    "smtp_from": "SMTP_FROM",
+    "smtp_tls": "SMTP_TLS",
+    "gemini_api_key": "GEMINI_API_KEY",
+    "gemini_model": "GEMINI_OCR_MODEL",
+    "google_token_base64": "GOOGLE_TOKEN_BASE64",
+    "google_drive_hkd": "GOOGLE_DRIVE_HKD",
+    "google_drive_tldn": "GOOGLE_DRIVE_TLDN",
+    "vnpay_tmn_code": "VNPAY_TMN_CODE",
+    "vnpay_hash_secret": "VNPAY_HASH_SECRET",
+    "vnpay_url": "VNPAY_URL",
+    "vnpay_return_url": "VNPAY_RETURN_URL",
+    "momo_partner_code": "MOMO_PARTNER_CODE",
+    "momo_access_key": "MOMO_ACCESS_KEY",
+    "momo_secret_key": "MOMO_SECRET_KEY",
+    "momo_endpoint": "MOMO_ENDPOINT",
+    "momo_return_url": "MOMO_RETURN_URL",
+    "momo_notify_url": "MOMO_NOTIFY_URL",
+}
+
+
+@router.put("/system/config")
+def update_system_config(data: SystemConfigUpdate, _=Depends(require_super_admin)):
+    """Cập nhật cấu hình tích hợp vào file .env và settings object ngay lập tức."""
+    from app.core.config import settings as s
+
+    env_updates: dict = {}
+    payload = data.model_dump(exclude_unset=True)
+
+    for field, value in payload.items():
+        if value is None:
+            continue
+        env_key = _FIELD_TO_ENV_KEY.get(field)
+        if env_key is None:
+            continue
+        str_value = str(value)
+        env_updates[env_key] = str_value
+
+        # Cập nhật settings object trực tiếp (hiệu lực ngay)
+        settings_attr = env_key  # tên attribute trong Settings trùng env key
+        if hasattr(s, settings_attr):
+            # Convert type nếu cần
+            current = getattr(s, settings_attr)
+            if isinstance(current, bool):
+                setattr(s, settings_attr, str_value.lower() in ("true", "1", "yes"))
+            elif isinstance(current, int):
+                try:
+                    setattr(s, settings_attr, int(str_value))
+                except ValueError:
+                    pass
+            else:
+                setattr(s, settings_attr, str_value)
+
+    if env_updates:
+        _write_env_dict(env_updates)
+
+    return {"message": "Đã lưu cấu hình. Một số thay đổi có hiệu lực ngay, một số cần khởi động lại server."}

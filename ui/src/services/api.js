@@ -159,6 +159,7 @@ export const govSubmissionApi = {
 };
 
 export const exportApi = {
+  getTemplates: () => api.get('/export/templates'),
   exportHkd: (hkdId, templateIds, isMerge = false) =>
     api.post(`/export/hkd/${hkdId}`, { template_ids: templateIds, is_merge: isMerge }, { responseType: 'blob' }),
 };

@@ -34,7 +34,7 @@ def list_audit_logs(
     logs = db.execute(stmt).scalars().all()
 
     return {
-        "total": len(total),
+        "total": total,
         "page": page,
         "limit": limit,
         "items": [

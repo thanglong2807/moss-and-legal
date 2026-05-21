@@ -9,7 +9,7 @@ router = APIRouter()
 
 class AdminUnitRead(BaseModel):
     id: int
-    code: str
+    code: Optional[str] = None
     name: str
     division_type: str
     parent_id: Optional[int] = None

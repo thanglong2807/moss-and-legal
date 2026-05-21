@@ -36,30 +36,42 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    # OpenAPI chỉ khả dụng khi DEBUG=true — tắt ở production
+    openapi_url=f"{settings.API_V1_STR}/openapi.json" if settings.DEBUG else None,
+    docs_url="/docs" if settings.DEBUG else None,
+    redoc_url="/redoc" if settings.DEBUG else None,
     lifespan=lifespan,
 )
 
-# Set all CORS enabled origins
+# CORS — chỉ cho phép origins được cấu hình trong .env
+_allowed_origins = [o.strip() for o in settings.ALLOWED_ORIGINS.split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=_allowed_origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=["Authorization", "Content-Type", "Accept"],
 )
 
 # Subscription expiry check middleware
+# SECURITY: use exact prefix + "/" to avoid partial-match bypass (e.g. /auth vs /authXXX)
 _SKIP_SUBSCRIPTION_CHECK = (
-    f"{settings.API_V1_STR}/auth",
-    f"{settings.API_V1_STR}/payment",
-    f"{settings.API_V1_STR}/super-admin",
+    f"{settings.API_V1_STR}/auth/",
+    f"{settings.API_V1_STR}/payment/",
+    f"{settings.API_V1_STR}/super-admin/",
+    f"{settings.API_V1_STR}/admin-units/",  # reference data — always accessible
+    f"{settings.API_V1_STR}/dashboard/",    # dashboard needs to show expiry warning
+    f"{settings.API_V1_STR}/tenant/subscription/",  # tenant can view own subscription
+    f"{settings.API_V1_STR}/tenant/profile/",       # tenant profile — always accessible
+    f"{settings.API_V1_STR}/tenant/document-types/", # document types mgmt — always accessible
 )
 
 @app.middleware("http")
 async def check_subscription(request: Request, call_next):
     path = request.url.path
-    if any(path.startswith(p) for p in _SKIP_SUBSCRIPTION_CHECK):
+    # Normalize: ensure path has trailing slash for prefix comparison
+    path_norm = path if path.endswith("/") else path + "/"
+    if any(path_norm.startswith(p) for p in _SKIP_SUBSCRIPTION_CHECK):
         return await call_next(request)
 
     auth_header = request.headers.get("Authorization", "")

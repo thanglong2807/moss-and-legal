@@ -23,6 +23,7 @@ from app.models.gov_job import GovJob
 from app.auth.models import Tenant, User, Role, RolePermission
 from app.models.subscription import SubscriptionPlan, Subscription, Payment
 from app.models.audit_log import AuditLog
+from app.models.tenant_config import TenantProfile, TenantDocumentType
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

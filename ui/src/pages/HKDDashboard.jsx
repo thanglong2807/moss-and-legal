@@ -10,20 +10,15 @@ import { sortIndustriesByCode } from '../utils/validators';
 
 // Module-level cache cho static data (fields, industries, provinces, configs)
 // Chỉ fetch 1 lần trong suốt session, không re-fetch khi remount
-const _staticCache = { data: null, promise: null };
-const fetchStaticData = () => {
-  if (_staticCache.data) return Promise.resolve(_staticCache.data);
-  if (_staticCache.promise) return _staticCache.promise;
-  _staticCache.promise = Promise.all([
+// Không cache — staff/nguồn/trạng thái là per-tenant, phải fetch tươi mỗi lần mount
+const fetchStaticData = () =>
+  Promise.all([
     configApi.getStaff(), configApi.getSources(), configApi.getStatuses(),
     adminUnitsApi.getProvinces(), fieldsApi.list(), industryApi.list(),
-  ]).then(([s, src, st, p, f, ind]) => {
-    _staticCache.data = { staff: s.data, sources: src.data, statuses: st.data, provinces: p.data, fields: f.data, industries: ind.data };
-    _staticCache.promise = null;
-    return _staticCache.data;
-  }).catch(err => { _staticCache.promise = null; throw err; });
-  return _staticCache.promise;
-};
+  ]).then(([s, src, st, p, f, ind]) => ({
+    staff: s.data, sources: src.data, statuses: st.data,
+    provinces: p.data, fields: f.data, industries: ind.data,
+  }));
 import HKDCard from '../components/HKD/HKDCard';
 import HKDEditor from '../components/HKD/HKDEditor';
 import CustomerSelectionModal from '../components/Customer/CustomerSelectionModal';
@@ -206,12 +201,13 @@ const HKDDashboard = ({ customerFilter, setCustomerFilter }) => {
     try {
       if (formData.id) {
         await hkdApi.update(formData.id, buildPayload(formData));
+        showToast('Đã lưu hồ sơ thành công!');
       } else {
         const res = await hkdApi.create(buildPayload(formData));
-        navigate(`/hkd/${res.data.id}`);
+        showToast('Đã tạo hồ sơ thành công! Chọn hồ sơ cần tải về bên dưới.');
+        navigate(`/hkd/${res.data.id}`, { state: { justCreated: true } });
       }
       fetchInitialData();
-      showToast('Đã lưu hồ sơ thành công!');
     } catch (e) { showToast('Lỗi khi lưu: ' + (e.response?.data?.detail || e.message), 'error'); }
   };
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   FileText,
   Users,
@@ -139,21 +140,39 @@ const validateMainIndustry = (formData) => {
   return errs;
 };
 
-const EXPORT_TEMPLATES = [
-  { id: '000', name: 'HD ký + Hợp đồng + Giấy đề nghị' },
-  { id: '001', name: 'Giấy giới thiệu' },
-  // { id: '002', name: 'Hợp đồng & xác nhận dịch vụ' },
-  // { id: '003', name: 'Giấy giới thiệu nhận' },
-  // { id: '004', name: 'Giấy giới thiệu nộp' },
+// Fallback nếu API không trả về templates
+const FALLBACK_TEMPLATES = [
+  { id: '000', name: 'HD ký + Hợp đồng + Giấy đề nghị', source: 'system' },
+  { id: '001', name: 'Giấy giới thiệu', source: 'system' },
 ];
 
-
 const ExportModal = ({ isOpen, onClose, formData }) => {
-  const [selected, setSelected] = useState(new Set(EXPORT_TEMPLATES.map(t => t.id)));
+  const [templates, setTemplates] = useState([]);
+  const [selected, setSelected] = useState(new Set());
   const [exportErrors, setExportErrors] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [tplLoading, setTplLoading] = useState(false);
+
+  // Fetch templates khi modal mở
+  useEffect(() => {
+    if (!isOpen) return;
+    setTplLoading(true);
+    exportApi.getTemplates()
+      .then(res => {
+        const tpls = res.data?.templates || FALLBACK_TEMPLATES;
+        setTemplates(tpls);
+        setSelected(new Set(tpls.map(t => t.id)));
+      })
+      .catch(() => {
+        setTemplates(FALLBACK_TEMPLATES);
+        setSelected(new Set(FALLBACK_TEMPLATES.map(t => t.id)));
+      })
+      .finally(() => setTplLoading(false));
+  }, [isOpen]);
+
   if (!isOpen) return null;
   const toggle = (id) => { const s = new Set(selected); s.has(id) ? s.delete(id) : s.add(id); setSelected(s); };
+  const toggleAll = () => setSelected(selected.size === templates.length ? new Set() : new Set(templates.map(t => t.id)));
 
   const doExport = async (isMerge) => {
     const errs = validateMainIndustry(formData);
@@ -186,31 +205,77 @@ const ExportModal = ({ isOpen, onClose, formData }) => {
 
   const handleExport = () => doExport(false);
   const handleMerge = () => doExport(true);
+
+  const systemTpls = templates.filter(t => t.source !== 'custom');
+  const customTpls = templates.filter(t => t.source === 'custom');
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-      <div className="bg-surface rounded-[28px] shadow-2xl w-[480px] p-8">
-        <div className="flex justify-between items-center mb-6">
+      <div className="bg-surface rounded-[28px] shadow-2xl w-[520px] max-h-[80vh] flex flex-col p-8">
+        <div className="flex justify-between items-center mb-4 shrink-0">
           <h3 className="text-base font-black text-strong uppercase tracking-tight">Xuất hồ sơ</h3>
-          <button onClick={onClose} className="p-2 hover:bg-input rounded-xl text-weak"><X size={16} /></button>
+          <div className="flex items-center gap-3">
+            {!tplLoading && templates.length > 0 && (
+              <button onClick={toggleAll} className="text-[10px] font-black text-orange-600 hover:underline uppercase">
+                {selected.size === templates.length ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
+              </button>
+            )}
+            <button onClick={onClose} className="p-2 hover:bg-input rounded-xl text-weak"><X size={16} /></button>
+          </div>
         </div>
         {exportErrors.length > 0 && (
-          <div className="bg-red-50 border border-red-200 rounded-2xl px-5 py-4 mb-5">
+          <div className="bg-red-50 border border-red-200 rounded-2xl px-5 py-4 mb-4 shrink-0">
             <p className="text-[10px] font-black uppercase tracking-widest text-red-600 mb-2">Cần bổ sung thông tin trước khi xuất:</p>
             <ul className="space-y-1">
               {exportErrors.map((e, i) => <li key={i} className="text-xs font-bold text-red-500 flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-red-400 shrink-0" />{e}</li>)}
             </ul>
           </div>
         )}
-        <p className="text-[11px] font-bold text-weak uppercase tracking-widest mb-4">Chọn các biểu mẫu cần tạo</p>
-        <div className="space-y-2 mb-6">
-          {EXPORT_TEMPLATES.map(t => (
-            <div key={t.id} onClick={() => toggle(t.id)} className={`flex items-center gap-3 px-4 py-3 rounded-2xl cursor-pointer transition-all border ${selected.has(t.id) ? 'bg-orange-50 border-orange-200' : 'border-faint hover:border-base'}`}>
-              {selected.has(t.id) ? <CheckSquare size={16} className="text-orange-600 shrink-0" /> : <Square size={16} className="text-weak shrink-0" />}
-              <span className={`text-sm font-bold ${selected.has(t.id) ? 'text-orange-800' : 'text-body'}`}>{t.name}</span>
+
+        <div className="flex-1 overflow-y-auto">
+          {tplLoading ? (
+            <div className="flex items-center justify-center py-10">
+              <Loader2 size={20} className="animate-spin text-orange-500" />
             </div>
-          ))}
+          ) : (
+            <>
+              {/* Biểu mẫu hệ thống */}
+              {systemTpls.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[10px] font-black text-weak uppercase tracking-widest mb-2">Biểu mẫu mặc định</p>
+                  <div className="space-y-2">
+                    {systemTpls.map(t => (
+                      <div key={t.id} onClick={() => toggle(t.id)} className={`flex items-center gap-3 px-4 py-3 rounded-2xl cursor-pointer transition-all border ${selected.has(t.id) ? 'bg-orange-50 border-orange-200' : 'border-faint hover:border-base'}`}>
+                        {selected.has(t.id) ? <CheckSquare size={16} className="text-orange-600 shrink-0" /> : <Square size={16} className="text-weak shrink-0" />}
+                        <span className={`text-sm font-bold ${selected.has(t.id) ? 'text-orange-800' : 'text-body'}`}>{t.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {/* Mẫu tùy chỉnh của tenant */}
+              {customTpls.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[10px] font-black text-weak uppercase tracking-widest mb-2">Mẫu tùy chỉnh của công ty</p>
+                  <div className="space-y-2">
+                    {customTpls.map(t => (
+                      <div key={t.id} onClick={() => toggle(t.id)} className={`flex items-center gap-3 px-4 py-3 rounded-2xl cursor-pointer transition-all border ${selected.has(t.id) ? 'bg-indigo-50 border-indigo-200' : 'border-faint hover:border-base'}`}>
+                        {selected.has(t.id) ? <CheckSquare size={16} className="text-indigo-600 shrink-0" /> : <Square size={16} className="text-weak shrink-0" />}
+                        <span className={`text-sm font-bold ${selected.has(t.id) ? 'text-indigo-800' : 'text-body'}`}>{t.name}</span>
+                        <span className="ml-auto text-[9px] font-black text-indigo-400 bg-indigo-50 border border-indigo-200 px-1.5 py-0.5 rounded-full shrink-0">CUSTOM</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {templates.length === 0 && (
+                <p className="text-center text-xs text-weak italic py-6">Không có biểu mẫu nào.</p>
+              )}
+            </>
+          )}
         </div>
-        <div className="flex gap-3 justify-end flex-wrap">
+
+        <div className="flex gap-3 justify-end flex-wrap pt-4 border-t border-faint mt-2 shrink-0">
           <button onClick={onClose} className="px-6 py-2.5 text-weak font-bold text-sm">Hủy</button>
           {selected.size > 1 && (
             <button
@@ -366,6 +431,7 @@ const HKDEditor = ({
 }) => {
   const { can } = useAuth();
   const showToast = useToast();
+  const location = useLocation();
   const [syncing, setSyncing] = useState(false);
   const [activeIndustryIdx, setActiveIndustryIdx] = useState(null);
   const [showExtra, setShowExtra] = useState(false);
@@ -383,6 +449,15 @@ const HKDEditor = ({
   const [showCustomerDetail, setShowCustomerDetail] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [showGov, setShowGov] = useState(false);
+
+  // Tự động mở modal xuất hồ sơ khi vừa tạo mới (navigate state = { justCreated: true })
+  useEffect(() => {
+    if (location.state?.justCreated && formData?.id) {
+      setShowExport(true);
+      // Xóa state để không mở lại khi reload
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [formData?.id, location.state?.justCreated]);
   const [showUpload, setShowUpload] = useState(false);
   const [govErrors, setGovErrors] = useState([]);
 

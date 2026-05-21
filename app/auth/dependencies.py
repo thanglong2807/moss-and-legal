@@ -38,6 +38,9 @@ def require_permission(module: str, action: str = "view"):
     field = _ACTION_FIELD[action]
 
     def _check(current_user=Depends(get_current_user)):
+        # Super admin có toàn quyền — bypass permission check
+        if current_user.is_super_admin:
+            return current_user
         if not current_user.role:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Tài khoản chưa được gán vai trò")
         perm = next((p for p in current_user.role.permissions if p.module == module), None)
@@ -49,7 +52,10 @@ def require_permission(module: str, action: str = "view"):
 
 
 def require_admin(current_user=Depends(get_current_user)):
-    if not current_user.role or current_user.role.name != "ADMIN":
+    # SuperAdmin hoặc bất kỳ role nào có level=1 đều được phép
+    if current_user.is_super_admin:
+        return current_user
+    if not current_user.role or current_user.role.level != 1:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Chỉ ADMIN mới có quyền này")
     return current_user
 

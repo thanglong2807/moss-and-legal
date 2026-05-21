@@ -21,15 +21,15 @@ def create_staff(data: ConfigBase, db: Session = Depends(get_db), _=Depends(requ
     return config_service.create_staff(db, data, tenant_id=tenant_id)
 
 @router.put("/staff/{id}", response_model=ConfigRead)
-def update_staff(id: int, data: ConfigBase, db: Session = Depends(get_db), _=Depends(require_permission("config", "update"))):
-    obj = config_service.update_config(db, StaffConfig, id, data)
+def update_staff(id: int, data: ConfigBase, db: Session = Depends(get_db), _=Depends(require_permission("config", "update")), tenant_id: int = Depends(get_tenant_id)):
+    obj = config_service.update_config(db, StaffConfig, id, data, tenant_id=tenant_id)
     if not obj:
         raise HTTPException(status_code=404, detail="Không tìm thấy")
     return obj
 
 @router.delete("/staff/{id}")
-def delete_staff(id: int, db: Session = Depends(get_db), _=Depends(require_permission("config", "delete"))):
-    if not config_service.soft_delete_config(db, StaffConfig, id):
+def delete_staff(id: int, db: Session = Depends(get_db), _=Depends(require_permission("config", "delete")), tenant_id: int = Depends(get_tenant_id)):
+    if not config_service.soft_delete_config(db, StaffConfig, id, tenant_id=tenant_id):
         raise HTTPException(status_code=404, detail="Không tìm thấy")
     return {"status": "success"}
 
@@ -45,15 +45,15 @@ def create_source(data: ConfigBase, db: Session = Depends(get_db), _=Depends(req
     return config_service.create_source(db, data, tenant_id=tenant_id)
 
 @router.put("/sources/{id}", response_model=ConfigRead)
-def update_source(id: int, data: ConfigBase, db: Session = Depends(get_db), _=Depends(require_permission("config", "update"))):
-    obj = config_service.update_config(db, SourceConfig, id, data)
+def update_source(id: int, data: ConfigBase, db: Session = Depends(get_db), _=Depends(require_permission("config", "update")), tenant_id: int = Depends(get_tenant_id)):
+    obj = config_service.update_config(db, SourceConfig, id, data, tenant_id=tenant_id)
     if not obj:
         raise HTTPException(status_code=404, detail="Không tìm thấy")
     return obj
 
 @router.delete("/sources/{id}")
-def delete_source(id: int, db: Session = Depends(get_db), _=Depends(require_permission("config", "delete"))):
-    if not config_service.soft_delete_config(db, SourceConfig, id):
+def delete_source(id: int, db: Session = Depends(get_db), _=Depends(require_permission("config", "delete")), tenant_id: int = Depends(get_tenant_id)):
+    if not config_service.soft_delete_config(db, SourceConfig, id, tenant_id=tenant_id):
         raise HTTPException(status_code=404, detail="Không tìm thấy")
     return {"status": "success"}
 
@@ -69,14 +69,14 @@ def create_status(data: ConfigBase, db: Session = Depends(get_db), _=Depends(req
     return config_service.create_status(db, data, tenant_id=tenant_id)
 
 @router.put("/statuses/{id}", response_model=ConfigRead)
-def update_status(id: int, data: ConfigBase, db: Session = Depends(get_db), _=Depends(require_permission("config", "update"))):
-    obj = config_service.update_config(db, StatusConfig, id, data)
+def update_status(id: int, data: ConfigBase, db: Session = Depends(get_db), _=Depends(require_permission("config", "update")), tenant_id: int = Depends(get_tenant_id)):
+    obj = config_service.update_config(db, StatusConfig, id, data, tenant_id=tenant_id)
     if not obj:
         raise HTTPException(status_code=404, detail="Không tìm thấy")
     return obj
 
 @router.delete("/statuses/{id}")
-def delete_status(id: int, db: Session = Depends(get_db), _=Depends(require_permission("config", "delete"))):
-    if not config_service.soft_delete_config(db, StatusConfig, id):
+def delete_status(id: int, db: Session = Depends(get_db), _=Depends(require_permission("config", "delete")), tenant_id: int = Depends(get_tenant_id)):
+    if not config_service.soft_delete_config(db, StatusConfig, id, tenant_id=tenant_id):
         raise HTTPException(status_code=404, detail="Không tìm thấy")
     return {"status": "success"}

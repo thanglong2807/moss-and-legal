@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, LogIn } from 'lucide-react';
+import { Eye, EyeOff, ArrowRight, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import bgImage from '../assets/bg.jpg';
-import logoImage from '../assets/logo.webp';
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -28,34 +27,48 @@ const LoginPage = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-orange-50"
+      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center relative"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="flex justify-center mb-10">
-          <img src={logoImage} alt="Logo" className="h-14 w-auto object-contain" />
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]" />
+
+      <div className="relative z-10 w-full max-w-[380px]">
+
+        {/* Brand */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-orange-600 shadow-xl shadow-orange-600/30 mb-4">
+            <span className="text-white font-black text-xl">M</span>
+          </div>
+          <h1 className="text-3xl font-black text-white tracking-tight">
+            MOSS<span className="text-orange-400">&amp;</span>LEGAL
+          </h1>
+          <p className="text-white/60 text-base mt-1">Nền tảng quản lý pháp lý doanh nghiệp</p>
         </div>
 
-        <div className="bg-surface rounded-3xl shadow-sm border border-faint p-8">
-          <h2 className="text-lg font-black uppercase tracking-widest text-strong mb-1">Đăng nhập</h2>
-          <p className="text-xs text-weak font-medium mb-8">Nhập tài khoản để tiếp tục</p>
+        {/* Card */}
+        <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/20 border border-white/20 p-8">
+          <h2 className="text-xl font-black text-strong mb-0.5">Đăng nhập</h2>
+          <p className="text-sm text-weak mb-6">Nhập tài khoản để tiếp tục sử dụng</p>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email */}
             <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">Email</label>
+              <label className="text-xs uppercase tracking-widest font-medium text-weak block mb-1.5">Email</label>
               <input
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="email@gmail.com"
+                placeholder="email@company.com"
                 required
-                className="w-full px-4 py-3 bg-page border border-faint rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                autoComplete="email"
+                className="input-base !text-sm py-3"
               />
             </div>
 
+            {/* Password */}
             <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-weak mb-1.5 block px-1">Mật khẩu</label>
+              <label className="text-xs uppercase tracking-widest font-medium text-weak block mb-1.5">Mật khẩu</label>
               <div className="relative">
                 <input
                   type={showPass ? 'text' : 'password'}
@@ -63,40 +76,52 @@ const LoginPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full px-4 py-3 pr-12 bg-page border border-faint rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                  autoComplete="current-password"
+                  className="input-base !text-sm py-3 pr-11"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPass(!showPass)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-weak hover:text-body transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-weak hover:text-body rounded-lg transition-colors"
+                  tabIndex={-1}
                 >
-                  {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPass ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
               </div>
             </div>
 
+            {/* Error */}
             {error && (
-              <div className="px-4 py-3 bg-red-50 border border-red-100 rounded-2xl text-xs font-bold text-red-600">
+              <div className="flex items-center gap-2 px-3.5 py-2.5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-sm text-red-600 dark:text-red-400">
+                <AlertCircle size={15} className="shrink-0" />
                 {error}
               </div>
             )}
 
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-orange-600 text-white rounded-2xl hover:bg-orange-700 shadow-xl shadow-orange-100 font-black text-sm transition-all uppercase tracking-tight disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-orange-600 text-white rounded-2xl
+                         hover:bg-orange-700 active:scale-[.99]
+                         shadow-lg shadow-orange-600/25 font-medium text-base
+                         transition-all disabled:opacity-60 disabled:cursor-not-allowed mt-2"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
-                  <LogIn size={16} />
                   Đăng nhập
+                  <ArrowRight size={15} />
                 </>
               )}
             </button>
           </form>
         </div>
+
+        <p className="text-center text-white/40 text-xs mt-6">
+          © 2025 MOSS&amp;LEGAL. All rights reserved.
+        </p>
       </div>
     </div>
   );

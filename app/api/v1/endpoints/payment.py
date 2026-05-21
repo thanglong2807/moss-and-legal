@@ -7,6 +7,7 @@ from datetime import datetime
 
 from app.core.database import get_db
 from app.core.config import settings
+from app.auth.dependencies import get_current_user
 from app.models.subscription import Subscription, Payment
 from app.services import vnpay_service, momo_service
 
@@ -126,9 +127,16 @@ def momo_return(request: Request, db: Session = Depends(get_db)):
 
 
 @router.get("/status/{order_id}")
-def payment_status(order_id: str, db: Session = Depends(get_db)):
-    """Poll trạng thái thanh toán — frontend dùng để hiển thị kết quả."""
+def payment_status(
+    order_id: str,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    """Poll trạng thái thanh toán — chỉ tenant sở hữu đơn hàng mới được xem."""
     payment = db.execute(select(Payment).where(Payment.order_id == order_id)).scalars().first()
     if not payment:
+        raise HTTPException(status_code=404, detail="Không tìm thấy đơn hàng")
+    # SECURITY: chỉ super admin hoặc đúng tenant mới được xem
+    if not current_user.is_super_admin and payment.tenant_id != current_user.tenant_id:
         raise HTTPException(status_code=404, detail="Không tìm thấy đơn hàng")
     return {"order_id": order_id, "status": payment.status, "amount": payment.amount}

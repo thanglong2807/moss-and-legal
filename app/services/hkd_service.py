@@ -233,8 +233,8 @@ class HKDService:
             _attach_hkd_industries(db, [hkd])
         return hkd
 
-    def update(self, db: Session, hkd_id: int, obj_in: HKDUpdate):
-        hkd = self.get_by_id(db, hkd_id)
+    def update(self, db: Session, hkd_id: int, obj_in: HKDUpdate, tenant_id: int = None):
+        hkd = self.get_by_id(db, hkd_id, tenant_id=tenant_id)
         if not hkd:
             return None
         

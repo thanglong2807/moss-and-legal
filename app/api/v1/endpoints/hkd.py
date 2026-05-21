@@ -26,7 +26,7 @@ def list_hkd(
     staff_id: Optional[int] = None,
     source_id: Optional[int] = None,
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=1000),
+    limit: int = Query(20, ge=1, le=200),
     db: Session = Depends(get_db),
     current_user=Depends(require_permission("hkd", "view")),
     tenant_id: int = Depends(get_tenant_id),
@@ -52,8 +52,13 @@ def update_hkd(
     hkd_id: int, data: HKDUpdate,
     db: Session = Depends(get_db),
     current_user=Depends(require_permission("hkd", "update")),
+    tenant_id: int = Depends(get_tenant_id),
 ):
-    item = hkd_service.update(db, hkd_id, data)
+    # Verify ownership before update
+    existing = hkd_service.get_by_id(db, hkd_id, tenant_id=tenant_id)
+    if not existing:
+        raise HTTPException(status_code=404, detail="HKD not found")
+    item = hkd_service.update(db, hkd_id, data, tenant_id=tenant_id)
     if not item:
         raise HTTPException(status_code=404, detail="HKD not found")
     return item
@@ -63,7 +68,12 @@ def delete_hkd(
     hkd_id: int,
     db: Session = Depends(get_db),
     current_user=Depends(require_permission("hkd", "delete")),
+    tenant_id: int = Depends(get_tenant_id),
 ):
+    # Verify ownership before delete
+    existing = hkd_service.get_by_id(db, hkd_id, tenant_id=tenant_id)
+    if not existing:
+        raise HTTPException(status_code=404, detail="HKD not found")
     success = hkd_service.delete(db, hkd_id)
     if not success:
         raise HTTPException(status_code=404, detail="HKD not found")

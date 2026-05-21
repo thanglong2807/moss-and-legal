@@ -30,13 +30,16 @@ class CustomerService:
         items = db.execute(stmt.offset(skip).limit(limit)).scalars().all()
         return {"items": items, "total": total}
 
-    def get_by_id(self, db: Session, customer_id: int):
+    def get_by_id(self, db: Session, customer_id: int, tenant_id: int = None):
         stmt = select(Customer).where(Customer.id == customer_id).options(
             joinedload(Customer.source),
             joinedload(Customer.staff),
             joinedload(Customer.status),
             joinedload(Customer.households)
         )
+        # Enforce tenant isolation — always filter by tenant_id when provided
+        if tenant_id is not None:
+            stmt = stmt.where(Customer.tenant_id == tenant_id)
         return db.execute(stmt).scalars().first()
 
     def create(self, db: Session, obj_in: CustomerCreate, tenant_id: int = None):

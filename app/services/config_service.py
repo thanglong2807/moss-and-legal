@@ -86,8 +86,11 @@ class ConfigService:
 
     # ── Generic update & soft-delete ─────────────────────────────────────────
 
-    def update_config(self, db: Session, model, id: int, obj_in: ConfigBase):
-        db_obj = db.query(model).filter(model.id == id, model.deleted_at == None).first()
+    def update_config(self, db: Session, model, id: int, obj_in: ConfigBase, tenant_id: int = None):
+        q = db.query(model).filter(model.id == id, model.deleted_at == None)
+        if tenant_id is not None:
+            q = q.filter(model.tenant_id == tenant_id)
+        db_obj = q.first()
         if not db_obj:
             return None
         for field, value in obj_in.dict().items():
@@ -96,8 +99,11 @@ class ConfigService:
         db.refresh(db_obj)
         return db_obj
 
-    def soft_delete_config(self, db: Session, model, id: int) -> bool:
-        db_obj = db.query(model).filter(model.id == id, model.deleted_at == None).first()
+    def soft_delete_config(self, db: Session, model, id: int, tenant_id: int = None) -> bool:
+        q = db.query(model).filter(model.id == id, model.deleted_at == None)
+        if tenant_id is not None:
+            q = q.filter(model.tenant_id == tenant_id)
+        db_obj = q.first()
         if not db_obj:
             return False
         db_obj.deleted_at = datetime.utcnow()

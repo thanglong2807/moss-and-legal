@@ -31,16 +31,25 @@ def get_roles(db: Session, tenant_id: int = None) -> list[RoleRead]:
     return [_enrich(r) for r in roles]
 
 
-def get_role_by_id(db: Session, role_id: int) -> Optional[Role]:
-    return db.execute(
-        select(Role).options(joinedload(Role.permissions)).where(Role.id == role_id)
-    ).scalars().first()
+def get_role_by_id(db: Session, role_id: int, tenant_id: int = None) -> Optional[Role]:
+    q = select(Role).options(joinedload(Role.permissions)).where(Role.id == role_id)
+    if tenant_id is not None:
+        q = q.where(Role.tenant_id == tenant_id)
+    return db.execute(q).scalars().first()
 
 
-def create_role(db: Session, obj: RoleCreate) -> Role:
-    role = Role(**obj.model_dump())
+def create_role(db: Session, obj: RoleCreate, tenant_id: int = None) -> Role:
+    data = obj.model_dump()
+    if tenant_id is not None:
+        data["tenant_id"] = tenant_id
+    role = Role(**data)
     db.add(role)
-    db.commit()
+    try:
+        db.commit()
+    except Exception:
+        db.rollback()
+        from fastapi import HTTPException
+        raise HTTPException(status_code=400, detail="Tên vai trò đã tồn tại, vui lòng chọn tên khác")
     db.refresh(role)
     return role
 

@@ -24,7 +24,7 @@ class RolePermissionIn(BaseModel):
 # ── Role ──────────────────────────────────────────────────────────────────────
 class RoleCreate(BaseModel):
     name: str
-    level: int = 1
+    level: int = 2
     parent_id: Optional[int] = None
 
 
@@ -104,7 +104,7 @@ class UserRead(BaseModel):
     id_number: Optional[str] = None
     address: Optional[str] = None
     gov_account: Optional[str]
-    gov_pass: Optional[str]
+    # gov_pass intentionally excluded — never return credentials in API responses
     role_id: Optional[int]
     role_name: Optional[str] = None
     staff_config_id: Optional[int]

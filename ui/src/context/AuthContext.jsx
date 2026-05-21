@@ -31,21 +31,22 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  const isAdmin = user?.roles?.includes('ADMIN') ?? false;
   const isSuperAdmin = user?.is_super_admin ?? false;
-  const isTenantAdmin = !isSuperAdmin && (user?.roles?.includes('ADMIN') ?? false);
+  // TenantAdmin = có role level 1 (bất kể tên role là gì)
+  const isTenantAdmin = !isSuperAdmin && (user?.role_level === 1);
+  const isAdmin = isTenantAdmin;
   const hasActiveSubscription = isSuperAdmin || (user?.subscription?.status === 'active');
 
   // can('hkd')            → kiểm tra can_view (mặc định)
   // can('hkd', 'delete')  → kiểm tra can_delete
   const can = useCallback((module, action = 'view') => {
     if (!user) return false;
-    // SuperAdmin và TenantAdmin (role.level=1) có toàn quyền mọi module
+    // SuperAdmin và TenantAdmin (role_level=1) có toàn quyền mọi module
     const _sa = user?.is_super_admin ?? false;
-    const _ta = !_sa && (user?.roles?.includes('ADMIN') ?? false);
+    const _ta = !_sa && (user?.role_level === 1);
     if (_sa || _ta) return true;
     const perm = user.permissions?.[module];
-    if (!perm) return false;  // module không khai báo → không có quyền
+    if (!perm) return false;
     const key = { view: 'can_view', create: 'can_create', update: 'can_update', delete: 'can_delete' }[action];
     return perm[key] ?? false;
   }, [user]);

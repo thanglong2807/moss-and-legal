@@ -38,10 +38,17 @@ class Settings(BaseSettings):
     CRM_TABLE_TLDN: str = ""
 
     # JWT Auth
-    JWT_SECRET_KEY: str = "change-me-in-production"
+    # SECURITY: No default — server will crash on startup if not set in .env
+    JWT_SECRET_KEY: str
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
+
+    # CORS — comma-separated list of allowed origins, e.g. "https://app.mosslegal.vn,https://admin.mosslegal.vn"
+    ALLOWED_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
+
+    # Toggle OpenAPI docs (disable in production)
+    DEBUG: bool = False
 
     # VNPay
     VNPAY_TMN_CODE: str = ""

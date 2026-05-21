@@ -20,6 +20,9 @@ import PaymentResultPage from './pages/PaymentResultPage';
 import StaffPage from './pages/StaffPage';
 import LandingPage from './pages/LandingPage';
 import ExportPage from './pages/ExportPage';
+import DashboardPage from './pages/DashboardPage';
+import IntegrationPage from './pages/IntegrationPage';
+import TenantSettingsPage from './pages/TenantSettingsPage';
 import './index.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -47,11 +50,7 @@ const AppLayout = () => {
         <Routes>
           <Route path="/" element={<Navigate to="/home" replace />} />
 
-          <Route path="/home" element={
-            <div className="flex-1 flex flex-col items-center justify-center p-12 bg-page text-weak italic">
-              <h2 className="text-xl font-black italic uppercase tracking-widest text-orange-600/20">MOSS&LEGAL DASHBOARD</h2>
-            </div>
-          } />
+          <Route path="/home" element={<DashboardPage />} />
 
           <Route path="/customers" element={
             <CustomerManagement
@@ -97,11 +96,13 @@ const AppLayout = () => {
           } />
 
           <Route path="/super-admin" element={<SuperAdminDashboard />} />
+          <Route path="/integration" element={<IntegrationPage />} />
           <Route path="/subscription" element={<SubscriptionPage />} />
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/payment/result" element={<PaymentResultPage />} />
           <Route path="/staff" element={<StaffPage />} />
           <Route path="/export-data" element={<ExportPage />} />
+          <Route path="/settings" element={<TenantSettingsPage />} />
 
           <Route path="*" element={<Navigate to="/hkd" replace />} />
         </Routes>

@@ -107,14 +107,9 @@ def list_staff(
     """Danh sách nhân viên của tenant (trừ role level=1 admin)."""
     stmt = (
         select(User)
-        .join(Role, User.role_id == Role.id, isouter=True)
         .where(
             User.tenant_id == current_user.tenant_id,
             User.deleted_at.is_(None),
-        )
-        .where(
-            # Chỉ lấy user không phải admin (level != 1) hoặc chưa có role
-            (Role.level != 1) | (User.role_id.is_(None))
         )
     )
     total = len(db.execute(stmt).scalars().all())

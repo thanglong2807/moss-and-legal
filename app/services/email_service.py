@@ -53,6 +53,20 @@ def send_subscription_expiry_warning(
     send_email(email, f"[MOSS&LEGAL] Gói dịch vụ hết hạn sau {days_left} ngày", html)
 
 
+def send_test_email(to: str) -> None:
+    """Gửi email test để kiểm tra cấu hình SMTP — raise exception nếu thất bại."""
+    if not settings.SMTP_HOST:
+        raise ValueError("SMTP_HOST chưa được cấu hình trong .env")
+    from datetime import datetime
+    html = f"""
+    <h2>✅ Email test từ MOSS&amp;LEGAL</h2>
+    <p>Nếu bạn nhận được email này, cấu hình SMTP đã hoạt động đúng.</p>
+    <p><b>Thời gian gửi:</b> {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}</p>
+    <p><b>SMTP Host:</b> {settings.SMTP_HOST}:{settings.SMTP_PORT}</p>
+    """
+    send_email(to, "[MOSS&LEGAL] Email test — cấu hình SMTP hoạt động ✓", html)
+
+
 def send_payment_success(
     email: str, tenant_name: str, plan_name: str, end_date: str, amount: int
 ) -> None:

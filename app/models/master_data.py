@@ -13,7 +13,8 @@ from sqlalchemy.orm import relationship
 class Field(Base):
     __tablename__ = "fields"
     name = Column(String(255), nullable=False)
-    
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=True, index=True)
+
     # Relationships
     industries = relationship("FieldIndustry", back_populates="field", cascade="all, delete-orphan")
 
