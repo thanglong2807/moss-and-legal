@@ -66,8 +66,8 @@ class TenantDocumentType(Base):
 
     name            = Column(String(255), nullable=False)          # tên hiển thị
     description     = Column(Text,        nullable=True)
-    # category: hkd | company — xác định dùng cho loại hồ sơ nào
-    category        = Column(String(20),  nullable=False, default="hkd")
+    # category: comma-separated list, e.g. "hkd,tldn_1,tldn_2"
+    category        = Column(String(100), nullable=False, default="hkd")
     # template_key: ID dùng để match file template (ví dụ "t001", "custom_01")
     template_key    = Column(String(50),  nullable=True)
     # đường dẫn tương đối tới file template đã upload

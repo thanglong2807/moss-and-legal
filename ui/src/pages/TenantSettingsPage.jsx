@@ -7,9 +7,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Building2, FileText, Save, Upload, Trash2, Plus,
   Download, CheckCircle2, AlertCircle, Edit2, X,
-  ChevronDown, Info, RefreshCw,
+  ChevronDown, Info, RefreshCw, Tag,
 } from 'lucide-react';
 import axios from 'axios';
+import { configApi } from '../services/api';
 
 const token = () => localStorage.getItem('mosslegal_access_token');
 const api = (path) => axios.get(`/api/v1/tenant${path}`, { headers: { Authorization: `Bearer ${token()}` } });
@@ -19,7 +20,16 @@ const del = (path) => axios.delete(`/api/v1/tenant${path}`, { headers: { Authori
 
 const TABS = [
   { key: 'profile',   label: 'Thông tin công ty', icon: Building2 },
+  { key: 'statuses',  label: 'Tình trạng hồ sơ',  icon: Tag       },
   { key: 'doctypes',  label: 'Loại hồ sơ',        icon: FileText  },
+];
+
+// Category map cho loại hình DN
+const CATEGORY_OPTIONS = [
+  { value: 'hkd',    label: 'Hộ KD',     full: 'Hộ kinh doanh' },
+  { value: 'tldn_1', label: 'TNHH 1TV',  full: 'TNHH 1 thành viên' },
+  { value: 'tldn_2', label: 'TNHH 2TV+', full: 'TNHH 2 thành viên+' },
+  { value: 'tldn_3', label: 'Cổ phần',   full: 'Công ty cổ phần' },
 ];
 
 // ── Toast mini ────────────────────────────────────────────────────────────────
@@ -205,12 +215,38 @@ const ProfileTab = ({ toast }) => {
 };
 
 // ════════════════════════════════════════════════════════════════════════════
-// TAB 2 — Document Types
+// TAB 2 — Document Types (multi-category)
 // ════════════════════════════════════════════════════════════════════════════
-const CATEGORY_LABEL = { hkd: 'Hộ kinh doanh', company: 'Thành lập DN' };
-const CATEGORY_COLOR = {
-  hkd:     'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300',
-  company: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+const CAT_COLORS = {
+  hkd:     { bg: 'bg-orange-100 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-300', border: 'border-orange-200 dark:border-orange-700' },
+  tldn_1:  { bg: 'bg-purple-100 dark:bg-purple-900/30', text: 'text-purple-700 dark:text-purple-300', border: 'border-purple-200 dark:border-purple-700' },
+  tldn_2:  { bg: 'bg-blue-100   dark:bg-blue-900/30',   text: 'text-blue-700   dark:text-blue-300',   border: 'border-blue-200   dark:border-blue-700'   },
+  tldn_3:  { bg: 'bg-green-100  dark:bg-green-900/30',  text: 'text-green-700  dark:text-green-300',  border: 'border-green-200  dark:border-green-700'  },
+  company: { bg: 'bg-slate-100  dark:bg-slate-800',     text: 'text-slate-600  dark:text-slate-300',  border: 'border-slate-200  dark:border-slate-600'  },
+};
+
+// Multi-category checkbox widget
+const CategoryPicker = ({ value, onChange }) => {
+  const cats = Array.isArray(value) ? value : (value || '').split(',').filter(Boolean);
+  const toggle = (v) => {
+    const next = cats.includes(v) ? cats.filter(c => c !== v) : [...cats, v];
+    onChange(next.length ? next : [v]); // at least 1 required
+  };
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {CATEGORY_OPTIONS.map(o => {
+        const on = cats.includes(o.value);
+        const col = CAT_COLORS[o.value];
+        return (
+          <button key={o.value} type="button" onClick={() => toggle(o.value)}
+            className={`px-2.5 py-1 rounded-lg text-[10px] font-black border transition-all
+              ${on ? `${col.bg} ${col.text} ${col.border}` : 'bg-surface border-base text-weak hover:border-orange-300'}`}>
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
 };
 
 const DocTypesTab = ({ toast }) => {
@@ -218,8 +254,8 @@ const DocTypesTab = ({ toast }) => {
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [editId, setEditId] = useState(null);
-  const [newForm, setNewForm] = useState({ name: '', description: '', category: 'hkd', sort_order: 0 });
-  const [filterCat, setFilterCat] = useState('all');
+  const [newForm, setNewForm] = useState({ name: '', description: '', categories: ['hkd'], sort_order: 0 });
+  const [filterActive, setFilterActive] = useState('all'); // 'all' | 'active' | 'inactive'
   const fileInputs = useRef({});
 
   const load = () => {
@@ -228,15 +264,20 @@ const DocTypesTab = ({ toast }) => {
   };
   useEffect(load, []);
 
-  const filtered = filterCat === 'all' ? items : items.filter(i => i.category === filterCat);
+  const filtered = items.filter(i => {
+    if (filterActive === 'active') return i.is_active;
+    if (filterActive === 'inactive') return !i.is_active;
+    return true;
+  });
 
   // Tạo mới
   const handleCreate = async () => {
     if (!newForm.name.trim()) { toast.show('Nhập tên loại hồ sơ', 'error'); return; }
+    if (!newForm.categories.length) { toast.show('Chọn ít nhất 1 loại hình', 'error'); return; }
     try {
       const res = await post('/document-types', newForm);
       setItems(prev => [...prev, res.data]);
-      setNewForm({ name: '', description: '', category: 'hkd', sort_order: 0 });
+      setNewForm({ name: '', description: '', categories: ['hkd'], sort_order: 0 });
       setCreating(false);
       toast.show('Đã thêm loại hồ sơ');
     } catch (e) {
@@ -303,24 +344,28 @@ const DocTypesTab = ({ toast }) => {
     }
   };
 
+  const activeCount = items.filter(i => i.is_active).length;
+
   return (
     <div className="space-y-5">
-      {/* Header actions */}
-      <div className="flex items-center justify-between">
+      {/* Header */}
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2">
-          {['all', 'hkd', 'company'].map(cat => (
-            <button key={cat}
-              onClick={() => setFilterCat(cat)}
+          {[
+            { key: 'all',      label: `Tất cả (${items.length})` },
+            { key: 'active',   label: `Đang dùng (${activeCount})` },
+            { key: 'inactive', label: `Tắt (${items.length - activeCount})` },
+          ].map(f => (
+            <button key={f.key} onClick={() => setFilterActive(f.key)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all
-                ${filterCat === cat
+                ${filterActive === f.key
                   ? 'bg-orange-600 text-white shadow'
                   : 'bg-surface border border-base text-weak hover:border-orange-300'}`}>
-              {cat === 'all' ? 'Tất cả' : CATEGORY_LABEL[cat]}
+              {f.label}
             </button>
           ))}
         </div>
-        <button onClick={() => setCreating(true)}
-          className="btn-primary text-xs px-4 py-2">
+        <button onClick={() => setCreating(true)} className="btn-primary text-xs px-4 py-2 shrink-0">
           <Plus size={13} /> Thêm loại hồ sơ
         </button>
       </div>
@@ -329,45 +374,48 @@ const DocTypesTab = ({ toast }) => {
       <div className="flex items-start gap-2.5 p-3.5 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-2xl">
         <Info size={14} className="text-blue-600 shrink-0 mt-0.5" />
         <p className="text-xs text-blue-700 dark:text-blue-300">
-          Upload file <strong>.docx</strong> làm template. Trong file có thể dùng các biến{' '}
+          Mỗi hồ sơ có thể áp dụng cho <strong>nhiều loại hình</strong> doanh nghiệp.
+          Upload file <strong>.docx</strong> làm template — dùng biến{' '}
           <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded text-[10px]">{'{{ hkd_name }}'}</code>,{' '}
-          <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded text-[10px]">{'{{ firm_name }}'}</code>, v.v.
-          Xem danh sách biến đầy đủ tại mục <em>Thông tin công ty</em>.
+          <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded text-[10px]">{'{{ firm_name }}'}</code> trong template.
         </p>
       </div>
 
       {/* Create form */}
       {creating && (
-        <div className="card p-4 border-2 border-orange-200 dark:border-orange-800 space-y-3">
-          <div className="flex items-center justify-between mb-1">
+        <div className="card p-5 border-2 border-orange-200 dark:border-orange-800 space-y-4">
+          <div className="flex items-center justify-between">
             <span className="text-sm font-black text-strong">Thêm loại hồ sơ mới</span>
             <button onClick={() => setCreating(false)} className="btn-ghost p-1"><X size={14} /></button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="text-[10px] font-semibold text-weak uppercase mb-1 block">Tên loại hồ sơ *</label>
+              <label className="text-[10px] font-semibold text-weak uppercase mb-1.5 block">Tên loại hồ sơ *</label>
               <input className="input w-full text-sm" placeholder="Ví dụ: Giấy ủy quyền dịch vụ"
-                value={newForm.name} onChange={e => setNewForm(f => ({ ...f, name: e.target.value }))} />
+                value={newForm.name} onChange={e => setNewForm(f => ({ ...f, name: e.target.value }))}
+                onKeyDown={e => e.key === 'Enter' && handleCreate()} autoFocus />
             </div>
             <div>
-              <label className="text-[10px] font-semibold text-weak uppercase mb-1 block">Nhóm</label>
-              <select className="input w-full text-sm"
-                value={newForm.category} onChange={e => setNewForm(f => ({ ...f, category: e.target.value }))}>
-                <option value="hkd">Hộ kinh doanh</option>
-                <option value="company">Thành lập DN</option>
-              </select>
-            </div>
-            <div className="md:col-span-2">
-              <label className="text-[10px] font-semibold text-weak uppercase mb-1 block">Mô tả</label>
-              <input className="input w-full text-sm" placeholder="Mô tả ngắn về loại hồ sơ này"
-                value={newForm.description} onChange={e => setNewForm(f => ({ ...f, description: e.target.value }))} />
-            </div>
-            <div>
-              <label className="text-[10px] font-semibold text-weak uppercase mb-1 block">Thứ tự hiển thị</label>
+              <label className="text-[10px] font-semibold text-weak uppercase mb-1.5 block">Thứ tự</label>
               <input type="number" className="input w-full text-sm" value={newForm.sort_order}
                 onChange={e => setNewForm(f => ({ ...f, sort_order: parseInt(e.target.value) || 0 }))} />
             </div>
+            <div className="md:col-span-2">
+              <label className="text-[10px] font-semibold text-weak uppercase mb-1.5 block">Mô tả</label>
+              <input className="input w-full text-sm" placeholder="Mô tả ngắn..."
+                value={newForm.description} onChange={e => setNewForm(f => ({ ...f, description: e.target.value }))} />
+            </div>
           </div>
+
+          <div>
+            <label className="text-[10px] font-semibold text-weak uppercase mb-2 block">
+              Áp dụng cho loại hình <span className="text-red-500">*</span>
+            </label>
+            <CategoryPicker value={newForm.categories}
+              onChange={cats => setNewForm(f => ({ ...f, categories: cats }))} />
+          </div>
+
           <div className="flex justify-end gap-2 pt-1">
             <button onClick={() => setCreating(false)} className="btn-ghost text-xs px-4 py-2">Hủy</button>
             <button onClick={handleCreate} className="btn-primary text-xs px-5 py-2">
@@ -385,10 +433,14 @@ const DocTypesTab = ({ toast }) => {
       ) : filtered.length === 0 ? (
         <div className="text-center py-16 space-y-3">
           <FileText size={36} className="mx-auto text-weak/30" />
-          <p className="text-sm text-weak">Chưa có loại hồ sơ nào. Nhấn <strong>Thêm loại hồ sơ</strong> để bắt đầu.</p>
+          <p className="text-sm text-weak">
+            {items.length === 0
+              ? <>Chưa có loại hồ sơ nào. Nhấn <strong>Thêm loại hồ sơ</strong> để bắt đầu.</>
+              : 'Không có hồ sơ nào phù hợp.'}
+          </p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {filtered.map(item => (
             <DocTypeRow
               key={item.id}
@@ -408,40 +460,190 @@ const DocTypesTab = ({ toast }) => {
   );
 };
 
+// ════════════════════════════════════════════════════════════════════════════
+// TAB 2 — Tình trạng hồ sơ
+// ════════════════════════════════════════════════════════════════════════════
+const StatusTab = ({ toast }) => {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [creating, setCreating] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [editId, setEditId] = useState(null);
+  const [editName, setEditName] = useState('');
+
+  const load = () => {
+    setLoading(true);
+    configApi.getStatuses()
+      .then(r => setItems(r.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  };
+  useEffect(load, []);
+
+  const handleCreate = async () => {
+    if (!newName.trim()) { toast.show('Nhập tên tình trạng', 'error'); return; }
+    try {
+      const res = await configApi.createStatus({ name: newName.trim() });
+      setItems(prev => [...prev, res.data]);
+      setNewName(''); setCreating(false);
+      toast.show('Đã thêm tình trạng');
+    } catch (e) {
+      toast.show(e.response?.data?.detail || 'Lỗi tạo tình trạng', 'error');
+    }
+  };
+
+  const handleUpdate = async (id) => {
+    if (!editName.trim()) return;
+    try {
+      const res = await configApi.updateStatus(id, { name: editName.trim() });
+      setItems(prev => prev.map(i => i.id === id ? res.data : i));
+      setEditId(null);
+      toast.show('Đã cập nhật');
+    } catch (e) {
+      toast.show(e.response?.data?.detail || 'Lỗi cập nhật', 'error');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Xóa tình trạng này?')) return;
+    try {
+      await configApi.delete('statuses', id);
+      setItems(prev => prev.filter(i => i.id !== id));
+      toast.show('Đã xóa');
+    } catch (e) {
+      toast.show('Lỗi xóa', 'error');
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-weak">Các trạng thái áp dụng cho hồ sơ HKD và Doanh nghiệp.</p>
+        <button onClick={() => { setCreating(true); setNewName(''); }}
+          className="btn-primary text-xs px-4 py-2">
+          <Plus size={13} /> Thêm tình trạng
+        </button>
+      </div>
+
+      {/* Create form */}
+      {creating && (
+        <div className="card p-4 border-2 border-orange-200 dark:border-orange-800 flex items-center gap-3">
+          <Tag size={15} className="text-orange-500 shrink-0" />
+          <input
+            autoFocus
+            className="input flex-1 text-sm"
+            placeholder="VD: Đang tư vấn / Đã ký HĐ / Hoàn thành..."
+            value={newName}
+            onChange={e => setNewName(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') handleCreate(); if (e.key === 'Escape') setCreating(false); }}
+          />
+          <button onClick={handleCreate} className="btn-primary text-xs px-4 py-2 shrink-0">
+            <Plus size={12} /> Tạo
+          </button>
+          <button onClick={() => setCreating(false)} className="btn-ghost p-2 text-weak shrink-0">
+            <X size={14} />
+          </button>
+        </div>
+      )}
+
+      {/* List */}
+      {loading ? (
+        <div className="flex items-center justify-center py-14">
+          <div className="w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : items.length === 0 ? (
+        <div className="text-center py-14 space-y-3">
+          <Tag size={36} className="mx-auto text-weak/30" />
+          <p className="text-sm text-weak">Chưa có tình trạng nào. Nhấn <strong>Thêm tình trạng</strong> để bắt đầu.</p>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {items.map((item, idx) => (
+            <div key={item.id} className="card p-3.5 flex items-center gap-3">
+              <span className="text-[10px] font-black text-weak/50 w-5 text-right shrink-0">{idx + 1}</span>
+              {editId === item.id ? (
+                <>
+                  <input
+                    autoFocus
+                    className="input flex-1 text-sm"
+                    value={editName}
+                    onChange={e => setEditName(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') handleUpdate(item.id); if (e.key === 'Escape') setEditId(null); }}
+                  />
+                  <button onClick={() => handleUpdate(item.id)} className="btn-primary text-xs px-3 py-1.5 shrink-0">
+                    <Save size={12} />
+                  </button>
+                  <button onClick={() => setEditId(null)} className="btn-ghost p-1.5 text-weak shrink-0">
+                    <X size={13} />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span className="flex-1 text-sm font-semibold text-strong">{item.name}</span>
+                  <button onClick={() => { setEditId(item.id); setEditName(item.name); }}
+                    className="btn-ghost p-1.5 text-weak hover:text-strong shrink-0">
+                    <Edit2 size={13} />
+                  </button>
+                  <button onClick={() => handleDelete(item.id)}
+                    className="btn-ghost p-1.5 text-weak hover:text-red-600 shrink-0">
+                    <Trash2 size={13} />
+                  </button>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 // ── Single doc type row ───────────────────────────────────────────────────────
 const DocTypeRow = ({ item, editId, setEditId, onUpdate, onDelete, onUpload, onDownload, fileInputRef }) => {
   const isEditing = editId === item.id;
-  const [editForm, setEditForm] = useState({ name: item.name, description: item.description, category: item.category, sort_order: item.sort_order });
+  const cats = item.categories || (item.category ? item.category.split(',').filter(Boolean) : ['hkd']);
+  const [editForm, setEditForm] = useState({
+    name: item.name,
+    description: item.description || '',
+    categories: cats,
+    sort_order: item.sort_order,
+  });
 
-  const setE = (k) => (v) => setEditForm(f => ({ ...f, [k]: v }));
+  // Reset form when item changes
+  React.useEffect(() => {
+    if (!isEditing) return;
+    const c = item.categories || (item.category ? item.category.split(',').filter(Boolean) : ['hkd']);
+    setEditForm({ name: item.name, description: item.description || '', categories: c, sort_order: item.sort_order });
+  }, [isEditing, item]);
 
   if (isEditing) {
     return (
-      <div className="card p-4 border-2 border-orange-200 dark:border-orange-800 space-y-3">
+      <div className="card p-4 border-2 border-orange-200 dark:border-orange-800 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
             <label className="text-[10px] font-semibold text-weak uppercase mb-1 block">Tên *</label>
             <input className="input w-full text-sm" value={editForm.name}
-              onChange={e => setE('name')(e.target.value)} />
-          </div>
-          <div>
-            <label className="text-[10px] font-semibold text-weak uppercase mb-1 block">Nhóm</label>
-            <select className="input w-full text-sm" value={editForm.category}
-              onChange={e => setE('category')(e.target.value)}>
-              <option value="hkd">Hộ kinh doanh</option>
-              <option value="company">Thành lập DN</option>
-            </select>
-          </div>
-          <div className="md:col-span-2">
-            <label className="text-[10px] font-semibold text-weak uppercase mb-1 block">Mô tả</label>
-            <input className="input w-full text-sm" value={editForm.description || ''}
-              onChange={e => setE('description')(e.target.value)} />
+              onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))}
+              onKeyDown={e => e.key === 'Escape' && setEditId(null)} autoFocus />
           </div>
           <div>
             <label className="text-[10px] font-semibold text-weak uppercase mb-1 block">Thứ tự</label>
             <input type="number" className="input w-full text-sm" value={editForm.sort_order}
-              onChange={e => setE('sort_order')(parseInt(e.target.value) || 0)} />
+              onChange={e => setEditForm(f => ({ ...f, sort_order: parseInt(e.target.value) || 0 }))} />
           </div>
+          <div className="md:col-span-2">
+            <label className="text-[10px] font-semibold text-weak uppercase mb-1 block">Mô tả</label>
+            <input className="input w-full text-sm" value={editForm.description}
+              onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))}
+              placeholder="Mô tả ngắn..." />
+          </div>
+        </div>
+        <div>
+          <label className="text-[10px] font-semibold text-weak uppercase mb-2 block">
+            Áp dụng cho loại hình <span className="text-red-500">*</span>
+          </label>
+          <CategoryPicker value={editForm.categories}
+            onChange={cats => setEditForm(f => ({ ...f, categories: cats }))} />
         </div>
         <div className="flex justify-end gap-2">
           <button onClick={() => setEditId(null)} className="btn-ghost text-xs px-4 py-2">Hủy</button>
@@ -454,69 +656,91 @@ const DocTypeRow = ({ item, editId, setEditId, onUpdate, onDelete, onUpload, onD
   }
 
   return (
-    <div className={`card p-4 flex items-start gap-4 ${!item.is_active ? 'opacity-50' : ''}`}>
-      {/* Category badge */}
-      <span className={`shrink-0 text-[9px] font-black uppercase px-2 py-1 rounded-lg ${CATEGORY_COLOR[item.category]}`}>
-        {CATEGORY_LABEL[item.category]}
-      </span>
+    <div className={`card p-4 transition-opacity ${!item.is_active ? 'opacity-50' : ''}`}>
+      <div className="flex items-start gap-3">
+        {/* Active toggle dot */}
+        <button
+          onClick={() => onUpdate(item.id, { is_active: !item.is_active })}
+          title={item.is_active ? 'Bấm để tắt' : 'Bấm để bật'}
+          className={`mt-1 shrink-0 w-3 h-3 rounded-full border-2 transition-all
+            ${item.is_active
+              ? 'bg-emerald-500 border-emerald-500'
+              : 'bg-transparent border-slate-300 dark:border-slate-600'}`}
+        />
 
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-0.5">
-          <span className="text-sm font-bold text-strong truncate">{item.name}</span>
-          {!item.is_active && <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-weak">Tắt</span>}
+        {/* Main content */}
+        <div className="flex-1 min-w-0">
+          {/* Row 1: Name + file status */}
+          <div className="flex items-center gap-2 flex-wrap mb-1.5">
+            <span className={`text-sm font-bold ${item.is_active ? 'text-strong' : 'text-weak'}`}>
+              {item.name}
+            </span>
+            {!item.is_active && (
+              <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-weak">
+                Tắt
+              </span>
+            )}
+            <span className="ml-auto shrink-0">
+              {item.has_template ? (
+                <span className="flex items-center gap-1 text-[10px] text-emerald-600 font-semibold">
+                  <CheckCircle2 size={10} /> {item.original_filename}
+                </span>
+              ) : (
+                <span className="flex items-center gap-1 text-[10px] text-amber-500 font-semibold">
+                  <AlertCircle size={10} /> Chưa có template
+                </span>
+              )}
+            </span>
+          </div>
+
+          {/* Row 2: Category badges */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {cats.map(c => {
+              const opt = CATEGORY_OPTIONS.find(o => o.value === c);
+              const col = CAT_COLORS[c] || CAT_COLORS.company;
+              return (
+                <span key={c} className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-md border ${col.bg} ${col.text} ${col.border}`}>
+                  {opt?.label || c}
+                </span>
+              );
+            })}
+            {item.description && (
+              <span className="text-[10px] text-weak ml-1 truncate max-w-xs">{item.description}</span>
+            )}
+          </div>
         </div>
-        {item.description && <p className="text-xs text-weak truncate">{item.description}</p>}
-        <div className="flex items-center gap-3 mt-1.5">
-          <span className="text-[10px] text-weak font-mono">{item.template_key}</span>
-          {item.has_template ? (
-            <span className="flex items-center gap-1 text-[10px] text-emerald-600 font-semibold">
-              <CheckCircle2 size={10} /> {item.original_filename}
-            </span>
-          ) : (
-            <span className="flex items-center gap-1 text-[10px] text-amber-600 font-semibold">
-              <AlertCircle size={10} /> Chưa có template
-            </span>
+
+        {/* Actions */}
+        <div className="flex items-center gap-1 shrink-0 ml-2">
+          {/* Upload */}
+          <label className="flex items-center gap-1 px-2.5 py-1.5 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700 text-orange-700 dark:text-orange-300 rounded-xl text-[11px] font-semibold cursor-pointer hover:bg-orange-100 dark:hover:bg-orange-900/40 transition">
+            <Upload size={11} /> {item.has_template ? 'Đổi' : 'Upload'}
+            <input type="file" accept=".docx,.doc" className="hidden"
+              ref={fileInputRef} onChange={() => onUpload(item.id)} />
+          </label>
+
+          {/* Download */}
+          {item.has_template && (
+            <button onClick={() => onDownload(item)} title="Tải về template"
+              className="p-1.5 rounded-xl border border-base text-weak hover:text-strong hover:border-orange-300 transition">
+              <Download size={13} />
+            </button>
           )}
-        </div>
-      </div>
 
-      {/* Actions */}
-      <div className="flex items-center gap-1.5 shrink-0">
-        {/* Upload */}
-        <label className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300 rounded-xl text-xs font-semibold cursor-pointer hover:bg-orange-100 dark:hover:bg-orange-900/40 transition">
-          <Upload size={11} /> {item.has_template ? 'Đổi file' : 'Upload'}
-          <input type="file" accept=".docx,.doc" className="hidden"
-            ref={fileInputRef}
-            onChange={() => onUpload(item.id)} />
-        </label>
-
-        {/* Download */}
-        {item.has_template && (
-          <button onClick={() => onDownload(item)}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-base text-weak hover:text-strong transition text-xs">
-            <Download size={11} />
+          {/* Edit */}
+          <button
+            onClick={() => setEditId(item.id)}
+            title="Chỉnh sửa"
+            className="p-1.5 rounded-xl border border-base text-weak hover:text-strong hover:border-orange-300 transition">
+            <Edit2 size={13} />
           </button>
-        )}
 
-        {/* Toggle active */}
-        <button onClick={() => onUpdate(item.id, { is_active: !item.is_active })}
-          title={item.is_active ? 'Tắt' : 'Bật'}
-          className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-base text-weak hover:text-strong transition text-xs">
-          {item.is_active ? <CheckCircle2 size={11} className="text-emerald-500" /> : <X size={11} />}
-        </button>
-
-        {/* Edit */}
-        <button onClick={() => { setEditForm({ name: item.name, description: item.description, category: item.category, sort_order: item.sort_order }); setEditId(item.id); }}
-          className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-base text-weak hover:text-strong transition text-xs">
-          <Edit2 size={11} />
-        </button>
-
-        {/* Delete */}
-        <button onClick={() => onDelete(item.id)}
-          className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-base text-weak hover:text-red-600 transition text-xs">
-          <Trash2 size={11} />
-        </button>
+          {/* Delete */}
+          <button onClick={() => onDelete(item.id)} title="Xóa"
+            className="p-1.5 rounded-xl border border-base text-weak hover:text-red-600 hover:border-red-300 transition">
+            <Trash2 size={13} />
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -565,6 +789,7 @@ const TenantSettingsPage = () => {
         {/* Tab content */}
         <div>
           {activeTab === 'profile'  && <ProfileTab  toast={toast} />}
+          {activeTab === 'statuses' && <StatusTab   toast={toast} />}
           {activeTab === 'doctypes' && <DocTypesTab toast={toast} />}
         </div>
       </div>

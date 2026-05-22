@@ -54,10 +54,27 @@ class ProfileIn(BaseModel):
     seal_text:                Optional[str] = None
 
 
+VALID_CATS = ("hkd", "company", "tldn_1", "tldn_2", "tldn_3")
+
+
+def _parse_categories(raw) -> list:
+    """Normalize input to a list of valid category strings."""
+    if isinstance(raw, list):
+        return [c for c in raw if c in VALID_CATS]
+    if isinstance(raw, str):
+        return [c for c in raw.split(",") if c in VALID_CATS]
+    return ["hkd"]
+
+
+def _cats_to_str(cats: list) -> str:
+    return ",".join(c for c in cats if c in VALID_CATS) or "hkd"
+
+
 class DocTypeIn(BaseModel):
     name:        str
     description: Optional[str] = None
-    category:    str = "hkd"       # hkd | company
+    # Accept either a list or a comma-separated string
+    categories:  list = ["hkd"]
     sort_order:  int = 0
     is_active:   bool = True
 
@@ -65,7 +82,7 @@ class DocTypeIn(BaseModel):
 class DocTypeUpdate(BaseModel):
     name:        Optional[str] = None
     description: Optional[str] = None
-    category:    Optional[str] = None
+    categories:  Optional[list] = None
     sort_order:  Optional[int] = None
     is_active:   Optional[bool] = None
 
@@ -100,12 +117,15 @@ def _profile_dict(p: TenantProfile) -> dict:
 
 
 def _doctype_dict(d: TenantDocumentType) -> dict:
+    raw_cat = d.category or "hkd"
+    cats = [c for c in raw_cat.split(",") if c]
     return {
         "id":                d.id,
         "tenant_id":         d.tenant_id,
         "name":              d.name,
         "description":       d.description,
-        "category":          d.category,
+        "category":          raw_cat,         # backward compat
+        "categories":        cats,            # new: list of categories
         "template_key":      d.template_key,
         "has_template":      bool(d.template_path),
         "original_filename": d.original_filename,
@@ -177,13 +197,20 @@ def list_document_types(
     tenant_id: int = Depends(get_tenant_id),
     db: Session = Depends(get_db),
 ):
-    """Liệt kê loại hồ sơ của tenant."""
+    """Liệt kê loại hồ sơ của tenant. Nếu có ?category=xxx thì lọc theo loại hình."""
+    from sqlalchemy import or_
     q = select(TenantDocumentType).where(
         TenantDocumentType.tenant_id == tenant_id,
         TenantDocumentType.deleted_at.is_(None),
     )
     if category:
-        q = q.where(TenantDocumentType.category == category)
+        # Match if category appears anywhere in the comma-separated list
+        q = q.where(or_(
+            TenantDocumentType.category == category,
+            TenantDocumentType.category.like(f"{category},%"),
+            TenantDocumentType.category.like(f"%,{category},%"),
+            TenantDocumentType.category.like(f"%,{category}"),
+        ))
     q = q.order_by(TenantDocumentType.sort_order, TenantDocumentType.id)
     items = db.execute(q).scalars().all()
     return {"items": [_doctype_dict(d) for d in items]}
@@ -196,8 +223,9 @@ def create_document_type(
     db: Session = Depends(get_db),
 ):
     """Tạo loại hồ sơ mới (chưa có template file)."""
-    if body.category not in ("hkd", "company"):
-        raise HTTPException(status_code=400, detail="category phải là 'hkd' hoặc 'company'")
+    cats = _parse_categories(body.categories)
+    if not cats:
+        raise HTTPException(status_code=400, detail=f"categories phải có ít nhất 1 giá trị trong: {', '.join(VALID_CATS)}")
 
     # Tạo template_key tự động: t{tenant_id}_{uuid4[:6]}
     key = f"t{tenant_id}_{uuid.uuid4().hex[:6]}"
@@ -206,7 +234,7 @@ def create_document_type(
         tenant_id=tenant_id,
         name=body.name,
         description=body.description,
-        category=body.category,
+        category=_cats_to_str(cats),
         template_key=key,
         sort_order=body.sort_order,
         is_active=body.is_active,
@@ -227,8 +255,11 @@ def update_document_type(
     """Cập nhật metadata loại hồ sơ."""
     dt = _get_doc_type(db, doc_type_id, tenant_id)
     data = body.model_dump(exclude_unset=True)
-    if "category" in data and data["category"] not in ("hkd", "company"):
-        raise HTTPException(status_code=400, detail="category phải là 'hkd' hoặc 'company'")
+    # Handle categories → convert to comma-separated string
+    if "categories" in data:
+        cats = _parse_categories(data.pop("categories"))
+        if cats:
+            dt.category = _cats_to_str(cats)
     for k, v in data.items():
         setattr(dt, k, v)
     dt.updated_at = datetime.utcnow()

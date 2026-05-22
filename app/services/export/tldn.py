@@ -441,11 +441,60 @@ async def export_company_docs(db: Session, company_id: int, template_ids: list[s
     subdir = TEMPLATE_BASE / subdir_name
     data = process_data(raw)
 
+    # Inject firm variables từ tenant profile
+    if current_user and not getattr(current_user, "is_super_admin", False) and getattr(current_user, "tenant_id", None):
+        from app.models.tenant_config import TenantProfile
+        from app.api.v1.endpoints.tenant_config import _build_export_vars
+        profile = db.execute(
+            select(TenantProfile).where(TenantProfile.tenant_id == current_user.tenant_id)
+        ).scalars().first()
+        data.update(_build_export_vars(profile))
+
+    # Phân tách system IDs và custom IDs (custom bắt đầu bằng "t<tenant_id>_")
+    system_ids: list[str] = []
+    custom_ids: list[str] = []
+    if current_user and not getattr(current_user, "is_super_admin", False) and getattr(current_user, "tenant_id", None):
+        prefix = f"t{current_user.tenant_id}_"
+        for tid in template_ids:
+            if tid.startswith(prefix):
+                custom_ids.append(tid)
+            else:
+                system_ids.append(tid)
+    else:
+        system_ids = list(template_ids)
+
     results: list[tuple[bytes, str]] = []
-    for tid in template_ids:
+
+    # Xuất system templates
+    for tid in system_ids:
         tpl_path = _find_template(subdir, tid)
         content, filename = await _render_docx_bytes(tpl_path, data)
         results.append((content, filename))
+
+    # Xuất custom tenant templates
+    if custom_ids and current_user and getattr(current_user, "tenant_id", None):
+        from app.models.tenant_config import TenantDocumentType
+        from app.services.template_service import render_to_bytes
+        for tid in custom_ids:
+            row = db.execute(
+                select(TenantDocumentType).where(
+                    TenantDocumentType.template_key == tid,
+                    TenantDocumentType.tenant_id == current_user.tenant_id,
+                    TenantDocumentType.deleted_at.is_(None),
+                )
+            ).scalars().first()
+            if not row or not row.template_path:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Template '{tid}' chưa có file. Vui lòng upload trong Cài đặt → Loại hồ sơ."
+                )
+            tpl_dir = Path(row.template_path).parent
+            tpl_key = Path(row.template_path).stem
+            try:
+                file_bytes, fn = await render_to_bytes(tpl_dir, tpl_key, data)
+                results.append((file_bytes, fn))
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"Lỗi render template '{row.name}': {e}")
 
     if len(results) == 1:
         return results[0]
